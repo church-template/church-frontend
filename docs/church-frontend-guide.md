@@ -1051,6 +1051,8 @@ export default function DeptHero({ title, caption, media }: CrossHeroProps) {
 | 폼 | **react-hook-form + zod** | 가입 폼 사전검증(1.1)을 zod 스키마로: password ≥ 8자, 약관 2종 true. 서버 `errors[]`(4.2)는 `setError`로 필드에 매핑 |
 | 마크다운 | **marked + DOMPurify** | 5.3 파이프라인 그대로. 우회 렌더링 금지 |
 | 날짜 | **date-fns** | 캘린더 셀 계산·날짜 포맷. moment/dayjs 추가 금지 |
+| 클래스 유틸 | **clsx + tailwind-merge** | `cn()`(`src/lib/utils.ts`)로 variant className 병합·충돌 해소. 시각(T3)·동작(T4 shadcn) 컴포넌트 공유 |
+| 아이콘 | **lucide-react** | UI 아이콘 전용. **이모지로 아이콘을 대체하지 않는다.** 색은 `currentColor`(토큰 상속), 크기는 `size` prop. 다른 아이콘 세트(react-icons 등)·이미지 아이콘 추가 금지 |
 
 **데이터 패칭 경계 (중요)**:
 - **공개 페이지**(메인·설교·공지·일정·부서·주보 조회): 서버 컴포넌트에서 `fetch` + ISR. TanStack Query 사용하지 않는다 — 토큰이 필요 없고 서버 캐시(13.1)가 이미 있다.
