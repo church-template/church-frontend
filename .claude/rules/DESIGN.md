@@ -172,25 +172,25 @@ components:
     backgroundColor: "{colors.primary}"
     textColor: "{colors.on-primary}"
     typography: "{typography.button}"
-    rounded: "{rounded.pill}"
+    rounded: "{rounded.lg}"     # 16px — 배지(8)의 ×2, 중첩 라디우스 원칙
     padding: 12px 20px
     height: 44px
   button-primary-active:
     backgroundColor: "{colors.primary-active}"
     textColor: "{colors.on-primary}"
-    rounded: "{rounded.pill}"
+    rounded: "{rounded.lg}"
   button-secondary-light:
     backgroundColor: "{colors.surface-strong}"
     textColor: "{colors.ink}"
     typography: "{typography.button}"
-    rounded: "{rounded.pill}"
+    rounded: "{rounded.lg}"
     padding: 12px 20px
     height: 44px
   button-outline-on-dark:
     backgroundColor: transparent
     textColor: "{colors.on-dark}"
     typography: "{typography.button}"
-    rounded: "{rounded.pill}"
+    rounded: "{rounded.lg}"
     padding: 11px 19px
     height: 44px
   button-tertiary-text:
@@ -201,7 +201,7 @@ components:
     backgroundColor: "{colors.primary}"
     textColor: "{colors.on-primary}"
     typography: "{typography.button}"
-    rounded: "{rounded.pill}"
+    rounded: "{rounded.lg}"     # 16px — 이름의 pill은 레거시, 모양은 lg
     padding: 16px 32px
     height: 56px
   sermon-card:
@@ -249,14 +249,14 @@ components:
     backgroundColor: "{colors.surface-strong}"
     textColor: "{colors.ink}"
     typography: "{typography.caption-strong}"
-    rounded: "{rounded.pill}"
+    rounded: "{rounded.sm}"     # 8px — 작은 칩까지 풀필이면 템플릿 인상이 강해 배지만 낮춘다
     padding: 4px 12px
   badge-pill-primary:
     # "NEW", "이번 주" 등 강조 배지
     backgroundColor: "{colors.primary-soft}"
     textColor: "{colors.primary}"
     typography: "{typography.caption-strong}"
-    rounded: "{rounded.pill}"
+    rounded: "{rounded.sm}"     # 8px — badge-pill과 동일
     padding: 4px 12px
   text-input:
     backgroundColor: "{colors.canvas}"
@@ -294,7 +294,8 @@ components:
 **핵심 성격:**
 - 단일 액센트: `{colors.primary}` 는 기본 CTA, 로고, 인라인 링크에만 쓴다. 희소할수록 강하다.
 - 절제된 디스플레이: 헤드라인은 굵기 500. 700 이상으로 키우지 않는다 — 차분함이 브랜드 보이스다.
-- 필 지오메트리: 모든 CTA는 `{rounded.pill}`, 모든 카드는 `{rounded.xl}`(24px). 직각 모서리는 쓰지 않는다.
+- 중첩 라디우스 원칙: **외부 라디우스 ≈ 내부 라디우스 × 2.** 배지 8 ↔ 버튼 16, 입력 12 ↔ 카드 24.
+  CTA는 `{rounded.lg}`(16px), 카드는 `{rounded.xl}`(24px). 직각 모서리는 쓰지 않는다.
 - 96px 섹션 리듬: 에디토리얼한 여백 호흡. 밀도보다 호흡이 우선이다.
 - 사진/영상이 주인공: 히어로와 카드 썸네일이 분위기를 만들고, UI 크롬은 조용히 받친다.
 
@@ -390,9 +391,14 @@ components:
 
 ## 모양 (Shapes)
 
-- 인터랙티브(버튼, 검색, 배지) = `{rounded.pill}`
-- 컨테이너(카드) = `{rounded.xl}` (24px)
+**중첩 라디우스 원칙: 외부 라디우스 ≈ 내부 라디우스 × 2.** 안에 들어가는 요소의 라운드를
+절반으로 줄이면 모서리 곡률이 평행하게 보인다. 새 요소의 라운드는 이 중첩 관계로 정한다.
+
+- 배지·칩 = `{rounded.sm}` (8px) — 작은 칩까지 풀필이면 템플릿 인상이 강해진다
 - 폼 입력 = `{rounded.md}` (12px)
+- 버튼·CTA = `{rounded.lg}` (16px) — 배지(8)의 ×2
+- 컨테이너(카드) = `{rounded.xl}` (24px) — 입력(12)의 ×2
+- 검색 필 = `{rounded.pill}` — 유일하게 남는 필(검색임을 즉시 알리는 형태 액센트)
 - 아바타·아이콘 플레이트 = `{rounded.full}`
 - 직각(0px)은 사용하지 않는다.
 
@@ -432,7 +438,7 @@ components:
 
 ### Do
 - `{colors.primary}`는 밴드당 한두 번만 등장시킨다.
-- 모든 CTA는 필, 모든 카드는 24px 라운드.
+- CTA는 16px, 카드는 24px 라운드 — 중첩 시 외부 ≈ 내부 × 2.
 - 디스플레이 굵기 500 유지.
 - 흰 섹션 ↔ 회색 밴드 ↔ 다크/미디어 밴드의 교차로 페이지 리듬을 만든다.
 - 날짜·시간엔 항상 `{typography.datetime}` (tnum).

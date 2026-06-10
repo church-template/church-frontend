@@ -14,13 +14,13 @@ DESIGN.md 정의대로 시각 중심 컴포넌트를 **직접 구현**한다(sha
 ## 1. Button (변형별 토큰)
 | 변형 | 배경 | 텍스트 | 라운드 | 패딩 | 높이 |
 |---|---|---|---|---|---|
-| `button-primary` | primary | on-primary | pill | 12px 20px | 44 |
-| (active) | primary-active | on-primary | pill | | |
-| `button-secondary-light` | surface-strong | ink | pill | 12px 20px | 44 |
-| `button-outline-on-dark` | transparent | on-dark | pill | 11px 19px | 44 |
+| `button-primary` | primary | on-primary | lg(16) | 12px 20px | 44 |
+| (active) | primary-active | on-primary | lg(16) | | |
+| `button-secondary-light` | surface-strong | ink | lg(16) | 12px 20px | 44 |
+| `button-outline-on-dark` | transparent | on-dark | lg(16) | 11px 19px | 44 |
 | `button-tertiary-text` | transparent | primary | — | — | — |
-| `button-pill-cta` | primary | on-primary | pill | 16px 32px | 56 |
-- 타이포 `button`(16/600). **한 밴드(화면)에 primary 1개 원칙.** CTA 직각 모서리 금지.
+| `button-pill-cta` | primary | on-primary | lg(16) | 16px 32px | 56 |
+- 타이포 `button`(16/600). **한 밴드(화면)에 primary 1개 원칙.** CTA 직각 모서리 금지. 라운드는 중첩 원칙(외부≈내부×2, DESIGN Shapes).
 
 ## 2. Card (변형별 토큰)
 | 변형 | 배경 | 라운드 | 패딩 | 보더 |
@@ -37,8 +37,8 @@ DESIGN.md 정의대로 시각 중심 컴포넌트를 **직접 구현**한다(sha
 ## 3. Badge
 | 변형 | 배경 | 텍스트 | 라운드 | 패딩 |
 |---|---|---|---|---|
-| `badge-pill` | surface-strong | ink | pill | 4px 12px |
-| `badge-pill-primary` | primary-soft | primary | pill | 4px 12px |
+| `badge-pill` | surface-strong | ink | sm(8) | 4px 12px |
+| `badge-pill-primary` | primary-soft | primary | sm(8) | 4px 12px |
 - 타이포 caption-strong. `badge-pill-primary`는 "NEW"·"이번 주"·캘린더 칩(T12)에 사용.
 
 ## 4. Input
