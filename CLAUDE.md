@@ -18,7 +18,8 @@ Next.js (App Router) + TypeScript / 공개=서버컴포넌트+ISR · 회원=TanS
 - **모르면 모른다고** — 확실하지 않은 내용은 추측하지 않는다
 - **주석은 한국어, WHY 중심** — 과하지 않게, 주변 코드 스타일에 맞춘다
 - **콘텐츠 하드코딩 금지** — 사용자 노출 텍스트·이미지·영상은 API 또는 상수(`src/constants/church.ts`)에서 주입한다 (가이드 12장)
-- **hex·px 인라인 금지** — 색·크기·간격은 DESIGN.md 토큰(CSS 변수 / Tailwind `theme.extend`) 참조. arbitrary value(`bg-[#...]`) 금지. 예외: CrossHero/DeptHero 검증 로직 내부 수치(SVG 좌표·rgba)
+- **텍스트 스타일은 `typo.*` 상수 사용** — `src/constants/typography.ts`의 의미 상수(`typo.displayMega`·`typo.bodyMd` 등)로 적용한다. 컴포넌트에 폰트 크기/굵기/행간을 직접 쓰지 않는다. 새 위계가 필요하면 DESIGN.md → globals.css `@theme --text-*` → `typo`에 추가 후 사용
+- **hex·px 인라인 금지** — 색·크기·간격은 DESIGN.md 토큰(globals.css `@theme` → Tailwind 유틸 `bg-primary`·`p-section`) 참조. arbitrary value(`bg-[#...]`) 금지. 예외: CrossHero/DeptHero 검증 로직 내부 수치(SVG 좌표·rgba)
 - **허용 라이브러리 외 추가 금지** — 가이드 15.1 확정 스택 밖 라이브러리 임의 도입 금지
 
 ---
