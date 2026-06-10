@@ -20,6 +20,23 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## 개발 규약 (요약)
+
+자세한 규칙은 [`CLAUDE.md`](CLAUDE.md) · [`docs/church-frontend-guide.md`](docs/church-frontend-guide.md) · [`.claude/rules/DESIGN.md`](.claude/rules/DESIGN.md) 참조.
+
+**데이터 패칭 경계** (가이드 15.1)
+
+- 공개 페이지(메인·설교·공지·일정·부서·주보): **서버 컴포넌트 `fetch` + ISR**. TanStack Query 미사용.
+- 회원·어드민(갤러리·내 정보): **클라이언트 + TanStack Query + `authFetch`**.
+- 클라 상태는 Zustand(토큰·member 스냅샷), 폼은 react-hook-form + zod. 서버 데이터를 Zustand에 복제하지 않는다.
+
+**설정 분리**
+
+- 환경마다 다른 값만 `.env`(`NEXT_PUBLIC_API_BASE`). 교회 고유값·콘텐츠는 `src/constants/`(매직스트링 금지, env 아님).
+- 색·간격·타이포는 DESIGN.md 토큰 참조(hex·px 인라인 금지).
+
+> ⚠️ 이 프로젝트는 Next.js 16 — 코드 작성 전 `node_modules/next/dist/docs/`를 확인한다([AGENTS.md](AGENTS.md)).
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
