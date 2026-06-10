@@ -21,6 +21,7 @@ import { NoticeRow as NoticeRowBefore } from "./_before/NoticeRow";
 import { EventCard as EventCardBefore } from "./_before/EventCard";
 import { cn } from "@/lib/utils";
 import { typo } from "@/constants/typography";
+import { BehaviorShowcase } from "./_behavior/BehaviorShowcase";
 
 // 폴리시 전(_before 스냅샷)/후를 한 화면에서 비교하는 검증 페이지 — 프로덕션 미노출.
 function Compare({
@@ -248,6 +249,7 @@ export default function ShowcasePage() {
           />
         </div>
       </section>
+      <BehaviorShowcase />
     </main>
   );
 }
