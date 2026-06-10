@@ -44,6 +44,9 @@
   --radius-pill: 100px;
   --radius-full: 9999px;
 
+  /* --- 그림자 (DESIGN Elevation의 유일한 단계) --- */
+  --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.04);
+
   /* --- 간격(의미 토큰) — p-section, gap-lg 등 --- */
   --spacing-xxs: 4px;
   --spacing-xs: 8px;
