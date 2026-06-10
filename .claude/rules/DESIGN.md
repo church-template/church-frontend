@@ -378,6 +378,19 @@ components:
 - **카드 내부 패딩**: `{spacing.xl}`(32px).
 - **그리드**: 설교/행사 카드 데스크톱 3-up, 태블릿 2-up, 모바일 1-up.
 
+## 레이어링 (z-index)
+
+portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·Toast)는 고정 네비
+(`top-nav-transparent`, z 10) **위에** 렌더되어야 한다. z 스케일은 globals.css `--z-*` 토큰으로
+단일 정의하고 `z-nav`/`z-popover`/`z-overlay`/`z-toast` 유틸로 참조한다(인라인 z-index 금지).
+
+| 레이어 | z | 대상 |
+|---|---|---|
+| nav | 10 | `top-nav-transparent` |
+| popover | 40 | Popover · DropdownMenu · Select · Tabs content |
+| overlay | 50 | Dialog · Sheet 의 overlay + content |
+| toast | 60 | sonner `<Toaster />` (항상 최상위) |
+
 ## 깊이 (Elevation)
 
 | 단계 | 처리 | 용도 |

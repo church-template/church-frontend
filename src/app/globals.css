@@ -47,6 +47,27 @@
   /* --- 그림자 (DESIGN Elevation의 유일한 단계) --- */
   --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.04);
 
+  /* --- 레이어(z-index) — portal이 고정 네비(z-nav) 위에 뜨도록(T04) --- */
+  --z-nav: 10;
+  --z-popover: 40;
+  --z-overlay: 50;
+  --z-toast: 60;
+
+  /* --- 모달 폭 (max-w t-shirt 토큰 충돌 회피: 항상 var()로 참조) --- */
+  --container-modal: 32rem;
+
+  /* --- 동작 컴포넌트 애니메이션 (자체 키프레임, tw-animate-css 미사용, T04) --- */
+  --animate-overlay-in: overlay-in 0.2s ease;
+  --animate-overlay-out: overlay-out 0.15s ease;
+  --animate-content-in: content-in 0.2s ease;
+  --animate-content-out: content-out 0.15s ease;
+  --animate-popover-in: popover-in 0.18s ease;
+  --animate-popover-out: popover-out 0.12s ease;
+  --animate-slide-in-right: slide-in-right 0.25s ease;
+  --animate-slide-out-right: slide-out-right 0.2s ease;
+  --animate-slide-in-left: slide-in-left 0.25s ease;
+  --animate-slide-out-left: slide-out-left 0.2s ease;
+
   /* --- 간격(의미 토큰) — p-section, gap-lg 등 --- */
   --spacing-xxs: 4px;
   --spacing-xs: 8px;
@@ -150,4 +171,41 @@ body {
   background: var(--color-canvas);
   color: var(--color-ink);
   font-family: var(--font-sans);
+}
+
+/* ============================================================
+ * 동작 컴포넌트(T04) — z-index 유틸(토큰 참조) · 자체 키프레임
+ * ============================================================ */
+@utility z-nav { z-index: var(--z-nav); }
+@utility z-popover { z-index: var(--z-popover); }
+@utility z-overlay { z-index: var(--z-overlay); }
+@utility z-toast { z-index: var(--z-toast); }
+
+@keyframes overlay-in { from { opacity: 0 } to { opacity: 1 } }
+@keyframes overlay-out { from { opacity: 1 } to { opacity: 0 } }
+
+/* Tailwind v4는 -translate-x-1/2 -translate-y-1/2를 `translate` 속성으로 컴파일한다(transform 아님).
+ * 키프레임은 scale만 건드린다 — 여기서 translate를 또 주면 translate 속성과 합산돼(-100%) 모달이
+ * 트리거 근처에서 열렸다가 가운데로 튀는 버그가 난다. 중앙정렬은 translate 속성이 항상 담당. */
+@keyframes content-in {
+  from { opacity: 0; transform: scale(0.96) }
+  to   { opacity: 1; transform: scale(1) }
+}
+@keyframes content-out {
+  from { opacity: 1; transform: scale(1) }
+  to   { opacity: 0; transform: scale(0.96) }
+}
+
+/* Popover/Select/Dropdown은 Radix popper가 위치 transform을 관리 → scale만 건드린다 */
+@keyframes popover-in { from { opacity: 0; transform: scale(0.96) } to { opacity: 1; transform: scale(1) } }
+@keyframes popover-out { from { opacity: 1; transform: scale(1) } to { opacity: 0; transform: scale(0.96) } }
+
+@keyframes slide-in-right { from { transform: translateX(100%) } to { transform: translateX(0) } }
+@keyframes slide-out-right { from { transform: translateX(0) } to { transform: translateX(100%) } }
+@keyframes slide-in-left { from { transform: translateX(-100%) } to { transform: translateX(0) } }
+@keyframes slide-out-left { from { transform: translateX(0) } to { transform: translateX(-100%) } }
+
+/* 접근성 — 모션 최소화 선호 시 애니메이션 제거 */
+@media (prefers-reduced-motion: reduce) {
+  [data-state] { animation: none !important; }
 }

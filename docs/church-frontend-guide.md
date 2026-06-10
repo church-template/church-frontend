@@ -1053,6 +1053,7 @@ export default function DeptHero({ title, caption, media }: CrossHeroProps) {
 | 날짜 | **date-fns** | 캘린더 셀 계산·날짜 포맷. moment/dayjs 추가 금지 |
 | 클래스 유틸 | **clsx + tailwind-merge** | `cn()`(`src/lib/utils.ts`)로 variant className 병합·충돌 해소. 시각(T3)·동작(T4 shadcn) 컴포넌트 공유 |
 | 아이콘 | **lucide-react** | UI 아이콘 전용. **이모지로 아이콘을 대체하지 않는다.** 색은 `currentColor`(토큰 상속), 크기는 `size` prop. 다른 아이콘 세트(react-icons 등)·이미지 아이콘 추가 금지 |
+| 동작 컴포넌트 엔진 | **@radix-ui/react-*** + **sonner** | shadcn 도입분(Dialog·Sheet·Popover·DropdownMenu·Select·Tabs=Radix, Toast=sonner)의 동작 엔진. 컴포넌트 소스는 `src/components/ui/`에 수동 벤더링 후 토큰 재스킨(T04). 직접 import는 ui 래퍼 경유 |
 
 **데이터 패칭 경계 (중요)**:
 - **공개 페이지**(메인·설교·공지·일정·부서·주보 조회): 서버 컴포넌트에서 `fetch` + ISR. TanStack Query 사용하지 않는다 — 토큰이 필요 없고 서버 캐시(13.1)가 이미 있다.
