@@ -38,27 +38,32 @@ Next.js App Router + TypeScript 기반 프로젝트 골격을 만들고, 전 작
 - [ ] `src/` 디렉터리 구조 + `@/*` 경로 alias (`tsconfig.json` paths)
 - [ ] Turbopack 개발 서버(`pnpm dev`) 동작
 - [ ] Tailwind CSS 설치·연결 (토큰 매핑은 T2)
-- [ ] `.env.example` 골격 작성 (아래 §3)
+- [ ] `.env.example`(API_BASE만) + 교회 상수 모듈 `src/constants/church.ts` (아래 §3)
 - [ ] 데이터 패칭 경계 규약을 README/주석에 명시 (아래 §4)
 - [ ] `pnpm build` 통과
 
-## 3. 환경변수 골격 (`.env.example`)
+## 3. 환경변수(`.env.example`) + 교회 상수
+
+### 3.1 env — 환경마다 바뀌는 값만 (사실상 API_BASE 하나)
 ```env
-# API (백엔드 답변 G: 로컬 8080, context-path 없음 = 루트 /)
+# 백엔드 API (백엔드 답변 G: 로컬 8080, context-path 없음 = 루트 /)
 NEXT_PUBLIC_API_BASE=http://localhost:8080
-
-# 교회 고유값 (12장 — 빌드 주입, 디자인에 하드코딩 금지)
-NEXT_PUBLIC_CHURCH_NAME=
-NEXT_PUBLIC_CHURCH_DOMAIN=
-
-# 히어로 (13.3 — T8에서 사용, 영상은 정적 에셋 a안)
-NEXT_PUBLIC_HERO_MEDIA_TYPE=video
-NEXT_PUBLIC_HERO_MEDIA_SRC=/hero.mp4
-NEXT_PUBLIC_HERO_POSTER=/hero-poster.jpg
-NEXT_PUBLIC_HERO_CAPTION=
 ```
-- **토큰 만료값(access 1h/refresh 14d)은 env에 두지 않는다** — 하드코딩 금지, 401 감지로 대응(T5, 0.3).
-- CORS: 로컬 `http://localhost:3000`은 서버가 기본 허용(백엔드 G). 배포 도메인은 서버 운영 `.env` 담당.
+- 토큰 만료값은 env에 두지 않음 — 401 감지로 대응(T5, 0.3).
+- CORS: 로컬 `http://localhost:3000`은 서버 기본 허용(백엔드 G). 배포 도메인은 서버 운영 `.env` 담당.
+
+### 3.2 교회 상수 — 매직스트링 방지용 (env 아님)
+교회명·도메인·히어로는 "환경"이 아니라 "교회"마다 다를 뿐 → **env 불필요. 그냥 상수 모듈**로 모아 컴포넌트가 import한다(문자열 인라인 금지 = 12장 "하드코딩 금지" 충족).
+```ts
+// src/constants/church.ts
+import type { HeroMedia } from "@/hero/types";
+
+export const CHURCH_NAME = "○○교회";
+export const CHURCH_DOMAIN = "example.org";
+export const HERO: HeroMedia = { type: "video", src: "/hero.mp4", poster: "/hero-poster.jpg" };
+export const HERO_CAPTION = ["말씀과 삶이 만나는 곳", "우리 동네의 교회"]; // 배열 → \n 이스케이프 불필요
+```
+- 히어로 미디어는 정적 에셋(a안, 백엔드 E). 나중에 예배시간·오시는길 등 정적 콘텐츠(T7)도 같은 방식의 상수로.
 
 ## 4. 데이터 패칭 경계 규약 (15.1 — README에 명시)
 - **공개 페이지**(메인·설교·공지·일정·부서·주보): **서버 컴포넌트 `fetch` + ISR**. TanStack Query 미사용.
@@ -72,6 +77,7 @@ src/
   components/         # ui(시각 T3)·동작(T4)·공통(T6)
   lib/                # authFetch, parseServerDate, api 클라이언트
   stores/             # zustand
+  constants/          # church.ts 등 교회 상수 (매직스트링 방지)
   hero/               # CrossHero/DeptHero + types.ts (T8/T9 공유)
 ```
 
