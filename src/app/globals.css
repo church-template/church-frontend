@@ -1,26 +1,150 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ============================================================
+ * 디자인 토큰 (DESIGN.md 단일 진실)
+ * 값은 여기 한 번만 정의 → Tailwind 유틸 자동 생성(bg-primary, text-ink, p-section ...)
+ * hex·px 인라인 금지, 항상 토큰 유틸 사용.
+ * ============================================================ */
+@theme {
+  /* --- 색 --- */
+  --color-primary: #0052ff;
+  --color-primary-active: #003ecc;
+  --color-primary-disabled: #a8b8cc;
+  --color-primary-soft: #e8efff;
+
+  --color-ink: #0a0b0d;
+  --color-body: #5b616e;
+  --color-muted: #7c828a;
+  --color-muted-soft: #a8acb3;
+
+  --color-hairline: #dee1e6;
+  --color-hairline-soft: #eef0f3;
+
+  --color-canvas: #ffffff;
+  --color-surface-soft: #f7f7f7;
+  --color-surface-card: #ffffff;
+  --color-surface-strong: #eef0f3;
+  --color-surface-dark: #0a0b0d;
+  --color-surface-dark-elevated: #16181c;
+  --color-cover-dark: #0a0f1f;        /* 가이드 14A — 메인 십자가 덮개색 */
+
+  --color-on-primary: #ffffff;
+  --color-on-dark: #ffffff;
+  --color-on-dark-soft: #a8acb3;
+
+  --color-success: #05b169;           /* 폼 메시지 텍스트 색으로만 */
+  --color-error: #cf202f;
+
+  /* --- 라운드 --- */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;                   /* 카드 표준 */
+  --radius-pill: 100px;
+  --radius-full: 9999px;
+
+  /* --- 간격(의미 토큰) — p-section, gap-lg 등 --- */
+  --spacing-xxs: 4px;
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-base: 16px;
+  --spacing-md: 20px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-xxl: 48px;
+  --spacing-section: 96px;
+
+  /* --- 레이아웃 --- */
+  --container-max: 1200px;
+  --container-padding: 24px;
+  --spacing-nav: 64px;
+
+  /* --- 타이포 (size + line-height + weight + letter-spacing) ---
+   * 디스플레이는 clamp로 유동(모바일→데스크톱 자동 스케일), 본문은 고정. */
+  --text-display-mega: clamp(36px, 6vw, 72px);
+  --text-display-mega--line-height: 1.15;
+  --text-display-mega--font-weight: 500;
+  --text-display-mega--letter-spacing: -0.02em;
+
+  --text-display-xl: clamp(32px, 5vw, 56px);
+  --text-display-xl--line-height: 1.18;
+  --text-display-xl--font-weight: 500;
+  --text-display-xl--letter-spacing: -0.02em;
+
+  --text-display-lg: clamp(28px, 4.5vw, 44px);
+  --text-display-lg--line-height: 1.2;
+  --text-display-lg--font-weight: 500;
+  --text-display-lg--letter-spacing: -0.02em;
+
+  --text-display-md: clamp(26px, 4vw, 36px);
+  --text-display-md--line-height: 1.25;
+  --text-display-md--font-weight: 500;
+  --text-display-md--letter-spacing: -0.01em;
+
+  --text-display-sm: clamp(24px, 3.5vw, 30px);
+  --text-display-sm--line-height: 1.3;
+  --text-display-sm--font-weight: 500;
+  --text-display-sm--letter-spacing: -0.01em;
+
+  --text-title-lg: 26px;
+  --text-title-lg--line-height: 1.35;
+  --text-title-lg--font-weight: 600;
+  --text-title-lg--letter-spacing: -0.01em;
+
+  --text-title-md: 18px;
+  --text-title-md--line-height: 1.4;
+  --text-title-md--font-weight: 600;
+
+  --text-title-sm: 16px;
+  --text-title-sm--line-height: 1.4;
+  --text-title-sm--font-weight: 600;
+
+  --text-body-md: 16px;
+  --text-body-md--line-height: 1.7;
+  --text-body-md--font-weight: 400;
+
+  --text-body-strong: 16px;
+  --text-body-strong--line-height: 1.7;
+  --text-body-strong--font-weight: 700;
+
+  --text-body-sm: 14px;
+  --text-body-sm--line-height: 1.6;
+  --text-body-sm--font-weight: 400;
+
+  --text-datetime: 14px;              /* tnum은 typo.datetime이 tabular-nums로 부여 */
+  --text-datetime--line-height: 1.4;
+  --text-datetime--font-weight: 500;
+
+  --text-caption: 13px;
+  --text-caption--line-height: 1.5;
+  --text-caption--font-weight: 400;
+
+  --text-caption-strong: 12px;
+  --text-caption-strong--line-height: 1.5;
+  --text-caption-strong--font-weight: 600;
+  --text-caption-strong--letter-spacing: 0.02em;
+
+  --text-button: 16px;
+  --text-button--line-height: 1.15;
+  --text-button--font-weight: 600;
+
+  --text-nav-link: 15px;
+  --text-nav-link--line-height: 1.4;
+  --text-nav-link--font-weight: 500;
 }
 
+/* 폰트는 next/font가 런타임에 주입하는 --font-pretendard를 참조하므로 inline 매핑 */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-pretendard), -apple-system, system-ui,
+    "Apple SD Gothic Neo", sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* ============================================================
+ * 베이스 — 흰 캔버스 고정(v1 다크모드 제외, DESIGN.md Known Gaps)
+ * ============================================================ */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
 }

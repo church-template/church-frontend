@@ -22,6 +22,7 @@ colors:
   surface-strong: "#eef0f3"
   surface-dark: "#0a0b0d"
   surface-dark-elevated: "#16181c"
+  cover-dark: "#0a0f1f"            # 메인 십자가 덮개색 (가이드 14A. CrossHero)
   on-primary: "#ffffff"
   on-dark: "#ffffff"
   on-dark-soft: "#a8acb3"
