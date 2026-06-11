@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { CHURCH_NAME } from "@/constants/church";
 import { Toaster } from "@/components/ui/sonner";
+import { Providers } from "./providers";
 
 // Pretendard Variable self-host (CDN import 금지, DESIGN.md). 가변 폰트라 100~900 전부 커버.
 const pretendard = localFont({
@@ -25,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="ko" className={`${pretendard.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
-        {children}
+        <Providers>{children}</Providers>
         <Toaster />
       </body>
     </html>
