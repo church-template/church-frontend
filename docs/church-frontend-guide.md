@@ -1050,6 +1050,7 @@ export default function DeptHero({ title, caption, media }: CrossHeroProps) {
 | 클라이언트 상태 | **Zustand** | 인증 스토어(토큰·member 스냅샷) 하나로 시작. 전역 스토어 남발 금지 — 서버 데이터는 Query가, 폼 상태는 RHF가 담당 |
 | 폼 | **react-hook-form + zod** | 가입 폼 사전검증(1.1)을 zod 스키마로: password ≥ 8자, 약관 2종 true. 서버 `errors[]`(4.2)는 `setError`로 필드에 매핑 |
 | 마크다운 | **marked + DOMPurify** | 5.3 파이프라인 그대로. 우회 렌더링 금지 |
+| 마크다운 새니타이즈 SSR | **isomorphic-dompurify** | 공개 콘텐츠 상세는 서버 컴포넌트+ISR이라 DOMPurify가 Node에서 실행돼야 함(서버=jsdom·클라=window 자동). DOMPurify config는 마크다운 산출 태그 allowlist로 조여 raw HTML 제거(가이드 5.1·이슈 T06 §7) |
 | 날짜 | **date-fns** | 캘린더 셀 계산·날짜 포맷. moment/dayjs 추가 금지 |
 | 클래스 유틸 | **clsx + tailwind-merge** | `cn()`(`src/lib/utils.ts`)로 variant className 병합·충돌 해소. 시각(T3)·동작(T4 shadcn) 컴포넌트 공유 |
 | 아이콘 | **lucide-react** | UI 아이콘 전용. **이모지로 아이콘을 대체하지 않는다.** 색은 `currentColor`(토큰 상속), 크기는 `size` prop. 다른 아이콘 세트(react-icons 등)·이미지 아이콘 추가 금지 |
