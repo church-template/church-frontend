@@ -79,7 +79,7 @@ afterEach(() => {
 describe("Home (메인)", () => {
   it("예배·설교·공지·일정 섹션과 CTA·푸터를 합성한다", async () => {
     stubBrowserApis();
-    render(await Home());
+    const { container } = render(await Home());
     // 섹션 타이틀은 h2(heading)로 좁힘 — 푸터 nav <a>와 텍스트 중복 방어
     expect(screen.getByRole("heading", { name: WORSHIP.title })).toBeDefined();
     expect(screen.getByRole("heading", { name: MAIN_SECTIONS.sermons.title })).toBeDefined();
@@ -93,6 +93,8 @@ describe("Home (메인)", () => {
     expect(screen.getByText("부활의 증인").closest("a")?.getAttribute("href")).toBe(
       "/sermons/1",
     );
+    // 콜라주 타일이 히어로와 예배시간 사이에 합성된다(MediaCollage 스펙 §5)
+    expect(container.querySelector('img[src="/collage-1.jpg"]')).not.toBeNull();
   });
 
   it("히어로 카피는 줄 단위로 DOM에 존재한다(SEO)", async () => {
