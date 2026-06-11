@@ -16,3 +16,15 @@ export const HERO: HeroMedia = {
 
 // 풀스크린 후 등장 카피 — 줄 단위 배열이라 "\n" 이스케이프가 필요 없다.
 export const HERO_CAPTION = ["말씀과 삶이 만나는 곳", "우리 동네의 교회"];
+
+// 교회 소재지·연락처 — 푸터·오시는 길에서 소비. 교회별 값이라 상수(env 아님, 스펙 D2).
+export const CHURCH_ADDRESS = "서울특별시 ○○구 ○○로 00";
+export const CHURCH_PHONE = "02-000-0000";
+export const CHURCH_EMAIL = `info@${CHURCH_DOMAIN}`;
+
+// 오시는 길 지도 임베드 URL(카카오/네이버 등). 비어 있으면 외부 지도 링크로 폴백(라이브러리 미사용).
+export const MAP_EMBED_SRC = "";
+
+// 임베드 미설정 시 외부 지도 폴백 — 교회/배포처가 지도 제공자를 바꿀 수 있게 상수로 노출.
+export const mapSearchUrl = (address: string) =>
+  `https://map.kakao.com/?q=${encodeURIComponent(address)}`;
