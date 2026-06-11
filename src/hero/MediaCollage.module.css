@@ -1,0 +1,66 @@
+/* 슬롯 %·vw 수치는 스펙 §4 표(연출 수치, C7 개정)가 단일 진실. 색·라디우스·간격은 토큰 참조. */
+.collage {
+  position: relative;
+  height: 220vh;
+  background: var(--color-canvas);
+  overflow-x: clip; /* 모바일 슬라이드 인 대기 위치(±40vw)가 가로 스크롤을 만들지 않게 */
+}
+.frame { position: sticky; top: 0; height: 100vh; height: 100dvh; overflow: hidden; }
+
+.center { position: absolute; inset: 0; will-change: clip-path; }
+.center video, .center img, .tile video, .tile img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+
+.tile {
+  position: absolute;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  opacity: 0; /* 데스크톱: 스크럽(JS)이 채움 / 모바일: tileShown이 채움 / reduced: 최하단 블록이 복원 */
+  will-change: transform, opacity;
+}
+
+/* 슬롯 기하(스펙 §4, C7 개정) — 안쪽으로 붙이고 상하 어긋남(T1↑T3↓·T2↓T4↑) */
+.tile1 { left: 14%; top: 10%; width: 15vw; aspect-ratio: 3 / 4; }
+.tile2 { left: 7%; bottom: 12%; width: 19vw; aspect-ratio: 4 / 3; }
+.tile3 { right: 7%; top: 16%; width: 18vw; aspect-ratio: 16 / 10; }
+.tile4 { right: 13%; bottom: 8%; width: 14vw; aspect-ratio: 3 / 4; }
+
+/* 모바일(C6) — sticky·스크럽 폐기, 세로 스택 카드 + 좌/우 1회 슬라이드 인 */
+@media (max-width: 639px) {
+  .collage { height: auto; padding: 0 var(--container-padding) var(--spacing-xl); }
+  .frame {
+    position: static;
+    height: auto;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-base);
+  }
+  .center {
+    position: static;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+  }
+  .tile, .tile1, .tile2, .tile3, .tile4 {
+    position: static;
+    width: 76vw;
+    transition: transform 0.6s ease, opacity 0.6s ease;
+  }
+  .tile1, .tile3 { align-self: flex-start; transform: translateX(-40vw); }
+  .tile2, .tile4 { align-self: flex-end; transform: translateX(40vw); }
+  .tileShown { opacity: 1; transform: translateX(0); }
+}
+
+/* reduced-motion — JS 미등록: 데스크톱은 완성 콜라주 정적, 모바일은 스택 즉시 표시(스펙 §6) */
+@media (prefers-reduced-motion: reduce) {
+  .collage { height: auto; }
+  .frame { position: static; }
+  .tile, .tile1, .tile2, .tile3, .tile4 { opacity: 1; transform: none; transition: none; }
+}
+@media (prefers-reduced-motion: reduce) and (min-width: 640px) {
+  .frame { height: 100vh; height: 100dvh; }
+  .center { clip-path: inset(14% 34% round var(--radius-xl)); }
+}
