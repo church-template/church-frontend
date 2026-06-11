@@ -20,7 +20,7 @@
 | D5 | 구조 = **섹션 컴포넌트 분리(A안)** | `page.tsx`는 fetch+합성만. 섹션마다 실제 로직(빈 배열·일정 엣지·고정 배지)이 있어 빈 추상화가 아님. 카드 확장은 T10~T12 목록 페이지가 재사용 |
 | D6 | 투명 헤더 = **스크롤 전환(IO)** | 히어로 위 = transparent, 히어로 이탈 = fixed 유지 + 라이트 스킨. T07이 남긴 `TODO(T8/T9)` 해소. mix-blend는 영상 위 색 반전 불안정으로 기각 |
 | D7 | 히어로 콘텐츠 = **상수 주입 유지** | 이슈의 env 방식 대신 T07 스펙 D2에서 확정된 `constants/church.ts`(`HERO`·`HERO_CAPTION`) 사용 — 기존 결정 승계, env 추가 없음 |
-| D8 | 빌드 전략 = **`dynamic = "force-dynamic"` + fetch 데이터 캐시(60s)** | CI(PROJECT-NEXT-CI)가 백엔드 없이 `next build`를 실행 → `/` prerender 시 `/api/main` 호출 실패로 빌드가 깨짐. force-dynamic으로 빌드 시 prerender를 제거하고, 신선도는 fetch 데이터 캐시(`next: { revalidate: 60 }`, Next 16 이전 모델에서 동작 확인)가 동일하게 담당. D4(런타임 실패 throw→error.tsx)는 그대로 유지 |
+| D8 | 빌드 전략 = **`await connection()` + fetch 데이터 캐시(60s)** | CI(PROJECT-NEXT-CI)가 백엔드 없이 `next build`를 실행 → `/` prerender 시 `/api/main` 호출 실패로 빌드가 깨짐. `connection()`(next/server)으로 prerender만 요청 시점으로 미루고, fetch 데이터 캐시(`next: { revalidate: 60 }`)는 그대로 동작. ~~force-dynamic~~은 구현 중 기각 — Next 문서상 모든 fetch를 `no-store`로 강제해 데이터 캐시까지 무시함(의도와 불일치). D4(런타임 실패 throw→error.tsx)는 그대로 유지 |
 
 ## 3. 파일 구조
 
@@ -52,8 +52,8 @@
 
 - `getMain(): Promise<MainResponse>` — 서버 전용. `!res.ok`면 throw(D4). 배열 필드는 `?? []` 방어만
   (자체 백엔드 + OpenAPI 단일 진실 → zod 런타임 검증은 과함).
-- `app/page.tsx`는 `export const dynamic = "force-dynamic"` 선언(D8) — 페이지는 요청별 렌더,
-  데이터는 fetch 데이터 캐시(60s)가 캡시. 백엔드 Redis(60s)와 이중 캐시로 부하 동일.
+- `app/page.tsx`는 getMain 호출 전 `await connection()`(next/server) 선언(D8) — 빌드 prerender만
+  요청 시점으로 미루고, 데이터는 fetch 데이터 캐시(60s)가 캡시. 백엔드 Redis(60s)와 이중 캐시.
 - TanStack Query 금지(공개 영역, 15.1 경계). **프론트 재정렬 금지**(서버 보장: 설교 `preachedAt desc`,
   공지 고정글 우선, 일정 `startAt asc`).
 - 날짜는 `parseServerDate`(+09:00) → `lib/date.ts` 포맷터가 **문자열로 변환 후** 카드에 전달.
