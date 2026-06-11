@@ -37,12 +37,12 @@
 ## 5. 라우트 에러 페이지 (404 · 런타임 에러)
 존재하지 않는 URL·`notFound()`·런타임 예외가 렌더할 **셸 위 페이지**. 가이드 4.2의 **API 404(`RESOURCE_NOT_FOUND`)는 토스트/목록 복귀**(T06 `handleApiError`)이고, 이건 **라우트 레벨 페이지**다 — 둘을 구분한다.
 - [ ] `app/not-found.tsx` — 404. 잘못된 URL + 공개 서버 페이지의 `notFound()`(설교·공지 등 비존재 리소스 상세, T06 스펙 §6) 렌더 대상. "페이지를 찾을 수 없습니다" 헤드라인(`display-md`) + 홈으로(`button-primary`)·이전/목록 복귀. 네비·푸터(셸) 위에 얹힌다.
-- [ ] `app/error.tsx` — 런타임 에러 바운더리(`'use client'`, `reset` prop). "문제가 발생했습니다" + 다시 시도(`reset()`)·홈으로. 민감 정보(스택) 비노출.
+- [ ] `app/error.tsx` — 런타임 에러 바운더리(`'use client'`, `unstable_retry` prop — Next 16.2.0, 스펙 D3). "문제가 발생했습니다" + 다시 시도(`unstable_retry()`)·홈으로. 민감 정보(스택) 비노출.
 - [ ] (선택) `app/global-error.tsx` — 루트 레이아웃까지 깨질 때 최후 바운더리(자체 `<html><body>` 포함).
 > AGENTS.md: Next 16의 not-found/error 파일 규약을 `node_modules/next/dist/docs/01-app/`에서 확인 후 작성. DESIGN 토큰·`EmptyState`(T06) 재사용.
 
-## 6. 교회 고유값 env (0.3/12장)
-- [ ] 이름·도메인·로고를 **env로 주입**(`NEXT_PUBLIC_CHURCH_*`). 디자인/코드에 하드코딩 금지.
+## 6. 교회 고유값 상수 (0.3/12장)
+- [ ] 이름·도메인·로고·주소·연락처를 **상수 파일(`src/constants/church.ts`)로 주입**. 디자인/코드에 하드코딩(매직스트링) 금지. (env가 아니라 상수 — "교회마다 다른 값"이라서. API base 등 "환경" 값만 env. 스펙 D2)
 
 ## 7. 완료 조건
 - [ ] `app/layout.tsx` + 공유 컨테이너(1200/24)
@@ -51,12 +51,12 @@
 - [ ] cta-band-dark 프리푸터 + footer-light/legal-band
 - [ ] 정적 페이지(소개·연혁·비전·오시는 길) 라우트
 - [ ] 라우트 에러 페이지: `app/not-found.tsx`(404, 셸 위 + 복귀 CTA) · `app/error.tsx`(런타임 바운더리, 재시도)
-- [ ] 교회 고유값 env 주입
+- [ ] 교회 고유값 상수 주입
 
 ## 8. 검수
 - [ ] 모든 섹션·히어로가 1200/24 컨테이너 하나를 공유한다.
 - [ ] 히어로 위 투명 네비가 어두운 배경에서 가독성 유지.
 - [ ] 768px 미만에서 햄버거 Sheet 전환 + 핵심 CTA 유지.
-- [ ] 교회 이름/로고가 env 주입이며 하드코딩 0.
+- [ ] 교회 이름/로고가 상수(`church.ts`) 주입이며 하드코딩 0.
 - [ ] 존재하지 않는 URL 접근 시 기본 Next 404가 아니라 셸(네비·푸터) 위 커스텀 404가 뜨고 홈 복귀가 동작한다.
 - [ ] 공개 상세에서 `notFound()` 호출 시 동일한 404 페이지가 렌더된다.
