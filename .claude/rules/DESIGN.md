@@ -443,6 +443,13 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 - **`cta-band-dark`**: 프리푸터. "처음 오셨나요?" 헤드라인 `{typography.display-lg}` +
   CTA 2개(primary + outline-on-dark). 상하 96px.
 
+### 연출
+- **`media-collage`**: 메인 히어로(14A) 직후의 스크럽 섹션. 풀스크린 미디어(히어로와 동일)가
+  `clip-path: inset(... round {rounded.xl})`로 중앙 카드로 축소되고, 주변 타일(데스크톱 4·
+  모바일 2, `{rounded.xl}` + hairline)이 가장자리에서 슬라이드 인해 캔버스 위 콜라주를 만든다.
+  transform/clip-path/opacity만 사용(reflow 금지), reduced-motion은 완성 콜라주 정적 표시.
+  슬롯 기하·구간 수치는 스펙(docs/superpowers/specs/2026-06-11-media-collage-design.md §4)이 단일 진실.
+
 ### 폼
 - **`text-input`**: 12px 라운드, 포커스 시 보더 2px `{colors.primary}`.
 - 검증 메시지는 입력 아래 `{typography.caption}`, 색은 semantic 토큰.
