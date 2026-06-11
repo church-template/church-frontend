@@ -3,3 +3,56 @@
 export function parseServerDate(s: string): Date {
   return /T/.test(s) ? new Date(`${s}+09:00`) : new Date(`${s}T00:00:00+09:00`);
 }
+
+// 표시 포맷터 — Intl + Asia/Seoul 고정. 서버 런타임 TZ와 무관하게 KST 표기를 보장한다.
+// (date-fns format()은 런타임 로컬 TZ 기준이라 비KST 서버에서 어긋남 — 도입은 캘린더 T12에서)
+const KST = "Asia/Seoul";
+
+const dateFmt = new Intl.DateTimeFormat("ko-KR", {
+  timeZone: KST,
+  year: "numeric",
+  month: "numeric",
+  day: "numeric",
+});
+const monthDayFmt = new Intl.DateTimeFormat("ko-KR", {
+  timeZone: KST,
+  month: "numeric",
+  day: "numeric",
+});
+const timeFmt = new Intl.DateTimeFormat("ko-KR", {
+  timeZone: KST,
+  hour: "2-digit",
+  minute: "2-digit",
+  hourCycle: "h23",
+});
+
+/** "2026. 6. 1." — preachedAt(date)·createdAt(datetime) 공용. datetime 토큰(tnum)과 함께 쓴다. */
+export function formatDate(iso: string): string {
+  return dateFmt.format(parseServerDate(iso));
+}
+
+/**
+ * EventCard 시간줄 — 날짜는 배지가 담당하므로 중복 표기하지 않는다(스펙 §4).
+ * allDay → null(시간 생략, 13.2). 단 여러 날이면 "~ 6. 15." 종료일만.
+ * endAt 없음 → "10:00" / 같은 날 → "10:00 ~ 12:00" / 다른 날 → "10:00 ~ 6. 15. 12:00"
+ */
+export function formatEventTime(
+  startAt: string,
+  endAt: string | null | undefined,
+  allDay: boolean,
+): string | null {
+  const start = parseServerDate(startAt);
+  const end = endAt ? parseServerDate(endAt) : null;
+  const sameDay = end !== null && dateFmt.format(start) === dateFmt.format(end);
+
+  if (allDay) {
+    return end && !sameDay ? `~ ${monthDayFmt.format(end)}` : null;
+  }
+  if (!end) {
+    return timeFmt.format(start);
+  }
+  if (sameDay) {
+    return `${timeFmt.format(start)} ~ ${timeFmt.format(end)}`;
+  }
+  return `${timeFmt.format(start)} ~ ${monthDayFmt.format(end)} ${timeFmt.format(end)}`;
+}

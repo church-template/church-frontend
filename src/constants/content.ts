@@ -45,3 +45,10 @@ export const CTA_BAND = {
   primary: "새가족 안내",
   secondary: "오시는 길",
 };
+
+// 메인 데이터 섹션 타이틀·빈 상태 문구(가이드 13.2 빈 배열 처리) — 콘텐츠 하드코딩 금지(12장).
+export const MAIN_SECTIONS = {
+  sermons: { title: "최신 설교", empty: "등록된 설교가 없습니다" },
+  notices: { title: "공지", empty: "등록된 공지가 없습니다" },
+  events: { title: "다가오는 일정", empty: "등록된 일정이 없습니다" },
+} as const;

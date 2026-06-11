@@ -49,3 +49,25 @@ describe("SiteHeader", () => {
     expect(button.getAttribute("aria-expanded")).toBe("false");
   });
 });
+
+describe("SiteHeader solid (T8)", () => {
+  it("transparent + solid면 fixed를 유지한 채 라이트 스킨으로 전환한다", () => {
+    render(<SiteHeader variant="transparent" solid />);
+    const header = screen.getByRole("banner");
+    expect(header.className).toContain("fixed");
+    expect(header.className).toContain("bg-canvas");
+    expect(header.className).not.toContain("text-on-dark");
+  });
+
+  it("transparent 기본은 투명 + on-dark 그대로다(회귀)", () => {
+    render(<SiteHeader variant="transparent" />);
+    const header = screen.getByRole("banner");
+    expect(header.className).toContain("bg-transparent");
+    expect(header.className).toContain("text-on-dark");
+  });
+
+  it("solid는 light variant에 영향이 없다", () => {
+    render(<SiteHeader solid />);
+    expect(screen.getByRole("banner").className).not.toContain("fixed");
+  });
+});

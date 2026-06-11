@@ -20,20 +20,26 @@ import { cn } from "@/lib/utils";
 
 export interface SiteHeaderProps {
   variant?: "light" | "transparent";
+  /** transparent 전용 — 히어로 이탈 시 fixed 유지 + 라이트 스킨. HeroHeaderSync(T8)가 제어. */
+  solid?: boolean;
 }
 
 // 전역 헤더. light=서브페이지(흐름·64px), transparent=히어로 위(fixed·on-dark, 메인 T8/부서 T9).
-export function SiteHeader({ variant = "light" }: SiteHeaderProps) {
+export function SiteHeader({ variant = "light", solid = false }: SiteHeaderProps) {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const isTransparent = variant === "transparent";
+  const onDark = isTransparent && !solid;
 
-  // TODO(T8/T9): transparent variant 스크롤 진행도 배경 전환 — T07은 정적 fixed+on-dark만(스펙 §5.2).
+  // transparent: fixed 고정, 히어로 위(on-dark) ↔ 히어로 밖(solid: 라이트 스킨) 전환(T8 스펙 §8)
   const headerCls = isTransparent
-    ? "fixed inset-x-0 top-0 z-nav bg-transparent text-on-dark"
+    ? cn(
+        "fixed inset-x-0 top-0 z-nav transition-colors duration-200",
+        solid ? "border-b border-hairline bg-canvas text-ink" : "bg-transparent text-on-dark",
+      )
     : "border-b border-hairline bg-canvas text-ink";
-  const linkColor = isTransparent ? "text-on-dark" : "text-ink";
-  const accentColor = isTransparent ? "text-on-dark" : "text-primary";
+  const linkColor = onDark ? "text-on-dark" : "text-ink";
+  const accentColor = onDark ? "text-on-dark" : "text-primary";
 
   return (
     <header className={headerCls}>
