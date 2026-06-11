@@ -1,19 +1,38 @@
-import { SiteShell } from "@/components/shell/SiteShell";
-import { Container } from "@/components/shell/Container";
-import { typo } from "@/constants/typography";
-import { cn } from "@/lib/utils";
-import { CHURCH_NAME } from "@/constants/church";
+import { connection } from "next/server";
+import { HeroHeaderSync } from "@/components/main/HeroHeaderSync";
+import { WorshipSection } from "@/components/main/WorshipSection";
+import { SermonSection } from "@/components/main/SermonSection";
+import { NoticeSection } from "@/components/main/NoticeSection";
+import { EventSection } from "@/components/main/EventSection";
+import { CtaBand } from "@/components/shell/CtaBand";
+import { SiteFooter } from "@/components/shell/SiteFooter";
+import { getMain } from "@/lib/api/main";
+import { HERO, HERO_CAPTION } from "@/constants/church";
 
-// 임시 홈 — T08에서 CrossHero(14A) + 13.4 섹션으로 대체된다. 현재는 셸 검증용 플레이스홀더.
-export default function Home() {
+// 메인(가이드 13.4) — 공개 콘텐츠 서버 fetch. SiteShell 대신 투명 헤더를 직접 합성(T07 §5.2).
+export default async function Home() {
+  // CI가 백엔드 없이 build하므로 prerender(= 빌드 시 /api/main 호출)를 요청 시점으로 미룬다(스펙 D8).
+  // force-dynamic과 달리 fetch 데이터 캐시(revalidate 60)는 그대로 동작 — 백엔드 부하는 60s 캐시가 흡수.
+  await connection();
+  const main = await getMain();
+
+  // 줄 단위 카피 배열 → block span 합성(가이드 13.3의 "\n" 이슈 원천 차단, 줄별 텍스트 노드 유지)
+  const caption = HERO_CAPTION.map((line, i) => (
+    <span key={i} className="block">
+      {line}
+    </span>
+  ));
+
   return (
-    <SiteShell>
-      <Container as="section" className="py-section text-center">
-        <h1 className={cn(typo.displayLg, "text-ink")}>{CHURCH_NAME}</h1>
-        <p className={cn(typo.bodyMd, "mt-base text-muted")}>
-          홈 페이지는 T08에서 구성됩니다.
-        </p>
-      </Container>
-    </SiteShell>
+    <>
+      <HeroHeaderSync media={HERO} caption={caption}>
+        <WorshipSection />
+        <SermonSection sermons={main.sermons} />
+        <NoticeSection notices={main.notices} />
+        <EventSection events={main.upcomingEvents} />
+      </HeroHeaderSync>
+      <CtaBand />
+      <SiteFooter />
+    </>
   );
 }
