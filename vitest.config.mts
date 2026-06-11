@@ -7,5 +7,7 @@ export default defineConfig({
   plugins: [tsconfigPaths(), react()],
   test: {
     environment: "jsdom",
+    // 렌더 테스트 격리: 매 테스트 후 RTL cleanup(한 파일 다중 render 시 screen 누적 방지)
+    setupFiles: ["./vitest.setup.ts"],
   },
 });
