@@ -30,7 +30,7 @@ T1 ─┬─ T2 ─┬─ T3 ─┐
 | T4 | 동작 컴포넌트(shadcn 7종 재스킨) | component | T2 | 15.4 |
 | T5 | 인증 인프라(authFetch·401 refresh·Zustand) | auth | T1 | |
 | T6 | 공통 응답/에러/유틸 | core | T3·T4 | |
-| T7 | 앱 셸(layout·nav·footer·정적페이지) | layout | T3·T4 | |
+| T7 | 앱 셸(layout·nav·footer·정적페이지·404/error) | layout | T3·T4 | |
 | T8 | 메인 페이지(13장 + 14A CrossHero) | page | T7·T6 | **14A.7** |
 | T9 | 부서 소개(14B DeptHero) | page | T7·T6 | **14B.9** |
 | T10 | 설교(목록·검색·상세) | page | T6·T7 | |
