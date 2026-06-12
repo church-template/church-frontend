@@ -1,0 +1,17 @@
+/* IO 1회 등장(스펙 H3). 이동 거리 24px = 연출 수치.
+   translate는 Tailwind v4에서 속성으로 컴파일되므로 여기서도 속성을 쓴다(transform 충돌 방지). */
+.reveal {
+  opacity: 0;
+  translate: 0 24px;
+  transition: opacity 0.6s ease, translate 0.6s ease;
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.shown {
+  opacity: 1;
+  translate: 0 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* JS 미등록 — 즉시 표시 */
+  .reveal { opacity: 1; translate: none; transition: none; }
+}

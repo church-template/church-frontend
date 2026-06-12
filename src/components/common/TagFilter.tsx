@@ -5,12 +5,10 @@ import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { typo } from "@/constants/typography";
+import type { TagResponse } from "@/lib/api/types";
 
-// api-docs TagResponse.
-export interface Tag {
-  id: number;
-  name: string;
-}
+// api-docs TagResponse — 정의는 lib/api/types.ts로 이동(T8), 기존 소비처 호환 재export.
+export type Tag = TagResponse;
 
 function TagFilterPills({ tags }: { tags: Tag[] }) {
   const pathname = usePathname();

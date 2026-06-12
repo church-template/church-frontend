@@ -347,6 +347,7 @@ components:
   가늘어 보이므로 500으로 보정했다. 600 이상으로 올리지 않는다.
 - **자간은 em 단위.** 디스플레이만 -0.01 ~ -0.02em의 미세한 음수 자간, 본문은 0.
 - **본문 행간 1.7.** 한글 장문(설교 본문, 공지)의 가독성 기준. 라틴 기준(1.5)보다 넉넉하게.
+- **본문 20px·보조 18px.** 주 사용자층(고령 교인)의 가독성 기준으로 일반 웹 기본(16/14)보다 두 단계 키운 스케일이다. 15px 미만 텍스트는 쓰지 않는다.
 - **날짜·시간 숫자는 `{typography.datetime}`** — `font-feature-settings: "tnum"` 으로
   자릿수가 흔들리지 않게 한다 (예배 시간표, 일정 캘린더에서 중요).
 
@@ -357,14 +358,14 @@ components:
 | `{typography.display-xl}` | 56px | 500 | 서브 페이지 히어로 |
 | `{typography.display-lg}` | 44px | 500 | 섹션 헤드, 히어로 오버레이 카피 |
 | `{typography.display-md}` | 36px | 500 | CTA 밴드 헤드라인 |
-| `{typography.title-lg}` | 26px | 600 | 카드 그룹 타이틀 |
-| `{typography.title-md}` | 18px | 600 | 카드 제목, 목록 제목 |
-| `{typography.body-md}` | 16px | 400 | 기본 본문 (행간 1.7) |
-| `{typography.body-sm}` | 14px | 400 | 보조 본문, 푸터 |
-| `{typography.datetime}` | 14px | 500 | 날짜·시간 (tnum) |
-| `{typography.caption}` | 13px | 400 | 캡션 |
-| `{typography.button}` | 16px | 600 | CTA |
-| `{typography.nav-link}` | 15px | 500 | 네비 메뉴 |
+| `{typography.title-lg}` | 30px | 600 | 카드 그룹 타이틀 |
+| `{typography.title-md}` | 22px | 600 | 카드 제목, 목록 제목 |
+| `{typography.body-md}` | 20px | 400 | 기본 본문 (행간 1.7) |
+| `{typography.body-sm}` | 18px | 400 | 보조 본문, 푸터 |
+| `{typography.datetime}` | 18px | 500 | 날짜·시간 (tnum) |
+| `{typography.caption}` | 16px | 400 | 캡션 |
+| `{typography.button}` | 20px | 600 | CTA |
+| `{typography.nav-link}` | 21px | 500 | 네비 메뉴 |
 
 모바일에서 디스플레이는 단계적으로 줄인다: 72 → 56 → 44 → 36 → 30px.
 구현은 `clamp()` 권장 (예: `clamp(36px, 6vw, 72px)`).
@@ -418,15 +419,19 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 ## 컴포넌트 (Components)
 
 ### 네비게이션
-- **`top-nav-light`**: 서브 페이지 기본. 흰 배경, ink 텍스트, 64px.
-  로고 좌측 / 메뉴(교회소개·예배·설교·소식·교육부서 등) 중앙 또는 우측.
+- **`top-nav-light`**: 서브 페이지 기본. 흰 배경, ink 텍스트, 80px.
+  로고 좌측 / 메뉴(교회안내·예배·설교·소식·교육부서 등) 중앙 또는 우측.
 - **`top-nav-transparent`**: 히어로 위(메인·부서). `position: fixed; z-index: 10`, 투명 배경.
   메인(14A)은 어두운 덮개 위에 얹히므로 흰색 텍스트 또는 `mix-blend-mode: difference`로 가독성을 확보한다.
   부서(14B)는 카드가 풀스크린으로 전환된 뒤 진행도에 따라 텍스트를 `{colors.on-dark}`로
   전환하거나 반투명 블러 배경을 더한다.
+- **`mega-menu`**: 데스크톱 GNB(참조: 우리은행). 1뎁스 호버/포커스 시 헤더 아래 풀폭 캔버스
+  패널이 펼쳐지고 전 카테고리가 컬럼으로 표시된다. 행 = 아이콘 플레이트(`{rounded.full}` 40px,
+  `primary-soft` 틴트 단일 — 다색 금지) + lucide 아이콘(20px, `currentColor`=primary) + 라벨.
+  닫힘: mouseleave·Esc·링크 클릭. 모바일은 햄버거 시트 유지.
 
 ### 버튼
-- **`button-primary`**: 시그니처 블루 필. 44px 높이. 한 화면(밴드)에 1개가 원칙.
+- **`button-primary`**: 시그니처 블루 필. 48px 높이. 한 화면(밴드)에 1개가 원칙.
 - **`button-pill-cta`**: 히어로·CTA 밴드용 56px 대형 필 ("새가족 안내", "오시는 길").
 - **`button-secondary-light`** / **`button-outline-on-dark`** / **`button-tertiary-text`**: 보조 위계.
 
@@ -442,6 +447,19 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 ### 밴드
 - **`cta-band-dark`**: 프리푸터. "처음 오셨나요?" 헤드라인 `{typography.display-lg}` +
   CTA 2개(primary + outline-on-dark). 상하 96px.
+
+### 연출
+- **`media-collage`**: 메인 히어로(14A) 직후의 스크럽 섹션. 풀스크린 미디어(히어로와 동일)가
+  `clip-path: inset(... round {rounded.xl})`로 중앙 카드로 축소되고, 주변 타일(데스크톱 4·
+  모바일 2, `{rounded.xl}` + hairline)이 가장자리에서 슬라이드 인해 캔버스 위 콜라주를 만든다.
+  transform/clip-path/opacity만 사용(reflow 금지), reduced-motion은 완성 콜라주 정적 표시.
+  슬롯 기하·구간 수치는 스펙(docs/superpowers/specs/2026-06-11-media-collage-design.md §4)이 단일 진실.
+- **`history-band`**: 연혁 카드 시퀀스(참조: 우리은행 Dream). 연도 배지 + 헤드라인 + 설명의
+  풀폭 라운드 밴드(`{rounded.xl}`)가 세로로 이어지고, 배경은 surface-dark·primary-soft·
+  surface-soft 토큰 교차(브랜드 3색 직역 금지 — 단일 액센트 원칙). 뷰포트 진입 시 1회
+  fade+slide-up(Reveal, 스태거 120ms).
+- **`ministry-cards`**: 사역 카드 3-up(모바일 1-up). lucide 아이콘(32·currentColor) + 제목 +
+  설명, 배경 토큰 교차는 history-band와 시작점을 달리한다. 동일한 Reveal 등장.
 
 ### 폼
 - **`text-input`**: 12px 라운드, 포커스 시 보더 2px `{colors.primary}`.
@@ -474,7 +492,7 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 | Desktop | 1024–1280px | 히어로 h1 72px, 카드 3-up |
 | Wide | > 1280px | 콘텐츠 1200px 캡, 히어로 미디어만 풀블리드 |
 
-- 터치 타깃: 기본 CTA 44px, 히어로 CTA 56px (WCAG AAA).
+- 터치 타깃: 기본 CTA 48px, 히어로 CTA 56px (WCAG AAA 이상 — 고령 사용자 여유 확보).
 - 네비는 768px 미만에서 햄버거 시트로 전환, 핵심 CTA는 유지.
 
 ## 구현 노트 (Implementation Notes)

@@ -9,7 +9,8 @@ import {
   SheetTitle,
   SheetClose,
 } from "@/components/ui/sheet";
-import { NAV_PRIMARY, NAV_AUTH } from "@/constants/navigation";
+import { NAV_PRIMARY, NAV_LOGIN, NAV_MYPAGE } from "@/constants/navigation";
+import { useAuthStore } from "@/lib/auth/authStore";
 import { typo } from "@/constants/typography";
 import { cn } from "@/lib/utils";
 
@@ -22,6 +23,9 @@ export interface MobileNavProps {
 export function MobileNav({ open, onOpenChange }: MobileNavProps) {
   const pathname = usePathname();
   const firstRender = useRef(true);
+  // 헤더와 동일 규칙 — member 스냅샷이 있으면 마이페이지, 없으면 로그인(스펙 M4).
+  const member = useAuthStore((s) => s.member);
+  const authLink = member ? NAV_MYPAGE : NAV_LOGIN;
 
   // 라우트 변경 시 닫힘(링크 클릭·뒤로가기·프로그램적 전환). 최초 렌더는 건너뛴다.
   useEffect(() => {
@@ -38,37 +42,29 @@ export function MobileNav({ open, onOpenChange }: MobileNavProps) {
       <SheetContent side="right" className="gap-lg" aria-describedby={undefined}>
         <SheetTitle>메뉴</SheetTitle>
         <nav className="flex flex-col gap-base">
-          {NAV_PRIMARY.map((item) =>
-            item.href ? (
-              <SheetClose asChild key={item.label}>
+          {NAV_PRIMARY.map((item) => (
+            <div key={item.label} className="flex flex-col gap-xs">
+              <SheetClose asChild>
                 <Link href={item.href} className={cn(typo.navLink, "text-ink")}>
                   {item.label}
                 </Link>
               </SheetClose>
-            ) : (
-              <div key={item.label} className="flex flex-col gap-xs">
-                <span className={cn(typo.captionStrong, "text-muted")}>
-                  {item.label}
-                </span>
-                {item.children?.map((c) => (
-                  <SheetClose asChild key={c.href}>
-                    <Link href={c.href} className={cn(typo.bodySm, "pl-sm text-body")}>
-                      {c.label}
-                    </Link>
-                  </SheetClose>
-                ))}
-              </div>
-            ),
-          )}
+              {item.children.map((c) => (
+                <SheetClose asChild key={c.href}>
+                  <Link href={c.href} className={cn(typo.bodySm, "pl-sm text-body")}>
+                    {c.label}
+                  </Link>
+                </SheetClose>
+              ))}
+            </div>
+          ))}
         </nav>
         <div className="mt-auto flex flex-col gap-xs border-t border-hairline pt-base">
-          {NAV_AUTH.map((l) => (
-            <SheetClose asChild key={l.href}>
-              <Link href={l.href} className={cn(typo.navLink, "text-primary")}>
-                {l.label}
-              </Link>
-            </SheetClose>
-          ))}
+          <SheetClose asChild>
+            <Link href={authLink.href} className={cn(typo.navLink, "text-primary")}>
+              {authLink.label}
+            </Link>
+          </SheetClose>
         </div>
       </SheetContent>
     </Sheet>

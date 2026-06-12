@@ -1,6 +1,8 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import type { ReactNode } from "react";
+import { useAuthStore } from "@/lib/auth/authStore";
+import type { MemberSummary } from "@/lib/auth/types";
 
 // usePathname을 가변 변수로 모킹 → 라우트 변경(rerender)으로 effect 동작 검증.
 let mockPath = "/";
@@ -19,12 +21,35 @@ beforeEach(() => {
   mockPath = "/";
 });
 
+afterEach(() => {
+  // 테스트 오염 방지
+  useAuthStore.setState({ member: null });
+});
+
 describe("MobileNav", () => {
-  it("열리면 IA 트리와 인증 링크를 노출한다", () => {
+  it("열리면 그룹 구조(1뎁스 라벨 링크 + 하위 링크)를 렌더한다", () => {
     render(<MobileNav open onOpenChange={() => {}} />);
+    // 1뎁스 라벨(링크)
+    expect(screen.getByRole("link", { name: "예배·설교" })).toBeDefined();
+    // 하위 자식 링크
     expect(screen.getByText("공지")).toBeDefined(); // 소식 하위
-    expect(screen.getByText("오시는 길")).toBeDefined(); // 교회소개 하위
+    expect(screen.getByText("오시는 길")).toBeDefined(); // 교회안내 하위
+    expect(screen.getByText("설교")).toBeDefined(); // 예배·설교 하위
+  });
+
+  it("기본(member null)이면 로그인 단일 링크를 노출한다", () => {
+    render(<MobileNav open onOpenChange={() => {}} />);
     expect(screen.getByRole("link", { name: "로그인" })).toBeDefined();
+    expect(screen.queryByRole("link", { name: "마이페이지" })).toBeNull();
+  });
+
+  it("member 존재 시 마이페이지 단일 링크를 노출한다", () => {
+    useAuthStore.setState({
+      member: { uuid: "u1", name: "홍길동", phone: "", position: "", roles: [] } satisfies MemberSummary,
+    });
+    render(<MobileNav open onOpenChange={() => {}} />);
+    expect(screen.getByRole("link", { name: "마이페이지" })).toBeDefined();
+    expect(screen.queryByRole("link", { name: "로그인" })).toBeNull();
   });
 
   it("닫혀 있으면 콘텐츠를 렌더하지 않는다", () => {

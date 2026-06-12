@@ -17,6 +17,15 @@ export const HERO: HeroMedia = {
 // 풀스크린 후 등장 카피 — 줄 단위 배열이라 "\n" 이스케이프가 필요 없다.
 export const HERO_CAPTION = ["말씀과 삶이 만나는 곳", "우리 동네의 교회"];
 
+// 콜라주 타일(MediaCollage 스펙 C2·C4) — 데스크톱 4장, 모바일은 앞 2장만 노출(컴포넌트가 처리).
+// 장식 미디어라 alt 기본 "". 의미 있는 사진으로 교체 시 alt도 채운다.
+export const COLLAGE_TILES: HeroMedia[] = [
+  { type: "image", src: "/collage-1.jpg", alt: "" },
+  { type: "image", src: "/collage-2.jpg", alt: "" },
+  { type: "image", src: "/collage-3.jpg", alt: "" },
+  { type: "image", src: "/collage-4.jpg", alt: "" },
+];
+
 // 교회 소재지·연락처 — 푸터·오시는 길에서 소비. 교회별 값이라 상수(env 아님, 스펙 D2).
 export const CHURCH_ADDRESS = "서울특별시 ○○구 ○○로 00";
 export const CHURCH_PHONE = "02-000-0000";

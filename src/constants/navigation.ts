@@ -1,51 +1,66 @@
-// 사이트 정보구조(IA) 단일 출처. 헤더·모바일·푸터가 이 데이터를 소비한다(하드코딩 0).
+// 사이트 정보구조(IA) 단일 출처. 헤더(메가메뉴)·모바일·푸터가 이 데이터를 소비한다(하드코딩 0).
+export type NavIconKey =
+  | "church"
+  | "history"
+  | "sparkles"
+  | "mapPin"
+  | "calendarClock"
+  | "bookOpen"
+  | "graduationCap"
+  | "bell"
+  | "calendar"
+  | "newspaper"
+  | "images";
+
 export interface NavLink {
   label: string;
   href: string;
+  /** 메가메뉴 아이콘 플레이트 키 — 직렬화 가능한 문자열만, lucide 매핑은 MegaMenu가 담당 */
+  icon?: NavIconKey;
 }
 export interface NavItem {
   label: string;
-  /** 단일 링크면 href, 드롭다운이면 children */
-  href?: string;
-  children?: NavLink[];
+  /** 1뎁스 라벨 클릭 시 이동하는 대표 페이지 */
+  href: string;
+  children: NavLink[];
 }
 
-// 링크 그룹은 헤더 드롭다운과 푸터 열에서 공유한다(DRY).
+// 링크 그룹은 메가메뉴 컬럼과 푸터 열에서 공유한다(DRY).
 const ABOUT_LINKS: NavLink[] = [
-  { label: "소개", href: "/about" },
-  { label: "연혁", href: "/about/history" },
-  { label: "비전", href: "/about/vision" },
-  { label: "오시는 길", href: "/about/location" },
+  { label: "소개", href: "/about", icon: "church" },
+  { label: "연혁", href: "/about/history", icon: "history" },
+  { label: "비전", href: "/about/vision", icon: "sparkles" },
+  { label: "오시는 길", href: "/about/location", icon: "mapPin" },
+];
+const WORSHIP_LINKS: NavLink[] = [
+  { label: "예배시간", href: "/worship", icon: "calendarClock" },
+  { label: "설교", href: "/sermons", icon: "bookOpen" },
+];
+const DEPT_LINKS: NavLink[] = [
+  // 부서별 라우트(T9/T13)가 생기면 여기에 추가 — 라우트 없는 항목은 만들지 않는다(스펙 M1).
+  { label: "교육부서 안내", href: "/departments", icon: "graduationCap" },
 ];
 const NEWS_LINKS: NavLink[] = [
-  { label: "공지", href: "/notices" },
-  { label: "일정", href: "/events" },
-  { label: "주보", href: "/bulletins" },
-  { label: "갤러리", href: "/gallery" },
+  { label: "공지", href: "/notices", icon: "bell" },
+  { label: "일정", href: "/events", icon: "calendar" },
+  { label: "주보", href: "/bulletins", icon: "newspaper" },
+  { label: "갤러리", href: "/gallery", icon: "images" },
 ];
 
 export const NAV_PRIMARY: NavItem[] = [
-  { label: "교회소개", children: ABOUT_LINKS },
-  { label: "예배", href: "/worship" },
-  { label: "설교", href: "/sermons" },
-  { label: "소식", children: NEWS_LINKS },
-  { label: "교육부서", href: "/departments" },
+  { label: "교회안내", href: "/about", children: ABOUT_LINKS },
+  { label: "예배·설교", href: "/worship", children: WORSHIP_LINKS },
+  { label: "교육부서", href: "/departments", children: DEPT_LINKS },
+  { label: "소식", href: "/notices", children: NEWS_LINKS },
 ];
 
-export const NAV_AUTH: NavLink[] = [
-  { label: "로그인", href: "/login" },
-  { label: "마이페이지", href: "/mypage" },
-];
+// 인증 영역은 하나만 노출 — member 스냅샷 유무로 SiteHeader/MobileNav가 선택(스펙 M4).
+export const NAV_LOGIN: NavLink = { label: "로그인", href: "/login" };
+export const NAV_MYPAGE: NavLink = { label: "마이페이지", href: "/mypage" };
 
 export const FOOTER_COLUMNS: { title: string; links: NavLink[] }[] = [
-  { title: "교회소개", links: ABOUT_LINKS },
+  { title: "교회안내", links: ABOUT_LINKS },
+  { title: "예배·설교", links: WORSHIP_LINKS },
+  { title: "교육부서", links: DEPT_LINKS },
   { title: "소식", links: NEWS_LINKS },
-  {
-    title: "바로가기",
-    links: [
-      { label: "예배", href: "/worship" },
-      { label: "설교", href: "/sermons" },
-      { label: "교육부서", href: "/departments" },
-    ],
-  },
 ];
