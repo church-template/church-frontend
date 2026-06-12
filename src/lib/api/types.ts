@@ -62,3 +62,22 @@ export interface DepartmentDetailResponse extends DepartmentCardResponse {
 export interface DepartmentNode extends DepartmentCardResponse {
   children: DepartmentNode[];
 }
+
+// 상세 응답 — 카드 메타 + 본문·외부링크·낙관적 락(가이드 10장, OpenAPI SermonDetailResponse).
+export interface SermonDetailResponse {
+  id: number;
+  title: string;
+  preacher: string;
+  series?: string | null;
+  scripture?: string | null;
+  content: string; // raw 마크다운
+  videoUrl?: string | null;
+  audioUrl?: string | null;
+  preachedAt: string; // date (yyyy-MM-dd)
+  viewCount: number;
+  createdAt: string; // LocalDateTime
+  updatedAt: string;
+  version: number;
+  tags: TagResponse[];
+  author?: string | null; // 서버 마스킹 적용
+}
