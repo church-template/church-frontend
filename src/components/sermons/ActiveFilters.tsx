@@ -5,8 +5,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { X } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { typo } from "@/constants/typography";
+import { Badge } from "@/components/ui/Badge";
 
 export interface FilterChip {
   label: string;
@@ -47,17 +46,12 @@ function ActiveFilterChips() {
   return (
     <div className="flex flex-wrap gap-xs" aria-label="적용된 필터">
       {chips.map((c) => (
-        <Link
-          key={c.label}
-          href={hrefWithout(c.remove)}
-          aria-label={`${c.label} 필터 제거`}
-          className={cn(
-            typo.captionStrong,
-            "inline-flex items-center gap-xxs rounded-sm bg-primary-soft px-3 py-1 text-primary",
-          )}
-        >
-          {c.label}
-          <X size={14} aria-hidden />
+        <Link key={c.label} href={hrefWithout(c.remove)} aria-label={`${c.label} 필터 제거`}>
+          {/* 활성 필터 칩 = Badge(primary) 재사용 — X 아이콘 간격만 추가 */}
+          <Badge variant="primary" className="gap-xxs">
+            {c.label}
+            <X size={14} aria-hidden />
+          </Badge>
         </Link>
       ))}
     </div>
