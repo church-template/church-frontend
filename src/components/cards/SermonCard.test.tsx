@@ -40,6 +40,16 @@ describe("SermonCard", () => {
     expect(screen.getByText("요한복음 시리즈")).toBeDefined();
   });
 
+  it("인터랙티브 카드는 h-full로 그리드 셀을 채운다(태그 유무 무관 동일 높이)", () => {
+    const { container } = render(
+      <SermonCard title="t" preacher="p" date="d" href="/sermons/1" />,
+    );
+    const link = container.querySelector("a");
+    expect(link?.className).toContain("h-full"); // Link가 셀 높이로 stretch
+    const card = link?.firstElementChild as HTMLElement;
+    expect(card?.className).toContain("h-full"); // Card가 Link를 채움
+  });
+
   it("thumbnailUrl이 있으면 기존 썸네일 카드를 유지한다(회귀)", () => {
     const { container } = render(
       <SermonCard thumbnailUrl="/t.jpg" title="t" preacher="p" date="d" />,
