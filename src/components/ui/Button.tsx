@@ -16,19 +16,19 @@ export type ButtonVariant =
 // rounded-lg(16px): 중첩 라디우스 원칙(외부 ≈ 내부 ×2) — 배지(8)의 ×2 (DESIGN Shapes).
 const variantClass: Record<ButtonVariant, string> = {
   primary: cn(
-    "bg-primary text-on-primary rounded-lg h-11 px-5",
+    "bg-primary text-on-primary rounded-lg h-12 px-5",
     "hover:bg-primary-active active:bg-primary-active active:translate-y-px",
     "disabled:bg-primary-disabled disabled:text-on-primary",
     "focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-canvas",
   ),
   secondary: cn(
-    "bg-surface-strong text-ink rounded-lg h-11 px-5",
+    "bg-surface-strong text-ink rounded-lg h-12 px-5",
     "hover:bg-hairline active:bg-hairline active:translate-y-px",
     "disabled:bg-surface-strong disabled:text-muted",
     "focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-canvas",
   ),
   outlineOnDark: cn(
-    "bg-transparent text-on-dark border border-on-dark rounded-lg h-11 px-5",
+    "bg-transparent text-on-dark border border-on-dark rounded-lg h-12 px-5",
     "hover:bg-on-dark/10 active:bg-on-dark/15 active:translate-y-px",
     "disabled:opacity-50",
     "focus-visible:ring-2 focus-visible:ring-on-dark focus-visible:ring-offset-2 focus-visible:ring-offset-surface-dark",

@@ -82,10 +82,11 @@
   /* --- 레이아웃 --- */
   --container-max: 1200px;
   --container-padding: 24px;
-  --spacing-nav: 64px;
+  --spacing-nav: 80px;             /* 타이포 확대에 맞춘 헤더 높이(고령 가독 강조) */
 
   /* --- 타이포 (size + line-height + weight + letter-spacing) ---
-   * 디스플레이는 clamp로 유동(모바일→데스크톱 자동 스케일), 본문은 고정. */
+   * 디스플레이는 clamp로 유동(모바일→데스크톱 자동 스케일), 본문은 고정.
+   * 어르신 가독성 기준으로 본문 20px·보조 18px(최대 확대, DESIGN.md 표와 동기). */
   --text-display-mega: clamp(36px, 6vw, 72px);
   --text-display-mega--line-height: 1.15;
   --text-display-mega--font-weight: 500;
@@ -111,49 +112,49 @@
   --text-display-sm--font-weight: 500;
   --text-display-sm--letter-spacing: -0.01em;
 
-  --text-title-lg: 26px;
+  --text-title-lg: 30px;
   --text-title-lg--line-height: 1.35;
   --text-title-lg--font-weight: 600;
   --text-title-lg--letter-spacing: -0.01em;
 
-  --text-title-md: 18px;
+  --text-title-md: 22px;
   --text-title-md--line-height: 1.4;
   --text-title-md--font-weight: 600;
 
-  --text-title-sm: 16px;
+  --text-title-sm: 20px;
   --text-title-sm--line-height: 1.4;
   --text-title-sm--font-weight: 600;
 
-  --text-body-md: 16px;
+  --text-body-md: 20px;
   --text-body-md--line-height: 1.7;
   --text-body-md--font-weight: 400;
 
-  --text-body-strong: 16px;
+  --text-body-strong: 20px;
   --text-body-strong--line-height: 1.7;
   --text-body-strong--font-weight: 700;
 
-  --text-body-sm: 14px;
+  --text-body-sm: 18px;
   --text-body-sm--line-height: 1.6;
   --text-body-sm--font-weight: 400;
 
-  --text-datetime: 14px;              /* tnum은 typo.datetime이 tabular-nums로 부여 */
+  --text-datetime: 18px;              /* tnum은 typo.datetime이 tabular-nums로 부여 */
   --text-datetime--line-height: 1.4;
   --text-datetime--font-weight: 500;
 
-  --text-caption: 13px;
+  --text-caption: 16px;
   --text-caption--line-height: 1.5;
   --text-caption--font-weight: 400;
 
-  --text-caption-strong: 12px;
+  --text-caption-strong: 15px;
   --text-caption-strong--line-height: 1.5;
   --text-caption-strong--font-weight: 600;
   --text-caption-strong--letter-spacing: 0.02em;
 
-  --text-button: 16px;
+  --text-button: 20px;
   --text-button--line-height: 1.15;
   --text-button--font-weight: 600;
 
-  --text-nav-link: 15px;
+  --text-nav-link: 21px;
   --text-nav-link--line-height: 1.4;
   --text-nav-link--font-weight: 500;
 }
