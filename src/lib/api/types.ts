@@ -112,3 +112,14 @@ export interface EventDetailResponse {
   version: number; // 낙관적 락 (표시엔 미사용, 어드민 대비)
   tags: TagResponse[];
 }
+
+// 주보 카드 — 본문 없음, PDF는 mediaId FK(가이드 10장, OpenAPI BulletinCardResponse).
+// 상세 타입은 선언하지 않는다(상세 페이지 없음 — 스펙 D2).
+export interface BulletinCardResponse {
+  id: number;
+  title: string;
+  serviceDate: string; // date (yyyy-MM-dd) — 예배일
+  mediaId: number;
+  createdAt: string; // LocalDateTime
+  author?: string | null; // 서버 마스킹 적용(가이드 7장) — 그대로 표기
+}

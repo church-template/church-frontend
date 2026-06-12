@@ -218,6 +218,12 @@ components:
     textColor: "{colors.ink}"
     typography: "{typography.body-md}"
     padding: 16px 0
+  bulletin-row:
+    # 주보 행: 제목 + 예배일 + 작성자(선택), 행 전체가 새 탭 PDF 링크
+    backgroundColor: transparent
+    textColor: "{colors.ink}"
+    typography: "{typography.title-sm}"
+    padding: 16px 0
   schedule-card:
     # 예배 시간 안내 카드: 예배명 + 시간 + 장소
     backgroundColor: "{colors.surface-soft}"
@@ -360,6 +366,7 @@ components:
 | `{typography.display-md}` | 36px | 500 | CTA 밴드 헤드라인 |
 | `{typography.title-lg}` | 30px | 600 | 카드 그룹 타이틀 |
 | `{typography.title-md}` | 22px | 600 | 카드 제목, 목록 제목 |
+| `{typography.title-sm}` | 20px | 600 | 목록 행 제목 (notice-row·bulletin-row) |
 | `{typography.body-md}` | 20px | 400 | 기본 본문 (행간 1.7) |
 | `{typography.body-sm}` | 18px | 400 | 보조 본문, 푸터 |
 | `{typography.datetime}` | 18px | 500 | 날짜·시간 (tnum) |
@@ -440,6 +447,9 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
   `{typography.title-md}` + 설교자·날짜 `{typography.datetime}` `{colors.muted}`.
   호버 시 soft drop + 썸네일 1.03배 줌(0.3s ease).
 - **`notice-row`**: 제목 + 날짜의 가로 행, 1px 헤어라인 구분. 클릭 영역은 행 전체.
+- **`bulletin-row`**: 주보 행(notice-row 변형). 제목 `{typography.title-sm}` + 예배일
+  `{typography.datetime}` `{colors.muted}` + 작성자 `{typography.body-sm}` `{colors.muted}`(없으면 줄 생략).
+  행 전체가 새 탭 PDF 링크(`GET /api/media/{id}`), 1px 헤어라인 구분, hover 시 제목 primary 전이.
 - **`schedule-card`**: `{colors.surface-soft}` 배경. 예배명 `{typography.title-md}` +
   시간 `{typography.datetime}` + 장소 `{typography.body-sm}`.
 - **`event-card`**: 행사 카드. 날짜 배지(`badge-pill-primary`) + 제목 + 요약.
