@@ -10,7 +10,10 @@ export type NavIconKey =
   | "bell"
   | "calendar"
   | "newspaper"
-  | "images";
+  | "images"
+  | "users"
+  | "music"
+  | "heart";
 
 export interface NavLink {
   label: string;
@@ -36,9 +39,13 @@ const WORSHIP_LINKS: NavLink[] = [
   { label: "예배시간", href: "/worship", icon: "calendarClock" },
   { label: "설교", href: "/sermons", icon: "bookOpen" },
 ];
-const DEPT_LINKS: NavLink[] = [
-  // 부서별 라우트(T9/T13)가 생기면 여기에 추가 — 라우트 없는 항목은 만들지 않는다(스펙 M1).
-  { label: "교육부서 안내", href: "/departments", icon: "graduationCap" },
+// 사역 부서 — slug는 constants/departments.ts의 DEPARTMENTS와 일치(navigation.test가 드리프트 감시).
+const MINISTRY_LINKS: NavLink[] = [
+  { label: "학생부", href: "/departments/student", icon: "bookOpen" },
+  { label: "청년부", href: "/departments/youth", icon: "users" },
+  { label: "예배부", href: "/departments/praise", icon: "music" },
+  { label: "남선교회", href: "/departments/men", icon: "users" },
+  { label: "여선교회", href: "/departments/women", icon: "heart" },
 ];
 const NEWS_LINKS: NavLink[] = [
   { label: "공지", href: "/notices", icon: "bell" },
@@ -50,8 +57,8 @@ const NEWS_LINKS: NavLink[] = [
 export const NAV_PRIMARY: NavItem[] = [
   { label: "교회안내", href: "/about", children: ABOUT_LINKS },
   { label: "예배·설교", href: "/worship", children: WORSHIP_LINKS },
-  { label: "교육부서", href: "/departments", children: DEPT_LINKS },
-  { label: "소식", href: "/notices", children: NEWS_LINKS },
+  { label: "사역", href: "/departments", children: MINISTRY_LINKS },
+  { label: "교회소식", href: "/notices", children: NEWS_LINKS },
 ];
 
 // 인증 영역은 하나만 노출 — member 스냅샷 유무로 SiteHeader/MobileNav가 선택(스펙 M4).
@@ -61,6 +68,6 @@ export const NAV_MYPAGE: NavLink = { label: "마이페이지", href: "/mypage" }
 export const FOOTER_COLUMNS: { title: string; links: NavLink[] }[] = [
   { title: "교회안내", links: ABOUT_LINKS },
   { title: "예배·설교", links: WORSHIP_LINKS },
-  { title: "교육부서", links: DEPT_LINKS },
-  { title: "소식", links: NEWS_LINKS },
+  { title: "사역", links: MINISTRY_LINKS },
+  { title: "교회소식", links: NEWS_LINKS },
 ];
