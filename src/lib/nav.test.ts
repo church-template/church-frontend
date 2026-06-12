@@ -35,9 +35,9 @@ describe("isActiveItem", () => {
     expect(isActiveItem("/about", worship)).toBe(false);
   });
 
-  it("children 중 하나가 활성이면 부모도 활성(/events → 소식)", () => {
-    // 소식의 대표 href=/notices이지만 /events는 자식 — 소식이 활성이어야 한다.
-    const news = NAV_PRIMARY.find((i) => i.label === "소식")!;
+  it("children 중 하나가 활성이면 부모도 활성(/events → 교회소식)", () => {
+    // 교회소식의 대표 href=/notices이지만 /events는 자식 — 교회소식이 활성이어야 한다.
+    const news = NAV_PRIMARY.find((i) => i.label === "교회소식")!;
     expect(isActiveItem("/events", news)).toBe(true);
     expect(isActiveItem("/gallery", news)).toBe(true);
     expect(isActiveItem("/sermons", news)).toBe(false);

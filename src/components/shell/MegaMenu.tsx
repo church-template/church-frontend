@@ -6,11 +6,14 @@ import {
   CalendarClock,
   Church,
   GraduationCap,
+  Heart,
   History,
   Images,
   MapPin,
+  Music,
   Newspaper,
   Sparkles,
+  Users,
   type LucideIcon,
 } from "lucide-react";
 import { Container } from "./Container";
@@ -31,6 +34,9 @@ const ICONS: Record<NavIconKey, LucideIcon> = {
   calendar: Calendar,
   newspaper: Newspaper,
   images: Images,
+  users: Users,
+  music: Music,
+  heart: Heart,
 };
 
 export interface MegaMenuProps {

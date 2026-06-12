@@ -1,13 +1,14 @@
 import { describe, it, expect } from "vitest";
 import { NAV_PRIMARY, NAV_LOGIN, NAV_MYPAGE, FOOTER_COLUMNS } from "./navigation";
+import { allDepartmentSlugs } from "./departments";
 
 describe("navigation IA", () => {
-  it("최상위 메뉴는 4종(교회안내·예배·설교·교육부서·소식)", () => {
+  it("최상위 메뉴는 4종(교회안내·예배·설교·사역·교회소식)", () => {
     expect(NAV_PRIMARY.map((i) => i.label)).toEqual([
       "교회안내",
       "예배·설교",
-      "교육부서",
-      "소식",
+      "사역",
+      "교회소식",
     ]);
   });
 
@@ -24,14 +25,24 @@ describe("navigation IA", () => {
     expect(about?.children?.some((c) => c.href === "/about/location")).toBe(true);
   });
 
-  it("소식 하위에 공지·일정·주보·갤러리가 있다", () => {
-    const news = NAV_PRIMARY.find((i) => i.label === "소식");
+  it("교회소식 하위에 공지·일정·주보·갤러리가 있다", () => {
+    const news = NAV_PRIMARY.find((i) => i.label === "교회소식");
     expect(news?.children?.map((c) => c.href)).toEqual([
       "/notices",
       "/events",
       "/bulletins",
       "/gallery",
     ]);
+  });
+
+  it("사역 하위 링크는 모두 DEPARTMENTS의 부서 slug로 연결된다(드리프트 감시)", () => {
+    const ministry = NAV_PRIMARY.find((i) => i.label === "사역");
+    const slugs = new Set(allDepartmentSlugs());
+    expect(ministry?.children.length).toBeGreaterThan(0);
+    for (const child of ministry!.children) {
+      const slug = child.href.replace("/departments/", "");
+      expect(slugs.has(slug)).toBe(true);
+    }
   });
 
   it("모든 하위 링크에 icon 키가 있다", () => {
@@ -47,13 +58,13 @@ describe("navigation IA", () => {
     expect(NAV_MYPAGE.href).toBe("/mypage");
   });
 
-  it("푸터 열은 4개(교회안내·예배·설교·교육부서·소식)", () => {
+  it("푸터 열은 4개(교회안내·예배·설교·사역·교회소식)", () => {
     expect(FOOTER_COLUMNS).toHaveLength(4);
     expect(FOOTER_COLUMNS.map((c) => c.title)).toEqual([
       "교회안내",
       "예배·설교",
-      "교육부서",
-      "소식",
+      "사역",
+      "교회소식",
     ]);
   });
 
