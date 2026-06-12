@@ -6,8 +6,8 @@ export function isActivePath(pathname: string, href: string): boolean {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-// NavItem 활성: 자기 href가 활성이거나, 드롭다운이면 자식 중 하나가 활성.
+// NavItem 활성: 대표 href가 활성이거나 자식 중 하나가 활성.
 export function isActiveItem(pathname: string, item: NavItem): boolean {
-  if (item.href) return isActivePath(pathname, item.href);
+  if (item.href && isActivePath(pathname, item.href)) return true;
   return item.children?.some((c) => isActivePath(pathname, c.href)) ?? false;
 }
