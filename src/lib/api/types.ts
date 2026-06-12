@@ -95,3 +95,20 @@ export interface SermonDetailResponse {
   tags: TagResponse[];
   author?: string | null; // 서버 마스킹 적용
 }
+
+// 일정 상세 — 카드 메타 + description·수정일·낙관적 락(OpenAPI EventDetailResponse).
+// 필드 집합은 OpenAPI와 정확히 일치(11개). nullable(?)은 OpenAPI 명시가 아니라
+// 도메인 규약(가이드 13.2 점 이벤트·10장 description) + types.ts 관행 기반 해석.
+export interface EventDetailResponse {
+  id: number;
+  title: string;
+  description?: string | null; // raw 마크다운 (없을 수 있음)
+  location?: string | null;
+  startAt: string; // offset 없는 LocalDateTime
+  endAt?: string | null; // null = 점(단일 시점) 이벤트
+  allDay: boolean;
+  createdAt: string;
+  updatedAt: string;
+  version: number; // 낙관적 락 (표시엔 미사용, 어드민 대비)
+  tags: TagResponse[];
+}

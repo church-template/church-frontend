@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { typo } from "@/constants/typography";
 
 export interface EventCardProps {
-  date: string;
+  date?: string | null;
   title: string;
   /** 시간줄(formatEventTime 결과). null이면 생략 — allDay는 날짜 배지만(가이드 13.2). */
   time?: string | null;
@@ -21,7 +21,7 @@ const focusRing =
 export function EventCard({ date, title, time, location, summary, href }: EventCardProps) {
   const inner = (
     <>
-      <Badge variant="primary">{date}</Badge>
+      {date ? <Badge variant="primary">{date}</Badge> : null}
       <h3 className={cn(typo.titleMd, "mt-base text-ink")}>{title}</h3>
       {time ? <p className={cn(typo.datetime, "mt-xs text-body")}>{time}</p> : null}
       {location ? (

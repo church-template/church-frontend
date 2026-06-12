@@ -56,3 +56,8 @@ export function formatEventTime(
   }
   return `${timeFmt.format(start)} ~ ${monthDayFmt.format(end)} ${timeFmt.format(end)}`;
 }
+
+/** 칩·상세의 시각 — KST "HH:mm"(tnum은 호출부 typo.datetime). allDay 분기는 호출부. */
+export function formatClockTime(iso: string): string {
+  return timeFmt.format(parseServerDate(iso));
+}

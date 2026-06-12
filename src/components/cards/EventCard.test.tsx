@@ -41,4 +41,11 @@ describe("EventCard", () => {
     render(<EventCard date="6월 14일" title="t" summary="행사 요약" />);
     expect(screen.getByText("행사 요약")).toBeDefined();
   });
+
+  it("date가 없으면 날짜 배지를 생략한다(모바일 목록 — 그룹 헤더가 날짜 담당)", () => {
+    render(<EventCard title="성가대 연습" time="10:00 ~ 12:00" location="본당" />);
+    expect(screen.getByText("성가대 연습")).toBeDefined();
+    expect(screen.getByText("10:00 ~ 12:00")).toBeDefined();
+    expect(screen.queryByText("2026. 6. 14.")).toBeNull();
+  });
 });
