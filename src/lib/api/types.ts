@@ -43,3 +43,22 @@ export interface MainResponse {
   notices: NoticeCardResponse[];
   upcomingEvents: EventCardResponse[];
 }
+
+export interface DepartmentCardResponse {
+  id: number;
+  name: string;
+  leader: string;
+  parentId: number | null;
+  sortOrder: number;
+}
+
+export interface DepartmentDetailResponse extends DepartmentCardResponse {
+  description: string;
+  createdAt: string; // LocalDateTime
+  updatedAt: string;
+  version: number; // 낙관적 락
+}
+
+export interface DepartmentNode extends DepartmentCardResponse {
+  children: DepartmentNode[];
+}
