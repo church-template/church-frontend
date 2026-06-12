@@ -63,6 +63,20 @@ export interface DepartmentNode extends DepartmentCardResponse {
   children: DepartmentNode[];
 }
 
+// 공지 상세 응답 — 카드 메타 + 본문·수정일·낙관적 락(가이드 10장, OpenAPI NoticeDetailResponse).
+export interface NoticeDetailResponse {
+  id: number;
+  title: string;
+  content: string; // raw 마크다운
+  isPinned: boolean;
+  viewCount: number;
+  createdAt: string; // LocalDateTime
+  updatedAt: string;
+  version: number; // 낙관적 락
+  tags: TagResponse[];
+  author?: string | null; // 서버 마스킹 적용
+}
+
 // 상세 응답 — 카드 메타 + 본문·외부링크·낙관적 락(가이드 10장, OpenAPI SermonDetailResponse).
 export interface SermonDetailResponse {
   id: number;
