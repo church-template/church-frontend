@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { parseServerDate, formatDate, formatEventTime } from "./date";
+import { parseServerDate, formatDate, formatEventTime, formatClockTime } from "./date";
 
 describe("parseServerDate", () => {
   it("datetime을 KST(+09:00)로 해석한다 — 10:00 KST = 01:00 UTC", () => {
@@ -57,5 +57,12 @@ describe("formatEventTime", () => {
     expect(
       formatEventTime("2026-06-14T00:00:00", "2026-06-14T00:00:00", true),
     ).toBeNull();
+  });
+});
+
+describe("formatClockTime", () => {
+  it("KST 'HH:mm' 시각만 반환", () => {
+    expect(formatClockTime("2026-06-14T10:00:00")).toBe("10:00");
+    expect(formatClockTime("2026-06-14T09:05:00")).toBe("09:05");
   });
 });
