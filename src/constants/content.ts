@@ -10,9 +10,9 @@ export const ABOUT = {
 export const HISTORY = {
   title: "연혁",
   items: [
-    { year: "2010", text: "교회 설립" },
-    { year: "2015", text: "교육관 건축" },
-    { year: "2020", text: "지역 섬김 사역 확대" },
+    { year: "2010", text: "교회 설립", desc: "작은 모임에서 시작해 첫 예배를 드렸습니다." },
+    { year: "2015", text: "교육관 건축", desc: "다음 세대를 위한 배움의 공간을 마련했습니다." },
+    { year: "2020", text: "지역 섬김 사역 확대", desc: "이웃과 함께하는 사역으로 지경을 넓혔습니다." },
   ],
 };
 
@@ -45,6 +45,20 @@ export const CTA_BAND = {
   primary: "새가족 안내",
   secondary: "오시는 길",
 };
+
+// 메인 사역 카드(스펙 2026-06-12 H4·H5) — VISION.points의 3축을 카드로 승격.
+// 아이콘은 직렬화 가능한 키만 — lucide 컴포넌트 매핑은 MinistryCards가 담당.
+export const MINISTRY = { title: "우리의 사역" };
+export interface Ministry {
+  key: "worship" | "nextgen" | "serving";
+  title: string;
+  desc: string;
+}
+export const MINISTRIES: Ministry[] = [
+  { key: "worship", title: "말씀 중심의 예배", desc: "주일과 평일, 삶의 자리마다 말씀으로 예배합니다." },
+  { key: "nextgen", title: "다음 세대 양육", desc: "영유아부터 청년까지 세대별 교육으로 신앙을 세웁니다." },
+  { key: "serving", title: "지역 사회 섬김", desc: "지역과 이웃의 필요에 응답하는 섬김을 실천합니다." },
+];
 
 // 메인 데이터 섹션 타이틀·빈 상태 문구(가이드 13.2 빈 배열 처리) — 콘텐츠 하드코딩 금지(12장).
 export const MAIN_SECTIONS = {
