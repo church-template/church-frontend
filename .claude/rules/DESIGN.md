@@ -460,6 +460,16 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
   fade+slide-up(Reveal, 스태거 120ms).
 - **`ministry-cards`**: 사역 카드 3-up(모바일 1-up). lucide 아이콘(32·currentColor) + 제목 +
   설명, 배경 토큰 교차는 history-band와 시작점을 달리한다. 동일한 Reveal 등장.
+- **`dept-hero`**: 부서 상세 히어로(가이드 14B). 미디어 카드가 스크롤에 따라 `clip-path`로 풀스크린
+  확장(width/height 애니메이션 금지), placeholder 측정으로 시작 inset 산출. 확장 종료(0.55) 후
+  카피 페이드인(0.60~, 겹침 0.05 유지). reduced-motion은 정적 70vh. 검증 코드라 내부 수치(px·rgba·#fff)는
+  토큰 인라인 금지의 예외. `HeroMedia`는 CrossHero와 공유(`@/hero/types`).
+- **`department-card`**: 사역 부서 카드(목록·하위부서 공용). 16:9 부서 히어로 이미지 썸네일 + 이름
+  `{typography.title-md}` + 인도자 `{typography.datetime}` `{colors.muted}`. `sermon-card` 호버(soft drop +
+  썸네일 1.03 줌) 재사용. `/departments/{slug}`로 링크, 목록 카드 이미지 = 상세 히어로 이미지(목록↔상세 시각 연속성).
+- **`dept-tree`**: 사역(부서) 목록 = 최상위 부서 카드 그리드(조직도 다이어그램 아님 — 탐색 목적·고령 터치·단일 액센트).
+  공개 인트로는 **프론트 상수(`DEPARTMENTS`) 구동**(메인처럼 자립, 백엔드 불필요·정적 생성). 하위부서는
+  인덱스에 펼치지 않고 각 상세의 `SubDepartments`에서만 노출. (백엔드 `department`는 교인 정보관리·어드민 별개.)
 
 ### 폼
 - **`text-input`**: 12px 라운드, 포커스 시 보더 2px `{colors.primary}`.
