@@ -246,7 +246,7 @@ interface SearchPillProps {
 | `src/lib/api/notices.test.ts` (신규) | `buildNoticeQuery` 직렬화(page·size·sort·tagId·q, 빈 입력 `""`) · `getNotices` revalidate 60 · `getNotice` **no-store**·404→null·!ok throw | 매번 백엔드 호출 |
 | `src/components/common/SearchPill.test.tsx` (신규) | q set/clear · page 리셋 · 기존 파라미터 보존 · placeholder/aria 반영 | 검색 제목만(placeholder "제목") |
 | `src/components/sermons/SermonSearch.test.tsx` (유지/조정) | 위임 후에도 기존 단언 green | 회귀 방지 |
-| `src/app/(site)/notices/page.test.tsx` (신규) | **서버 순서 유지(고정 우선 재정렬 안 함)** · 빈 상태 메시지 · `totalPages>1`만 Pagination · q·tagId가 `getNotices`로 전달 · **잘못된 파라미터 방어**(tagId="abc"·page="2.5" → undefined, 설교 page.test 미러) · ActiveFilters 부재 | 고정글 상단 |
+| `src/app/(site)/notices/page.test.tsx` (신규) | **서버 순서 유지(고정 우선 재정렬 안 함)** · 빈 상태 메시지 · `totalPages>1`만 Pagination · q·tagId가 `getNotices`로 전달 · **잘못된 파라미터 방어**(tagId="abc"·page="xyz" → undefined(NaN), 설교 page.test 미러) · ActiveFilters 부재 | 고정글 상단 |
 | `src/app/(site)/notices/[id]/page.test.tsx` (신규) | **no-store 호출** · content 마크다운 렌더 · **메타 순서**(날짜 · 조회수 · author 옵션) · author 표기 · 태그 링크 href `/notices?tagId={id}` 형식 · 잘못된 id(비정수·0 이하)·404 → notFound | 매번 호출 |
 
 **완료 조건(이슈 §4) 매핑:**
