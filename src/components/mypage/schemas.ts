@@ -28,3 +28,9 @@ export const passwordChangeSchema = z
     message: "비밀번호가 일치하지 않습니다.",
   });
 export type PasswordChangeValues = z.infer<typeof passwordChangeSchema>;
+
+// 회원 탈퇴 재인증 — 현재 비밀번호(WithdrawRequest, 서버 minLength 1). 비어있지 않음만 검증.
+export const withdrawSchema = z.object({
+  password: z.string().min(1, "비밀번호를 입력해 주세요."),
+});
+export type WithdrawValues = z.infer<typeof withdrawSchema>;

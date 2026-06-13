@@ -66,7 +66,7 @@ export interface WithdrawRequest {
   password: string;
 }
 
-// PATCH /api/members/me — 본인 프로필 부분 수정(MeUpdateRequest). 비-null 필드만 변경(null=미변경).
+// PATCH /api/members/me — 본인 프로필 부분 수정(MeUpdateRequest). 미전송(undefined) 필드는 미변경(전송한 필드만 적용).
 export interface MeUpdateRequest {
   name?: string;
   phone?: string;

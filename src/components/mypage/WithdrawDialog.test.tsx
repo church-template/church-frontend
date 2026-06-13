@@ -49,12 +49,15 @@ describe("WithdrawDialog", () => {
     expect(notifySuccess).toHaveBeenCalled();
   });
 
-  it("비밀번호 미입력 시 호출하지 않고 인라인 에러를 보인다", () => {
+  it("비밀번호 미입력 시 호출하지 않고 인라인 에러를 보인다", async () => {
     renderDialog();
     fireEvent.click(screen.getByRole("button", { name: "회원 탈퇴" }));
     fireEvent.click(screen.getByRole("button", { name: "탈퇴하기" }));
+    // RHF+zod 검증은 비동기 — 에러 노출을 기다린다.
+    await waitFor(() =>
+      expect(screen.getByText("비밀번호를 입력해 주세요.")).toBeDefined(),
+    );
     expect(withdrawMock).not.toHaveBeenCalled();
-    expect(screen.getByText("비밀번호를 입력해 주세요.")).toBeDefined();
   });
 
   it("비밀번호 불일치(401) 시 인라인 에러를 보이고 이동하지 않는다", async () => {

@@ -84,7 +84,7 @@
 
 ### `PasswordChangeSection` — 신규
 - 기본 접힘. "비밀번호 변경"(`tertiary`) → `PasswordInput` 새 비밀번호 + 확인 2칸.
-- zod(`passwordChangeSchema`): `password`(8~72), `confirm`(일치 `refine`).
+- zod(`passwordChangeSchema`): `password`(8~72), `passwordConfirm`(일치 `refine`).
 - 성공: `updateMe({ password })` → 토스트 + 폼 접고 값 비움 → **`useMe` refetch**(비번 변경이 토큰을 무효화하면 401→정상 만료 처리되도록, §12). "재로그인 불필요"를 단정하지 않음.
 
 ### `AgreementStatus` — 신규

@@ -1,8 +1,10 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { cn } from "@/lib/utils";
 import { typo } from "@/constants/typography";
 import { notify } from "@/lib/notify";
@@ -20,46 +22,53 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { withdrawSchema, type WithdrawValues } from "./schemas";
 
 // 회원 자가탈퇴 — 비밀번호 재인증 후 DELETE /api/members/me.
 // 비가역(소프트삭제+개인정보 스크럽)이라 다이얼로그로 한 번 더 확인받는다(스펙 §5.2 자가탈퇴).
+// 회원 영역 폼이므로 react-hook-form+zod로 통일(가이드 15.1).
 export function WithdrawDialog() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | undefined>();
-  const [submitting, setSubmitting] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setError,
+    formState: { errors },
+  } = useForm<WithdrawValues>({
+    resolver: zodResolver(withdrawSchema),
+    defaultValues: { password: "" },
+  });
 
-  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (password === "") {
-      setError("비밀번호를 입력해 주세요.");
-      return;
-    }
-    setSubmitting(true);
-    setError(undefined);
-    try {
-      await withdraw(password); // 성공 시 authApi가 로컬 세션 정리
-      queryClient.removeQueries({ queryKey: ["me"] });
+  const mutation = useMutation({
+    mutationFn: (password: string) => withdraw(password), // 성공 시 authApi가 로컬 세션 정리
+    onSuccess: () => {
+      queryClient.removeQueries({ queryKey: ["me"] }); // ['me'] 캐시 제거는 호출측 책임
       notify.success("탈퇴가 완료되었습니다. 그동안 함께해 주셔서 감사합니다.");
       router.replace("/");
-    } catch (err) {
-      if (err instanceof ApiError) {
-        // 비밀번호 불일치는 폼 내부에 인라인 표시, 403(마지막 SUPER_ADMIN) 등은 토스트 폴백
-        handleApiError(err, {
-          onAuthFailed: (message) => setError(message),
-        });
+    },
+    onError: (e) => {
+      if (e instanceof ApiError) {
+        // 비밀번호 불일치는 폼 인라인, 403(마지막 SUPER_ADMIN) 등은 토스트 폴백
+        handleApiError(e, { onAuthFailed: (message) => setError("password", { message }) });
       } else {
         notify.error("네트워크 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
       }
-    } finally {
-      setSubmitting(false);
-    }
+    },
+  });
+
+  // 닫을 때 비밀번호·에러 잔존 방지(민감정보) — 폼 초기화.
+  const onOpenChange = (next: boolean) => {
+    if (!next) reset();
+    setOpen(next);
   };
 
+  const onSubmit = handleSubmit((v) => mutation.mutate(v.password));
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger
         className={cn(
           typo.bodySm,
@@ -85,13 +94,12 @@ export function WithdrawDialog() {
             <PasswordInput
               id="withdraw-password"
               autoComplete="current-password"
-              error={error}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              error={errors.password?.message}
+              {...register("password")}
             />
           </div>
           <DialogFooter>
-            <Button type="submit" variant="destructive" loading={submitting}>
+            <Button type="submit" variant="destructive" loading={mutation.isPending}>
               탈퇴하기
             </Button>
           </DialogFooter>
