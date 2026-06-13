@@ -480,9 +480,19 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 - **`dept-tree`**: 사역(부서) 목록 = 최상위 부서 카드 그리드(조직도 다이어그램 아님 — 탐색 목적·고령 터치·단일 액센트).
   공개 인트로는 **프론트 상수(`DEPARTMENTS`) 구동**(메인처럼 자립, 백엔드 불필요·정적 생성). 하위부서는
   인덱스에 펼치지 않고 각 상세의 `SubDepartments`에서만 노출. (백엔드 `department`는 교인 정보관리·어드민 별개.)
+- **`auth-split`**: 인증(로그인·가입·재동의) 전용 풀스크린 스플릿. 좌측 50% 사진 패널
+  (`{colors.cover-dark}` 반투명 덮개 + on-dark 로고·슬로건, 콘텐츠는 church.ts 상수 주입) /
+  우측 `{colors.surface-soft}` 폼 패널에 카드 중앙 배치. 모바일(<768px)은 사진 숨김·우측 단독.
+  좌측 패널은 풀블리드 미디어 예외(라운드 없음). 헤더·푸터 미사용 — 좌상단 로고가 홈 링크.
+- **`wizard-progress`**: 가입 위저드 단계 도트. 진행 단계까지 `{colors.primary}` 채움, 미진행
+  `{colors.hairline}`, `{rounded.full}`. 장식 요소라 `aria-hidden` + sr-only 단계 텍스트 병행.
 
 ### 폼
 - **`text-input`**: 12px 라운드, 포커스 시 보더 2px `{colors.primary}`.
+- **`checkbox`**: 약관 동의 등 불리언 입력. 박스 24px · `{rounded.xs}`(4px) — 24px 박스에서
+  `{rounded.sm}`(8px)은 곡률이 과해 4px이 중첩 라디우스 비율(외부 ≈ 내부 ×2)에 부합한다.
+  체크 시 `{colors.primary}` 채움 + on-primary lucide `Check`. 라벨 포함 행 전체가 클릭
+  영역(행 높이 ≥ 48px — 고령 터치). 에러 메시지는 text-input과 동일(아래 caption, semantic 토큰).
 - 검증 메시지는 입력 아래 `{typography.caption}`, 색은 semantic 토큰.
 
 ## Do / Don't

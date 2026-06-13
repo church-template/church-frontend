@@ -212,6 +212,29 @@ body {
 }
 
 /* ============================================================
+ * AuthSplitLayout(auth-split) — 진입 1회 클립 연출(B안).
+ * 사진이 풀스크린 → 좌측 절반으로 갈라지고 폼 카드가 페이드인.
+ * clip-path/opacity만 사용(reflow 없음, DESIGN 연출 규칙). 기본값 = 최종 정적 상태라
+ * reduced-motion·모바일(.auth-hero-media는 모바일에서 display:none)·no-JS는 50:50을 즉시 본다.
+ * 레이아웃 레벨이라 로그인↔재동의 내부 이동에선 재생되지 않고 새 접속 시 1회만 재생된다.
+ * ============================================================ */
+@keyframes auth-split {
+  from { clip-path: inset(0 0 0 0); }
+  to   { clip-path: inset(0 50% 0 0); }
+}
+@keyframes auth-form-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+/* 정적 최종 상태: 사진은 좌측 절반만(우측 절반은 root 배경/폼이 차지) */
+.auth-hero-media { clip-path: inset(0 50% 0 0); }
+/* 데스크톱 + 모션 허용일 때만 1회 재생. 폼 카드는 갈라짐이 끝날 무렵 겹쳐 페이드인. */
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+  .auth-hero-media { animation: auth-split 0.7s cubic-bezier(0.4, 0, 0.2, 1) both; }
+  .auth-hero-form  { animation: auth-form-in 0.5s ease 0.45s both; }
+}
+
+/* ============================================================
  * MarkdownContent(T06) — 본문 prose. DESIGN.md body-md(행간 1.7) 기준 커스텀.
  * @tailwindcss/typography(스택 밖) 미사용 — 토큰만 참조.
  * ============================================================ */
