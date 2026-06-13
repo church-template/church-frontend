@@ -9,7 +9,8 @@ export type ButtonVariant =
   | "secondary"
   | "outlineOnDark"
   | "tertiary"
-  | "pillCta";
+  | "pillCta"
+  | "destructive";
 
 // 모든 variant: 색·상태·focus-visible 링을 토큰 유틸로만 표현. 높이는 표준 숫자 스케일로 고정.
 // hover는 기존 토큰 재사용(프레스 토큰·표면 톤·on-dark 알파 틴트), 프레스는 1px 가라앉음으로 hover와 구분.
@@ -44,6 +45,12 @@ const variantClass: Record<ButtonVariant, string> = {
     "hover:bg-primary-active active:bg-primary-active active:translate-y-px",
     "disabled:bg-primary-disabled disabled:text-on-primary",
     "focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-canvas",
+  ),
+  destructive: cn(
+    "bg-error text-on-error rounded-lg h-12 px-5",
+    "hover:bg-error-active active:bg-error-active active:translate-y-px",
+    "disabled:opacity-50",
+    "focus-visible:ring-2 focus-visible:ring-error focus-visible:ring-offset-2 focus-visible:ring-offset-surface-card",
   ),
 };
 
