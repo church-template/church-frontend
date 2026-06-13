@@ -345,6 +345,7 @@ components:
 ### 시맨틱 (폼 전용)
 - **Success** (`{colors.semantic-success}`) / **Error** (`{colors.semantic-error}`):
   폼 검증 메시지의 텍스트 색으로만 쓴다. 배경 채움·버튼 색으로 쓰지 않는다.
+  단, **파괴적 확인 버튼**(회원 탈퇴 등)에 한해 `error`(CSS `--color-error` / 유틸 `bg-error`)를 채움색으로 쓸 수 있다(`button-destructive`).
 
 ## 타이포그래피 (Typography)
 
@@ -441,6 +442,7 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 - **`button-primary`**: 시그니처 블루 필. 48px 높이. 한 화면(밴드)에 1개가 원칙.
 - **`button-pill-cta`**: 히어로·CTA 밴드용 56px 대형 필 ("새가족 안내", "오시는 길").
 - **`button-secondary-light`** / **`button-outline-on-dark`** / **`button-tertiary-text`**: 보조 위계.
+- **`button-destructive`**: 파괴적 확인(회원 탈퇴 등) 전용 빨강 필(`bg-error` / hover `bg-error-active` / 텍스트 `on-error`). 48px. 페이지 트리거가 아니라 **모달의 확정 버튼**에만 쓴다. 친화 장치는 색이 아니라 비밀번호 재인증·경고문이다.
 
 ### 콘텐츠 카드
 - **`sermon-card`**: 16:9 썸네일(상단, 라운드는 카드와 함께 24px) + 제목
@@ -513,7 +515,7 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 - 디스플레이를 700+로 볼드하지 않는다.
 - 그림자 단계를 추가하지 않는다.
 - CTA에 직각 모서리를 쓰지 않는다.
-- semantic success/error를 버튼·배경 색으로 쓰지 않는다.
+- semantic success/error를 버튼·배경 색으로 쓰지 않는다 — **단, 파괴적 확인 버튼(`button-destructive`)은 예외**.
 - hex·px를 인라인으로 쓰지 않는다 — 항상 토큰 참조.
 
 ## 반응형 (Responsive)
