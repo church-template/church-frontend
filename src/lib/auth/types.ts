@@ -48,3 +48,15 @@ export interface MeResponse {
   privacyAgreed: boolean;
   agreedAt: string;
 }
+
+// api-docs AgreementResponse — GET/PATCH /api/members/me/agreements 공용 응답.
+export interface AgreementResponse {
+  termsAgreed: boolean;
+  privacyAgreed: boolean;
+  agreedAt: string | null;
+}
+
+export interface AgreementUpdateRequest {
+  termsAgreed: boolean;
+  privacyAgreed: boolean;
+}
