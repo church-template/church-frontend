@@ -2942,6 +2942,87 @@
           }
         }
       },
+      "delete": {
+        "tags": ["내 정보"],
+        "summary": "회원 탈퇴",
+        "description": "본인 계정 자가탈퇴. 소프트 삭제 + 개인정보 스크럽 후 전체 세션을 무효화한다.\n\n- 인증(JWT): 필요 — 로그인(본인)\n- 요청 본문: `WithdrawRequest` — 현재 비밀번호(재인증)\n- 반환값: 없음(204)\n- 부수효과: 모든 리프레시 토큰 회수 + 현재 access 토큰 블랙리스트(전체 세션 무효화) · 마지막 활성 SUPER_ADMIN은 탈퇴 차단(403)\n",
+        "operationId": "withdraw",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WithdrawRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "유효하지 않은 입력값",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "인증 실패/토큰 무효",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "권한 없음",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "리소스 없음",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "충돌(중복·낙관락·참조)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
       "patch": {
         "tags": ["내 정보"],
         "summary": "내 정보 수정",
@@ -7980,6 +8061,16 @@
             }
           }
         }
+      },
+      "WithdrawRequest": {
+        "type": "object",
+        "properties": {
+          "password": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": ["password"]
       }
     },
     "securitySchemes": {
