@@ -2,7 +2,31 @@ import { apiUrl } from "./apiBase";
 import { parseJson } from "./apiError";
 import { authFetch } from "./authFetch";
 import { useAuthStore } from "./authStore";
-import type { LoginResponse, SignupRequest, SignupResponse } from "./types";
+import type { LoginResponse, MeResponse, MeUpdateRequest, SignupRequest, SignupResponse } from "./types";
+
+// 자가탈퇴(DELETE /api/members/me). 성공 시 서버가 전체 세션을 무효화하므로 로컬도 정리한다.
+// 비밀번호 불일치(401 AUTHENTICATION_FAILED)·마지막 SUPER_ADMIN(403)은 ApiError로 throw → 소비측이 분기.
+export async function withdraw(password: string): Promise<void> {
+  const res = await authFetch("/api/members/me", {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ password }),
+  });
+  // 204가 아니면 parseJson이 비-2xx 본문을 ApiError로 변환해 throw한다.
+  if (!res.ok) await parseJson<void>(res);
+  // 성공: 서버가 토큰을 모두 회수·블랙리스트 처리 → 로컬 store도 비운다(['me'] 캐시 제거는 호출측).
+  useAuthStore.getState().clear();
+}
+
+// PATCH /api/members/me — 본인 프로필 부분 수정. 200 + MeResponse 반환(login/signup과 동일 parseJson).
+export async function updateMe(req: MeUpdateRequest): Promise<MeResponse> {
+  const res = await authFetch("/api/members/me", {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(req),
+  });
+  return parseJson<MeResponse>(res);
+}
 
 // 공개 API: 토큰 헤더 없음. apiUrl로 base 결합.
 export async function login(phone: string, password: string): Promise<LoginResponse> {

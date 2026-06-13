@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
-import { login, signup, signOut } from "./authApi";
+import { login, signup, signOut, withdraw, updateMe } from "./authApi";
 import { useAuthStore } from "./authStore";
 import type { LoginResponse } from "./types";
 
@@ -152,5 +152,84 @@ describe("signOut", () => {
 
     expect(useAuthStore.getState().accessToken).toBeNull();
     expect(useAuthStore.getState().refreshToken).toBeNull();
+  });
+});
+
+describe("withdraw", () => {
+  it("204 성공 시 로컬 토큰+member를 정리한다", async () => {
+    useAuthStore.getState().setSession(mockLoginResponse);
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => new Response(undefined, { status: 204 })),
+    );
+
+    await withdraw("password1");
+
+    expect(useAuthStore.getState().accessToken).toBeNull();
+    expect(useAuthStore.getState().refreshToken).toBeNull();
+    expect(useAuthStore.getState().member).toBeNull();
+  });
+
+  it("비밀번호 불일치(401) 시 ApiError를 throw하고 세션을 유지한다", async () => {
+    useAuthStore.getState().setSession(mockLoginResponse);
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () =>
+        new Response(
+          JSON.stringify({ errorCode: "AUTHENTICATION_FAILED" }),
+          { status: 401 },
+        ),
+      ),
+    );
+
+    await expect(withdraw("wrong")).rejects.toMatchObject({
+      name: "ApiError",
+      status: 401,
+      errorCode: "AUTHENTICATION_FAILED",
+    });
+    // 탈퇴 실패 — 로컬 세션은 그대로 유지되어야 한다.
+    expect(useAuthStore.getState().accessToken).toBe("a1");
+  });
+
+  it("마지막 SUPER_ADMIN 차단(403) 시 ApiError를 throw한다", async () => {
+    useAuthStore.getState().setSession(mockLoginResponse);
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () =>
+        new Response(
+          JSON.stringify({ errorCode: "ACCESS_DENIED", detail: "마지막 관리자는 탈퇴할 수 없습니다" }),
+          { status: 403 },
+        ),
+      ),
+    );
+
+    await expect(withdraw("password1")).rejects.toMatchObject({
+      name: "ApiError",
+      status: 403,
+      errorCode: "ACCESS_DENIED",
+    });
+    expect(useAuthStore.getState().accessToken).toBe("a1");
+  });
+});
+
+describe("updateMe", () => {
+  it("PATCH로 변경 필드만 보내고 MeResponse를 반환한다", async () => {
+    useAuthStore.setState({ accessToken: "a1", refreshToken: "r1", member: null });
+    const meRes = {
+      uuid: "u1", name: "새이름", phone: "01012345678", email: "", position: "집사",
+      roles: ["MEMBER"], permissions: [], maxPriority: 0,
+      termsAgreed: true, privacyAgreed: true, agreedAt: null,
+    };
+    const fetchMock = vi.fn(async () => new Response(JSON.stringify(meRes), { status: 200 }));
+    vi.stubGlobal("fetch", fetchMock);
+
+    const res = await updateMe({ name: "새이름" });
+
+    expect(res.name).toBe("새이름");
+    // vi.fn() mock.calls 타입이 [][] 로 추론되므로 unknown 경유 캐스팅
+    const calls = fetchMock.mock.calls as unknown as [string, RequestInit][];
+    const init = calls[0]![1];
+    expect(init.method).toBe("PATCH");
+    expect(JSON.parse(init.body as string)).toEqual({ name: "새이름" });
   });
 });

@@ -46,7 +46,7 @@ export interface MeResponse {
   maxPriority: number;
   termsAgreed: boolean;
   privacyAgreed: boolean;
-  agreedAt: string;
+  agreedAt: string | null; // OpenAPI @JsonInclude(NON_NULL) — 미동의 시 누락 가능
 }
 
 // api-docs AgreementResponse — GET/PATCH /api/members/me/agreements 공용 응답.
@@ -59,4 +59,17 @@ export interface AgreementResponse {
 export interface AgreementUpdateRequest {
   termsAgreed: boolean;
   privacyAgreed: boolean;
+}
+
+// DELETE /api/members/me — 자가탈퇴. 현재 비밀번호로 재인증(api-docs WithdrawRequest).
+export interface WithdrawRequest {
+  password: string;
+}
+
+// PATCH /api/members/me — 본인 프로필 부분 수정(MeUpdateRequest). 비-null 필드만 변경(null=미변경).
+export interface MeUpdateRequest {
+  name?: string;
+  phone?: string;
+  password?: string;
+  email?: string;
 }
