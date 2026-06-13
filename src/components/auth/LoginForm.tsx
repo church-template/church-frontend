@@ -15,6 +15,7 @@ import { useAuthStore } from "@/lib/auth/authStore";
 import { afterLoginDestination, sanitizeNext } from "@/lib/auth/nextParam";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { PasswordInput } from "@/components/ui/PasswordInput";
 import { CHURCH_NAME } from "@/constants/church";
 import { AuthCard } from "./AuthCard";
 import { formatPhone } from "./formatPhone";
@@ -77,9 +78,8 @@ export function LoginForm() {
           <label htmlFor="login-password" className={cn(typo.bodySm, "text-ink")}>
             비밀번호
           </label>
-          <Input
+          <PasswordInput
             id="login-password"
-            type="password"
             autoComplete="current-password"
             error={errors.password?.message}
             {...register("password")}

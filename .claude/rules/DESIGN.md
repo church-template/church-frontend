@@ -489,6 +489,9 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 
 ### 폼
 - **`text-input`**: 12px 라운드, 포커스 시 보더 2px `{colors.primary}`.
+- **`password-input`**: 비밀번호 입력 변형. `text-input`을 그대로 감싸고 우측에 표시/숨기기 토글
+  (lucide `Eye`/`EyeOff`, 20px·`currentColor`, `{colors.muted}`→`{colors.ink}` hover)을 오버레이한다.
+  토글로 `type=password ↔ text` 전환, 버튼은 `aria-label`·`aria-pressed` 제공. 토큰·라운드는 상속.
 - **`checkbox`**: 약관 동의 등 불리언 입력. 박스 24px · `{rounded.xs}`(4px) — 24px 박스에서
   `{rounded.sm}`(8px)은 곡률이 과해 4px이 중첩 라디우스 비율(외부 ≈ 내부 ×2)에 부합한다.
   체크 시 `{colors.primary}` 채움 + on-primary lucide `Check`. 라벨 포함 행 전체가 클릭

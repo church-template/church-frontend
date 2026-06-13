@@ -18,6 +18,7 @@ import { TERMS_OF_SERVICE, PRIVACY_POLICY } from "@/constants/terms";
 import { Button } from "@/components/ui/Button";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { Input } from "@/components/ui/Input";
+import { PasswordInput } from "@/components/ui/PasswordInput";
 import { AuthCard } from "./AuthCard";
 import { formatPhone } from "./formatPhone";
 import { TermsDialog } from "./TermsDialog";
@@ -215,9 +216,8 @@ export function SignupForm() {
               <label htmlFor="signup-password" className={cn(typo.bodySm, "text-ink")}>
                 비밀번호
               </label>
-              <Input
+              <PasswordInput
                 id="signup-password"
-                type="password"
                 autoComplete="new-password"
                 placeholder="8자 이상"
                 error={errors.password?.message}
@@ -228,9 +228,8 @@ export function SignupForm() {
               <label htmlFor="signup-password-confirm" className={cn(typo.bodySm, "text-ink")}>
                 비밀번호 확인
               </label>
-              <Input
+              <PasswordInput
                 id="signup-password-confirm"
-                type="password"
                 autoComplete="new-password"
                 error={errors.passwordConfirm?.message}
                 {...register("passwordConfirm")}
