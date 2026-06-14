@@ -65,7 +65,7 @@
 
 - **베이스**: `#35`(`20260614_#35_어드민_공용_인프라_권한_게이트_관리_화면_토대`) 브랜치에 wave0 스캐폴드 커밋. 02·04는 #35에서 분기.
 - **브랜치 네이밍**(기존 컨벤션, 커밋 툴이 #번호 자동 추출): `20260614_#36_어드민_콘텐츠_설교_공지`, `20260614_#38_어드민_부서_계층_관리` 등.
-- **위치**: 리포 외부 형제 디렉터리(예: `../church-frontend--36`, `../church-frontend--38`) — Next.js/pnpm가 worktree를 스캔하지 않도록.
+- **위치**: 리포 루트의 `.worktrees/`(gitignore 등록). 예: `.worktrees/36-content`, `.worktrees/38-departments`. 각 worktree에서 Next/pnpm를 실행하므로 부모 리포 빌드와 격리된다.
 - **node_modules**: worktree마다 별도. 각 worktree에서 `pnpm install` 필요(pnpm은 worktree 간 자동 공유 안 함).
 - **동시 worktree 수**: 2개 기본(안전), 최대 3개. 6병렬은 비권장(생산자→소비자 의존이 막고 DESIGN.md 동시편집 비용이 이득 상쇄).
 - **통합 순서**: (0) #35 스캐폴드 → main / (1) #36·#38 → main / (2) #36 머지 후 wave2 분기, #39(DataTable) → main 먼저, 이어 #37·#40 / (3) #41 마지막. 각 머지 후 다음 worktree는 `git rebase main`으로 최신 공유 자산 수령.
