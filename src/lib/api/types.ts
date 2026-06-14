@@ -1,5 +1,14 @@
 // 공개 API 응답 타입 — docs/api-docs.json(OpenAPI, 스키마 단일 진실)을 그대로 선언한다.
 // 카드 응답은 본문(content)·version 없는 메타만(가이드 3.2). T10~T12 목록 페이지가 재사용.
+//
+// ── 어드민 트랙(02~07) 요청 타입 컨벤션 (병렬 작업 공유 규칙) ─────────────────
+// 1. 어드민 쓰기 요청 타입(SermonCreateRequest·NoticeUpdateRequest·EventCreateRequest 등)은
+//    이 공유 파일이 아니라 각 도메인 src/lib/api/{도메인}.ts 에 도메인-로컬로 둔다
+//    (여러 도메인이 이 파일을 동시 확장하면 머지 충돌 → 도메인 파일로 격리).
+// 2. 수정(PUT/PATCH) 요청 타입에는 낙관락 version: number 를 포함한다
+//    (가이드 8장 OPTIMISTIC_LOCK_CONFLICT 재편집 흐름).
+// 3. 이 파일에는 공개 GET 응답 타입만 둔다.
+// ─────────────────────────────────────────────────────────────────────────────
 
 export interface TagResponse {
   id: number;
