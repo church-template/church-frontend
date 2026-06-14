@@ -21,6 +21,8 @@ vi.mock("@/components/sermons/SermonVideo", () => ({
 vi.mock("@/components/sermons/SermonAudio", () => ({
   SermonAudio: ({ url }: { url: string }) => <div data-testid="audio" data-url={url} />,
 }));
+// 클라이언트 island는 스텁(useMe·QueryClientProvider 의존 차단) — 단위 테스트가 커버.
+vi.mock("@/components/sermons/SermonAdminActions", () => ({ SermonDetailActions: () => null }));
 
 import SermonDetailPage from "./page";
 

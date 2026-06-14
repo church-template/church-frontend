@@ -14,6 +14,8 @@ vi.mock("next/link", () => ({
     <a href={href} {...rest}>{children}</a>
   ),
 }));
+// 클라이언트 island는 스텁(useMe·QueryClientProvider 의존 차단) — 단위 테스트가 커버.
+vi.mock("@/components/notices/NoticeAdminActions", () => ({ NoticeDetailActions: () => null }));
 
 import NoticeDetailPage from "./page";
 
