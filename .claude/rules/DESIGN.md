@@ -504,6 +504,21 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 ### 마이페이지
 - **`manage-hub`**: 마이페이지 관리 허브 섹션. `useMe().permissions` 기준 권한 보유 도메인만 카드로 노출(보유 0이면 섹션 비노출). 카드 = `{rounded.xl}`(24px) + 1px 헤어라인, hover 시 보더 `{colors.primary}` 전이. 공개 도메인 카드는 해당 공개 페이지로, 운영 도메인은 `/mypage/manage/*`로 링크. 어드민 화면이라 가독성 우선 단순 변형이되 토큰 공유(hex·px 인라인 금지).
 
+### 어드민 공용 (Admin Shared)
+
+> 어드민 트랙(02~07)이 등록하는 공용 컴포넌트 구획. 병렬 작업 머지 충돌 최소화를 위해 각 도메인은
+> **자기 구획 주석 아래에만** 항목을 추가한다(다른 구획 라인은 건드리지 않는다). 어드민 화면은 본 문서
+> 범위 밖(Known Gaps)이라 가독성 우선 단순 변형이되, 토큰은 공유한다(hex·px 인라인 금지, `typo.*` 사용).
+> **단일 생산자**: `markdown-editor`·`tag-multiselect`·인라인 액션 패턴=02, `admin-data-table`·`media-uploader`=05가
+> 최초 등록·구현하고 나머지 도메인은 재사용만 한다. (조율 기준: `docs/superpowers/specs/2026-06-14-admin-track-parallelization.md`)
+
+<!-- admin:02 콘텐츠(설교·공지) — markdown-editor · tag-multiselect · admin-inline-action -->
+<!-- admin:03 일정 — datetime-picker · event-form-modal -->
+<!-- admin:04 부서 — admin-department-tree -->
+<!-- admin:05 미디어 — admin-data-table · media-uploader · media-references-list -->
+<!-- admin:06 분류(태그·직분) — tag/position form-dialog (admin-data-table 소비) -->
+<!-- admin:07 거버넌스 — role-permission-matrix · reset-password-reveal · agreement-reset-dialog -->
+
 ## Do / Don't
 
 ### Do
