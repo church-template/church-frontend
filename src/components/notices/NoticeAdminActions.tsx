@@ -12,9 +12,7 @@ import { Checkbox } from "@/components/ui/Checkbox";
 import { patchNotice, deleteNotice } from "@/lib/api/notices.admin";
 import { adminOnError } from "@/lib/admin/mutationHandlers";
 import { notify } from "@/lib/notify";
-
-// ISR 반영 지연 안내: 삭제·생성은 공개 페이지에 최대 1분 후 반영(revalidate 60).
-const DELAY_NOTICE = "공개 페이지 반영은 최대 1분 걸릴 수 있습니다.";
+import { revalidateNotices } from "@/lib/admin/revalidate";
 
 // 공지 목록 toolbar 액션: NOTICE_WRITE 권한 보유자에게만 '새 공지' 링크 노출.
 export function NoticeListAction() {
@@ -38,13 +36,16 @@ export function NoticeDetailActions({
   const pin = useMutation({
     mutationFn: () => patchNotice(id, { version, isPinned: !isPinned }),
     onError: adminOnError({ onReedit: () => router.refresh() }),
-    onSuccess: () => router.refresh(),
+    // 고정 토글도 공개 목록 반영 대상 — 즉시 무효화 후 라우터 갱신.
+    onSuccess: async () => { await revalidateNotices(); router.refresh(); },
   });
   const remove = useMutation({
     mutationFn: () => deleteNotice(id),
     onError: adminOnError(),
-    onSuccess: () => {
-      notify.success(`삭제했습니다. ${DELAY_NOTICE}`);
+    onSuccess: async () => {
+      // 공지 삭제 후 공개 ISR 캐시 즉시 무효화.
+      await revalidateNotices();
+      notify.success("삭제했습니다.");
       setOpen(false);
       router.push("/notices");
     },
