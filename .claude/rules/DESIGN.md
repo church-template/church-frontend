@@ -386,6 +386,7 @@ components:
 - **섹션 패딩**: 상하 `{spacing.section}`(96px). 모바일에서는 64px로 축소.
 - **카드 내부 패딩**: `{spacing.xl}`(32px).
 - **그리드**: 설교/행사 카드 데스크톱 3-up, 태블릿 2-up, 모바일 1-up.
+- **라이트박스 폭**: `--container-lightbox`(64rem) — 갤러리 사진 라이트박스(`PhotoLightbox`)가 기본 모달 폭(`--container-modal` 32rem)을 덮어쓸 때 쓰는 폭 토큰.
 
 ## 레이어링 (z-index)
 

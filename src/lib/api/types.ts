@@ -123,3 +123,34 @@ export interface BulletinCardResponse {
   createdAt: string; // LocalDateTime
   author?: string | null; // 서버 마스킹 적용(가이드 7장) — 그대로 표기
 }
+
+// 갤러리(회원전용, GALLERY_VIEW) — OpenAPI Gallery*Response. 다른 Response와 달리 authFetch로만 조회.
+// nullable(?)은 OpenAPI 명시가 아니라 도메인 규약(가이드 6.5 author 보유)·types.ts 관행 기반 해석.
+export interface GalleryAlbumCardResponse {
+  id: number;
+  title: string;
+  thumbnailMediaId: number | null; // 첫 사진, 없으면 null → 플레이스홀더
+  photoCount: number;
+  createdAt: string; // offset 없는 LocalDateTime — parseServerDate/formatDate로 표기
+  tags: TagResponse[];
+  author?: string | null;
+}
+
+export interface GalleryPhotoResponse {
+  id: number;
+  mediaId: number; // /api/media/{mediaId} 공개 서빙
+  caption?: string | null;
+  sortOrder: number;
+}
+
+export interface GalleryAlbumDetailResponse {
+  id: number;
+  title: string;
+  description?: string | null; // raw 마크다운
+  tags: TagResponse[];
+  author?: string | null;
+  createdAt: string;
+  updatedAt: string;
+  version: number; // 조회 전용 — 표시·전송 안 함(미사용 보존)
+  photos: GalleryPhotoResponse[];
+}
