@@ -11,6 +11,7 @@ import { Pagination } from "@/components/common/Pagination";
 import { EmptyState } from "@/components/common/EmptyState";
 import { SermonSearch } from "@/components/sermons/SermonSearch";
 import { ActiveFilters } from "@/components/sermons/ActiveFilters";
+import { SermonListAction } from "@/components/sermons/SermonAdminActions";
 
 type SearchParams = Record<string, string | string[] | undefined>;
 
@@ -58,7 +59,10 @@ export default async function SermonsPage({
 
   return (
     <Container as="section" className="py-section">
-      <h1 className={cn(typo.displayMd, "text-ink")}>설교</h1>
+      <div className="flex items-center justify-between gap-base">
+        <h1 className={cn(typo.displayMd, "text-ink")}>설교</h1>
+        <SermonListAction />
+      </div>
 
       <div className="mt-lg flex flex-col gap-base">
         <SermonSearch />

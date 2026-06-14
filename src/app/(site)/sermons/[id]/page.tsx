@@ -11,6 +11,7 @@ import { getSermon } from "@/lib/api/sermons";
 import { MarkdownContent } from "@/components/common/MarkdownContent";
 import { SermonVideo } from "@/components/sermons/SermonVideo";
 import { SermonAudio } from "@/components/sermons/SermonAudio";
+import { SermonDetailActions } from "@/components/sermons/SermonAdminActions";
 
 // 공개 설교 상세. no-store(getSermon) → 동적. 영상 우선 레이아웃(스펙 D6). 클릭 메타로 목록 필터(D9).
 export default async function SermonDetailPage({
@@ -42,6 +43,7 @@ export default async function SermonDetailPage({
       ) : null}
 
       <h1 className={cn(typo.titleLg, "mt-lg text-ink")}>{sermon.title}</h1>
+      <SermonDetailActions id={sermon.id} />
 
       <p className={cn(typo.datetime, "mt-xs text-muted")}>
         <Link
