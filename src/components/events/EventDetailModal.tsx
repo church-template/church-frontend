@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/common/Skeleton";
 import { EventDetailView } from "./EventDetailView";
+import { EventDetailActions } from "./EventAdminActions";
 import { apiUrl } from "@/lib/auth/apiBase";
 import { notify } from "@/lib/notify";
 import type { EventCardResponse, EventDetailResponse } from "@/lib/api/types";
@@ -51,7 +52,14 @@ export function EventDetailModal({
       {event ? (
         <DialogContent>
           <DialogTitle>{event.title}</DialogTitle>
-          {shown ? <EventDetailView event={shown} /> : <Skeleton className="h-40 w-full" />}
+          {shown ? (
+            <>
+              <EventDetailView event={shown} />
+              <EventDetailActions event={shown} />
+            </>
+          ) : (
+            <Skeleton className="h-40 w-full" />
+          )}
         </DialogContent>
       ) : null}
     </Dialog>
