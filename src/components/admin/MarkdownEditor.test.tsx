@@ -21,4 +21,9 @@ describe("MarkdownEditor", () => {
     fireEvent.mouseDown(screen.getByRole("tab", { name: "미리보기" })); // Radix Tabs는 jsdom에서 click 미동작
     expect(screen.getByText("미리볼 내용이 없습니다.")).toBeDefined();
   });
+
+  it("rows를 Textarea에 전달한다", () => {
+    const { container } = render(<MarkdownEditor value="" onChange={() => {}} rows={5} />);
+    expect(container.querySelector("textarea")?.getAttribute("rows")).toBe("5");
+  });
 });

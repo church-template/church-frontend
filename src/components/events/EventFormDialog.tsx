@@ -172,6 +172,7 @@ export function EventFormDialog({ open, onOpenChange, mode, initial }: EventForm
                   value={field.value}
                   onChange={field.onChange}
                   id="event-description"
+                  rows={5}
                 />
               )}
             />
