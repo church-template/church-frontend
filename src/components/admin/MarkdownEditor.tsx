@@ -15,8 +15,8 @@ export interface MarkdownEditorProps {
   placeholder?: string;
 }
 
-// 미리보기 MarkdownContent는 tab==="preview"일 때만 마운트 → 작성 중(키 입력)엔 renderMarkdown 미실행.
-// (Radix는 비활성 TabsContent를 언마운트하지 않고 hidden으로 유지하므로 tab 상태로 직접 게이트한다.)
+// Radix TabsContent는 비활성 탭의 자식을 아예 마운트하지 않는다.
+// → preview 탭이 선택될 때만 MarkdownContent가 마운트되므로 작성 중 renderMarkdown은 실행되지 않는다.
 export function MarkdownEditor({ value, onChange, id, error, placeholder }: MarkdownEditorProps) {
   const [tab, setTab] = useState("write");
   return (
@@ -35,13 +35,11 @@ export function MarkdownEditor({ value, onChange, id, error, placeholder }: Mark
         />
       </TabsContent>
       <TabsContent value="preview">
-        {tab === "preview" ? (
-          value.trim() ? (
-            <MarkdownContent source={value} />
-          ) : (
-            <p className={cn(typo.bodySm, "text-muted")}>미리볼 내용이 없습니다.</p>
-          )
-        ) : null}
+        {value.trim() ? (
+          <MarkdownContent source={value} />
+        ) : (
+          <p className={cn(typo.bodySm, "text-muted")}>미리볼 내용이 없습니다.</p>
+        )}
       </TabsContent>
     </Tabs>
   );
