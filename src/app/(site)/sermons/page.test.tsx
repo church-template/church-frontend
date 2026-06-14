@@ -14,9 +14,10 @@ vi.mock("next/link", () => ({
     <a href={href} {...rest}>{children}</a>
   ),
 }));
-// 클라이언트 자식은 스텁(next/navigation 의존 차단) — 각자 단위 테스트가 커버.
+// 클라이언트 자식은 스텁(next/navigation·useMe 의존 차단) — 각자 단위 테스트가 커버.
 vi.mock("@/components/sermons/SermonSearch", () => ({ SermonSearch: () => <div data-testid="search" /> }));
 vi.mock("@/components/sermons/ActiveFilters", () => ({ ActiveFilters: () => <div data-testid="active" /> }));
+vi.mock("@/components/sermons/SermonAdminActions", () => ({ SermonListAction: () => null }));
 vi.mock("@/components/common/TagFilter", () => ({
   TagFilter: ({ tags }: { tags: unknown[] }) => <div data-testid="tagfilter" data-count={tags.length} />,
 }));

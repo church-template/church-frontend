@@ -42,3 +42,12 @@ export async function getNotice(
   if (!res.ok) throw new Error(`GET /api/notices/${id} 실패: ${res.status}`);
   return (await res.json()) as NoticeDetailResponse;
 }
+
+// 어드민 쓰기(createNotice·updateNotice·patchNotice·deleteNotice + 타입)는
+// notices.admin.ts에서 제공. 서버 컴포넌트가 이 파일을 import할 때
+// authFetch·authStore(useSyncExternalStore) 체인이 서버 번들에 포함되지 않도록 분리.
+export type {
+  NoticeCreateRequest,
+  NoticeUpdateRequest,
+  NoticePatchRequest,
+} from "./notices.admin";

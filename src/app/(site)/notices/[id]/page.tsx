@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/date";
 import { getNotice } from "@/lib/api/notices";
 import { MarkdownContent } from "@/components/common/MarkdownContent";
+import { NoticeDetailActions } from "@/components/notices/NoticeAdminActions";
 
 // 공개 공지 상세. no-store(getNotice) → 동적. 영상/오디오 없음. isPinned 배지·클릭 태그 필터.
 export default async function NoticeDetailPage({
@@ -42,6 +43,7 @@ export default async function NoticeDetailPage({
       <h1 className={cn(typo.titleLg, "text-ink", notice.isPinned ? "mt-xs" : "mt-lg")}>
         {notice.title}
       </h1>
+      <NoticeDetailActions id={notice.id} version={notice.version} isPinned={notice.isPinned} />
 
       <p className={cn(typo.datetime, "mt-xs text-muted")}>
         {`${formatDate(notice.createdAt)} · 조회 ${notice.viewCount.toLocaleString("ko-KR")}`}

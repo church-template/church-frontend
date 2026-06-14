@@ -10,6 +10,7 @@ import { TagFilter } from "@/components/common/TagFilter";
 import { Pagination } from "@/components/common/Pagination";
 import { EmptyState } from "@/components/common/EmptyState";
 import { SearchPill } from "@/components/common/SearchPill";
+import { NoticeListAction } from "@/components/notices/NoticeAdminActions";
 
 type SearchParams = Record<string, string | string[] | undefined>;
 
@@ -46,7 +47,10 @@ export default async function NoticesPage({
 
   return (
     <Container as="section" className="py-section">
-      <h1 className={cn(typo.displayMd, "text-ink")}>공지</h1>
+      <div className="flex items-center justify-between gap-base">
+        <h1 className={cn(typo.displayMd, "text-ink")}>공지</h1>
+        <NoticeListAction />
+      </div>
 
       <div className="mt-lg flex flex-col gap-base">
         <SearchPill placeholder="제목" ariaLabel="공지 검색" />
