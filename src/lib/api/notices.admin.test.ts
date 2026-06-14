@@ -1,4 +1,3 @@
-// src/lib/api/notices.admin.test.ts
 import { describe, it, expect, vi, afterEach } from "vitest";
 
 const { apiMutateMock } = vi.hoisted(() => ({ apiMutateMock: vi.fn() }));
