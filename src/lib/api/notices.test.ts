@@ -28,7 +28,7 @@ describe("getNotices", () => {
     vi.stubGlobal("fetch", spy);
     await getNotices({ tagId: 3 });
     expect(spy).toHaveBeenCalledWith("/api/notices?tagId=3", {
-      next: { revalidate: 60 },
+      next: { revalidate: 60, tags: ["notices"] },
     });
   });
   it("비 200이면 throw", async () => {

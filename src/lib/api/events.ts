@@ -22,18 +22,18 @@ export function buildEventQuery(p: EventListParams): string {
   return `?${sp.toString()}`;
 }
 
-// 목록(공개) — 캐시 가능(revalidate 60). 서버 컴포넌트 전용. 정렬은 서버 신뢰(startAt asc).
+// 목록(공개) — 캐시 가능(revalidate 60). tags 부착으로 updateTag("events") 즉시 무효화 연결.
 export async function getEvents(p: EventListParams): Promise<Page<EventCardResponse>> {
   const res = await fetch(apiUrl(`/api/events${buildEventQuery(p)}`), {
-    next: { revalidate: 60 },
+    next: { revalidate: 60, tags: ["events"] },
   });
   if (!res.ok) throw new Error(`GET /api/events 실패: ${res.status}`);
   return (await res.json()) as Page<EventCardResponse>;
 }
 
-// 상세(공개) — 일정은 viewCount 부수효과 없음 → 공지와 달리 캐시 가능. 404는 null.
+// 상세(공개) — viewCount 부수효과 없어 캐시 가능. tags 부착으로 updateTag("events") 무효화.
 export async function getEvent(id: number): Promise<EventDetailResponse | null> {
-  const res = await fetch(apiUrl(`/api/events/${id}`), { next: { revalidate: 60 } });
+  const res = await fetch(apiUrl(`/api/events/${id}`), { next: { revalidate: 60, tags: ["events"] } });
   if (res.status === 404) return null;
   if (!res.ok) throw new Error(`GET /api/events/${id} 실패: ${res.status}`);
   return (await res.json()) as EventDetailResponse;

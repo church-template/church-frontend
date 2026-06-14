@@ -30,12 +30,12 @@ export function buildSermonQuery(p: SermonListParams): string {
   return s ? `?${s}` : "";
 }
 
-// 목록(공개) — 캐시 가능(revalidate 60). 서버 컴포넌트 전용.
+// 목록(공개) — 캐시 가능(revalidate 60). tags 부착으로 updateTag("sermons") 즉시 무효화 연결.
 export async function getSermons(
   p: SermonListParams = {},
 ): Promise<Page<SermonCardResponse>> {
   const res = await fetch(apiUrl(`/api/sermons${buildSermonQuery(p)}`), {
-    next: { revalidate: 60 },
+    next: { revalidate: 60, tags: ["sermons"] },
   });
   if (!res.ok) throw new Error(`GET /api/sermons 실패: ${res.status}`);
   return (await res.json()) as Page<SermonCardResponse>;

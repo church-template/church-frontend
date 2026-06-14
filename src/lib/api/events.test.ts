@@ -25,7 +25,7 @@ describe("getEvents", () => {
     vi.stubGlobal("fetch", spy);
     await getEvents({ year: 2026, month: 6, tagId: 3 });
     expect(spy).toHaveBeenCalledWith(`/api/events?year=2026&month=6&size=${EVENTS_PAGE_SIZE}&tagId=3`, {
-      next: { revalidate: 60 },
+      next: { revalidate: 60, tags: ["events"] },
     });
   });
   it("비 200이면 throw", async () => {
@@ -39,7 +39,7 @@ describe("getEvent", () => {
     const spy = vi.fn(async () => okResponse({ id: 5 }));
     vi.stubGlobal("fetch", spy);
     await getEvent(5);
-    expect(spy).toHaveBeenCalledWith("/api/events/5", { next: { revalidate: 60 } });
+    expect(spy).toHaveBeenCalledWith("/api/events/5", { next: { revalidate: 60, tags: ["events"] } });
   });
   it("404는 null", async () => {
     vi.stubGlobal("fetch", vi.fn(async () => ({ ok: false, status: 404 }) as Response));
