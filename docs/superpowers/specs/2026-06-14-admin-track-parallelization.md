@@ -41,7 +41,9 @@
 
 ## 도메인-로컬 타입 규칙 (철칙 2)
 
-어드민 쓰기 요청 타입은 공유 `src/lib/api/types.ts`가 **아니라** 각 도메인 `src/lib/api/{sermons,notices,events,gallery,media,...}.ts`(이미 존재, 현재 GET만)에 도메인-로컬로 둔다. 수정 요청 타입에는 낙관락 `version: number` 포함(가이드 8장). `types.ts`는 공개 GET 응답 타입만. (이 규칙은 `types.ts` 헤더 주석에도 명시.)
+어드민 쓰기 요청 타입은 공유 `src/lib/api/types.ts`가 **아니라** 도메인-로컬로 둔다. 수정 요청 타입에는 낙관락 `version: number` 포함(가이드 8장). `types.ts`는 공개 GET 응답 타입만. (이 규칙은 `types.ts` 헤더 주석에도 명시.)
+
+> **RSC 번들 경계 (02 실측 학습)**: 공개 GET 모듈(`sermons.ts`·`notices.ts` 등)은 서버 컴포넌트가 import한다. 어드민 쓰기 함수는 `apiMutate`→`authFetch`→`authStore`(`useSyncExternalStore`, 클라이언트 전용) 체인을 끌어오므로, 같은 모듈에 두면 Turbopack이 이를 **서버 번들에 포함시켜 빌드 실패**한다. 따라서 어드민 쓰기 **함수·요청 타입은 `src/lib/api/{도메인}.admin.ts`로 분리**하고(공개 GET 모듈에서 `export type`만 재노출 가능), 클라이언트 컴포넌트는 `*.admin.ts`에서 직접 import한다. 03(events)·05(gallery·bulletins)처럼 공개 GET을 RSC가 쓰는 도메인은 반드시 이 분리를 따른다. 운영 전용 화면만 있는 04·06·07은 RSC 프리필이 없으면 분리 불요.
 
 ## 공유 파일 충돌 핫스팟
 
