@@ -6,6 +6,7 @@ import { getTags } from "@/lib/api/tags";
 import { buildCalendarModel, resolveMonth, kstCivilFromDate } from "@/lib/calendar";
 import { TagFilter } from "@/components/common/TagFilter";
 import { EventCalendar } from "@/components/events/EventCalendar";
+import { EventListAction } from "@/components/events/EventAdminActions";
 
 type SearchParams = Record<string, string | string[] | undefined>;
 
@@ -41,7 +42,10 @@ export default async function EventsPage({
 
   return (
     <Container as="section" className="py-section">
-      <h1 className={cn(typo.displayMd, "text-ink")}>일정</h1>
+      <div className="flex items-center justify-between gap-base">
+        <h1 className={cn(typo.displayMd, "text-ink")}>일정</h1>
+        <EventListAction />
+      </div>
       <div className="mt-lg">
         <TagFilter tags={tags} />
       </div>

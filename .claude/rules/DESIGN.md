@@ -517,6 +517,8 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 - **`tag-multiselect`**: 기존 태그 다중선택. `Popover` + `Checkbox` 목록 + 선택 `Badge` 칩. 옵션은 `getTags`. 신규 생성 없음(06 소관).
 - **`admin-inline-action`**: 공개 RSC 페이지 위 client island(목록 toolbar 등록 버튼·상세 수정/삭제·공지 고정 토글). `RequirePermission` 게이트, 카드 내부 중첩 `<a>` 금지(목록 액션은 카드 밖).
 <!-- admin:03 일정 — datetime-picker · event-form-modal -->
+- **`datetime-picker`**: 일정 시작·종료 입력. 네이티브 `<input type="datetime-local">`(종일이면 `date`) 래퍼, 라이브러리 없이. `Input` 토큰·error 배선 상속. 직렬화는 `toServerDateTime`(offset 없는 LocalDateTime).
+- **`event-form-modal`**: 일정 등록·수정 팝업 Dialog 폼. DateTimePicker·MarkdownEditor·TagMultiSelect·Checkbox(종일) 조합. 종료>시작 검증, 낙관락 version.
 <!-- admin:04 부서 — admin-department-tree -->
 <!-- admin:05 미디어 — admin-data-table · media-uploader · media-references-list -->
 <!-- admin:06 분류(태그·직분) — tag/position form-dialog (admin-data-table 소비) -->

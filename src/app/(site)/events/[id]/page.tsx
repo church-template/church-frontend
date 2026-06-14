@@ -6,6 +6,7 @@ import { typo } from "@/constants/typography";
 import { cn } from "@/lib/utils";
 import { getEvent } from "@/lib/api/events";
 import { EventDetailView } from "@/components/events/EventDetailView";
+import { EventDetailActions } from "@/components/events/EventAdminActions";
 
 // 공개 일정 상세(딥링크). 일정은 viewCount 없음 → 캐시 가능(getEvent revalidate 60).
 export default async function EventDetailPage({
@@ -30,7 +31,10 @@ export default async function EventDetailPage({
         일정
       </Link>
 
-      <h1 className={cn(typo.titleLg, "mt-lg text-ink")}>{event.title}</h1>
+      <div className="flex items-start justify-between gap-base mt-lg">
+        <h1 className={cn(typo.titleLg, "text-ink")}>{event.title}</h1>
+        <EventDetailActions event={event} />
+      </div>
       <div className="mt-xs">
         <EventDetailView event={event} />
       </div>

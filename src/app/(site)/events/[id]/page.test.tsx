@@ -14,6 +14,8 @@ vi.mock("next/link", () => ({
     <a href={href} {...rest}>{children}</a>
   ),
 }));
+// EventDetailActions는 useMe(useQuery)→QueryClient 의존이라 RSC 테스트 맥락에서 null-스텁(02 선례).
+vi.mock("@/components/events/EventAdminActions", () => ({ EventDetailActions: () => null }));
 
 import EventDetailPage from "./page";
 

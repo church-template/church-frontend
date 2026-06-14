@@ -19,6 +19,8 @@ vi.mock("@/components/common/TagFilter", () => ({
 vi.mock("@/components/events/EventCalendar", () => ({
   EventCalendar: ({ tagId }: { tagId?: number }) => <div data-testid="calendar" data-tag={String(tagId)} />,
 }));
+// EventListAction은 useMe(useQuery)→QueryClient 의존이라 RSC 테스트 맥락에서 null-스텁(02 선례).
+vi.mock("@/components/events/EventAdminActions", () => ({ EventListAction: () => null }));
 
 import EventsPage from "./page";
 
