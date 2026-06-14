@@ -57,6 +57,7 @@
 
   /* --- 모달 폭 (max-w t-shirt 토큰 충돌 회피: 항상 var()로 참조) --- */
   --container-modal: 32rem;
+  --container-lightbox: 64rem;
   --container-narrow: 42rem;        /* 계정·폼 중심 페이지(마이페이지) 읽기 컬럼 폭 */
 
   /* --- 동작 컴포넌트 애니메이션 (자체 키프레임, tw-animate-css 미사용, T04) --- */
