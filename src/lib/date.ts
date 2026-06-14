@@ -61,3 +61,19 @@ export function formatEventTime(
 export function formatClockTime(iso: string): string {
   return timeFmt.format(parseServerDate(iso));
 }
+
+// 쓰기 경로: 폼의 datetime-local/date 값 → 서버 offset 없는 LocalDateTime 문자열.
+// 읽기의 parseServerDate(+09:00 부착)와 대칭으로, 쓰기는 offset을 붙이지 않고 KST naive 그대로 둔다.
+export function toServerDateTime(local: string, allDay = false): string {
+  if (!local) return "";
+  if (allDay) return `${local.slice(0, 10)}T00:00:00`;
+  const withSeconds = local.length === 16 ? `${local}:00` : local; // 분 단위면 초 보강
+  return withSeconds.length === 10 ? `${withSeconds}T00:00:00` : withSeconds; // date만 온 경우 방어
+}
+
+// 편집 프리필: 서버 LocalDateTime 문자열 → datetime-local(앞 16자) 또는 date(앞 10자) 입력값.
+// parseServerDate(Date 변환)를 거치지 않아야 런타임 TZ가 섞이지 않는다.
+export function toLocalInput(serverIso: string, allDay = false): string {
+  if (!serverIso) return "";
+  return allDay ? serverIso.slice(0, 10) : serverIso.slice(0, 16);
+}
