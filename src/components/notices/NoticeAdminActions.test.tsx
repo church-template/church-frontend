@@ -11,7 +11,7 @@ const { useMeMock, patchNoticeMock, deleteNoticeMock, refreshMock, pushMock } = 
   pushMock: vi.fn(),
 }));
 vi.mock("@/lib/auth/useMe", () => ({ useMe: useMeMock }));
-vi.mock("@/lib/api/notices", () => ({ patchNotice: patchNoticeMock, deleteNotice: deleteNoticeMock }));
+vi.mock("@/lib/api/notices.admin", () => ({ patchNotice: patchNoticeMock, deleteNotice: deleteNoticeMock }));
 vi.mock("next/navigation", () => ({ useRouter: () => ({ push: pushMock, refresh: refreshMock }) }));
 vi.mock("next/link", () => ({ default: ({ href, children }: { href: string; children: React.ReactNode }) => <a href={href}>{children}</a> }));
 vi.mock("@/lib/notify", () => ({ notify: { success: vi.fn(), error: vi.fn() } }));

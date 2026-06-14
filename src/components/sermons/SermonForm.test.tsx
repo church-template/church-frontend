@@ -10,7 +10,7 @@ const { createSermonMock, updateSermonMock, pushMock, refreshMock, notifySuccess
   refreshMock: vi.fn(),
   notifySuccess: vi.fn(),
 }));
-vi.mock("@/lib/api/sermons", () => ({ createSermon: createSermonMock, updateSermon: updateSermonMock }));
+vi.mock("@/lib/api/sermons.admin", () => ({ createSermon: createSermonMock, updateSermon: updateSermonMock }));
 vi.mock("next/navigation", () => ({ useRouter: () => ({ push: pushMock, refresh: refreshMock }) }));
 vi.mock("@/lib/notify", () => ({ notify: { success: notifySuccess, error: vi.fn() } }));
 // 태그 옵션 fetch는 폼 테스트 범위 밖 — 빈 배열로 고정

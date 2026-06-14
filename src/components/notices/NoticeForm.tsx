@@ -18,7 +18,7 @@ import {
   updateNotice,
   type NoticeCreateRequest,
   type NoticeUpdateRequest,
-} from "@/lib/api/notices";
+} from "@/lib/api/notices.admin";
 import type { NoticeDetailResponse } from "@/lib/api/types";
 import { noticeSchema, type NoticeFormValues } from "./schemas";
 

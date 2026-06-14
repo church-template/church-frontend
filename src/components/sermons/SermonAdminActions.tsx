@@ -8,7 +8,7 @@ import { useMutation } from "@tanstack/react-query";
 import { RequirePermission } from "@/components/admin/RequirePermission";
 import { DeleteConfirmDialog } from "@/components/admin/DeleteConfirmDialog";
 import { Button, buttonVariants } from "@/components/ui/Button";
-import { deleteSermon } from "@/lib/api/sermons";
+import { deleteSermon } from "@/lib/api/sermons.admin";
 import { adminOnError } from "@/lib/admin/mutationHandlers";
 import { notify } from "@/lib/notify";
 

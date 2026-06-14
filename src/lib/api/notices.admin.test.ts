@@ -3,7 +3,7 @@ import { describe, it, expect, vi, afterEach } from "vitest";
 const { apiMutateMock } = vi.hoisted(() => ({ apiMutateMock: vi.fn() }));
 vi.mock("@/lib/admin/apiMutate", () => ({ apiMutate: apiMutateMock }));
 
-import { createNotice, updateNotice, patchNotice, deleteNotice } from "./notices";
+import { createNotice, updateNotice, patchNotice, deleteNotice } from "./notices.admin";
 
 afterEach(() => vi.clearAllMocks());
 

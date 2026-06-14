@@ -1,7 +1,6 @@
 import { apiUrl } from "@/lib/auth/apiBase";
 import type { Page } from "@/lib/page";
 import type { SermonCardResponse, SermonDetailResponse } from "./types";
-import { apiMutate } from "@/lib/admin/apiMutate";
 
 // 설교 목록 필터(가이드 10장). 공유 buildListQuery는 q/preacher/series/from/to를 안 다루므로 전용 빌더.
 export interface SermonListParams {
@@ -52,43 +51,11 @@ export async function getSermon(
   return (await res.json()) as SermonDetailResponse;
 }
 
-// ── 어드민 쓰기(도메인-로컬 타입, 철칙 2). 수정 타입에 낙관락 version 포함. ──
-export interface SermonCreateRequest {
-  title: string;
-  preacher: string;
-  preachedAt: string; // yyyy-MM-dd
-  series?: string;
-  scripture?: string;
-  content?: string; // 마크다운, media:{id}
-  videoUrl?: string;
-  audioUrl?: string;
-  tagIds?: number[];
-}
-export interface SermonUpdateRequest extends SermonCreateRequest {
-  version: number;
-}
-export interface SermonPatchRequest {
-  version: number;
-  title?: string;
-  preacher?: string;
-  preachedAt?: string;
-  series?: string;
-  scripture?: string;
-  content?: string;
-  videoUrl?: string;
-  audioUrl?: string;
-  tagIds?: number[];
-}
-
-export function createSermon(body: SermonCreateRequest): Promise<SermonDetailResponse> {
-  return apiMutate<SermonDetailResponse>("/api/admin/sermons", { method: "POST", body });
-}
-export function updateSermon(id: number, body: SermonUpdateRequest): Promise<SermonDetailResponse> {
-  return apiMutate<SermonDetailResponse>(`/api/admin/sermons/${id}`, { method: "PUT", body });
-}
-export function patchSermon(id: number, body: SermonPatchRequest): Promise<SermonDetailResponse> {
-  return apiMutate<SermonDetailResponse>(`/api/admin/sermons/${id}`, { method: "PATCH", body });
-}
-export function deleteSermon(id: number): Promise<void> {
-  return apiMutate<void>(`/api/admin/sermons/${id}`, { method: "DELETE" });
-}
+// 어드민 쓰기(createSermon·updateSermon·patchSermon·deleteSermon + 타입)는
+// sermons.admin.ts에서 제공. 서버 컴포넌트가 이 파일을 import할 때
+// authFetch·authStore(useSyncExternalStore) 체인이 서버 번들에 포함되지 않도록 분리.
+export type {
+  SermonCreateRequest,
+  SermonUpdateRequest,
+  SermonPatchRequest,
+} from "./sermons.admin";

@@ -9,7 +9,7 @@ import { RequirePermission } from "@/components/admin/RequirePermission";
 import { DeleteConfirmDialog } from "@/components/admin/DeleteConfirmDialog";
 import { Button, buttonVariants } from "@/components/ui/Button";
 import { Checkbox } from "@/components/ui/Checkbox";
-import { patchNotice, deleteNotice } from "@/lib/api/notices";
+import { patchNotice, deleteNotice } from "@/lib/api/notices.admin";
 import { adminOnError } from "@/lib/admin/mutationHandlers";
 import { notify } from "@/lib/notify";
 

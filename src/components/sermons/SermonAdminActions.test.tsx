@@ -10,7 +10,7 @@ const { useMeMock, deleteSermonMock, pushMock } = vi.hoisted(() => ({
 }));
 // RequirePermission이 의존하는 useMe를 제어
 vi.mock("@/lib/auth/useMe", () => ({ useMe: useMeMock }));
-vi.mock("@/lib/api/sermons", () => ({ deleteSermon: deleteSermonMock }));
+vi.mock("@/lib/api/sermons.admin", () => ({ deleteSermon: deleteSermonMock }));
 vi.mock("next/navigation", () => ({ useRouter: () => ({ push: pushMock, refresh: vi.fn() }) }));
 vi.mock("next/link", () => ({ default: ({ href, children }: { href: string; children: React.ReactNode }) => <a href={href}>{children}</a> }));
 vi.mock("@/lib/notify", () => ({ notify: { success: vi.fn(), error: vi.fn() } }));

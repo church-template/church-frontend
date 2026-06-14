@@ -3,7 +3,7 @@ import { describe, it, expect, vi, afterEach } from "vitest";
 const { apiMutateMock } = vi.hoisted(() => ({ apiMutateMock: vi.fn() }));
 vi.mock("@/lib/admin/apiMutate", () => ({ apiMutate: apiMutateMock }));
 
-import { createSermon, updateSermon, patchSermon, deleteSermon } from "./sermons";
+import { createSermon, updateSermon, patchSermon, deleteSermon } from "./sermons.admin";
 
 afterEach(() => vi.clearAllMocks());
 

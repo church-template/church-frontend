@@ -17,7 +17,7 @@ import {
   updateSermon,
   type SermonCreateRequest,
   type SermonUpdateRequest,
-} from "@/lib/api/sermons";
+} from "@/lib/api/sermons.admin";
 import type { SermonDetailResponse } from "@/lib/api/types";
 import { sermonSchema, type SermonFormValues } from "./schemas";
 

@@ -1,5 +1,4 @@
 import { apiUrl } from "@/lib/auth/apiBase";
-import { apiMutate } from "@/lib/admin/apiMutate";
 import type { Page } from "@/lib/page";
 import type { NoticeCardResponse, NoticeDetailResponse } from "./types";
 
@@ -44,37 +43,11 @@ export async function getNotice(
   return (await res.json()) as NoticeDetailResponse;
 }
 
-// ── 어드민 쓰기(도메인-로컬 타입, 철칙 2). 수정 타입에 낙관락 version 포함. ──
-export interface NoticeCreateRequest {
-  title: string;
-  content?: string;
-  isPinned?: boolean;
-  tagIds?: number[];
-}
-export interface NoticeUpdateRequest {
-  title: string;
-  version: number;
-  content?: string;
-  isPinned?: boolean;
-  tagIds?: number[];
-}
-export interface NoticePatchRequest {
-  version: number;
-  title?: string;
-  content?: string;
-  isPinned?: boolean;
-  tagIds?: number[];
-}
-
-export function createNotice(body: NoticeCreateRequest): Promise<NoticeDetailResponse> {
-  return apiMutate<NoticeDetailResponse>("/api/admin/notices", { method: "POST", body });
-}
-export function updateNotice(id: number, body: NoticeUpdateRequest): Promise<NoticeDetailResponse> {
-  return apiMutate<NoticeDetailResponse>(`/api/admin/notices/${id}`, { method: "PUT", body });
-}
-export function patchNotice(id: number, body: NoticePatchRequest): Promise<NoticeDetailResponse> {
-  return apiMutate<NoticeDetailResponse>(`/api/admin/notices/${id}`, { method: "PATCH", body });
-}
-export function deleteNotice(id: number): Promise<void> {
-  return apiMutate<void>(`/api/admin/notices/${id}`, { method: "DELETE" });
-}
+// 어드민 쓰기(createNotice·updateNotice·patchNotice·deleteNotice + 타입)는
+// notices.admin.ts에서 제공. 서버 컴포넌트가 이 파일을 import할 때
+// authFetch·authStore(useSyncExternalStore) 체인이 서버 번들에 포함되지 않도록 분리.
+export type {
+  NoticeCreateRequest,
+  NoticeUpdateRequest,
+  NoticePatchRequest,
+} from "./notices.admin";

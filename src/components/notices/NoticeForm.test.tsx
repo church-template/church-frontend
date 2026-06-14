@@ -9,7 +9,7 @@ const { createNoticeMock, updateNoticeMock, pushMock, refreshMock, notifySuccess
   refreshMock: vi.fn(),
   notifySuccess: vi.fn(),
 }));
-vi.mock("@/lib/api/notices", () => ({ createNotice: createNoticeMock, updateNotice: updateNoticeMock }));
+vi.mock("@/lib/api/notices.admin", () => ({ createNotice: createNoticeMock, updateNotice: updateNoticeMock }));
 vi.mock("next/navigation", () => ({ useRouter: () => ({ push: pushMock, refresh: refreshMock }) }));
 vi.mock("@/lib/notify", () => ({ notify: { success: notifySuccess, error: vi.fn() } }));
 vi.mock("@/lib/api/tags", () => ({ getTags: vi.fn().mockResolvedValue([]) }));
