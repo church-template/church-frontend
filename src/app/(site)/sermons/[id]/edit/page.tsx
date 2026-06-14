@@ -7,7 +7,11 @@ import { getSermon } from "@/lib/api/sermons";
 
 export default async function SermonEditPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const sermon = await getSermon(Number(id));
+  // 비숫자·0·음수 id는 fetch 전에 차단 — 형제 라우트([id]/page.tsx)와 동일 패턴
+  const numId = Number(id);
+  if (!Number.isInteger(numId) || numId <= 0) notFound();
+
+  const sermon = await getSermon(numId);
   if (!sermon) notFound();
   return (
     <Container as="section" className="py-section">
