@@ -22,12 +22,12 @@ export function buildNoticeQuery(p: NoticeListParams): string {
   return s ? `?${s}` : "";
 }
 
-// 목록(공개) — 캐시 가능(revalidate 60). 서버 컴포넌트 전용. 정렬은 서버 신뢰(재정렬 금지).
+// 목록(공개) — 캐시 가능(revalidate 60). tags 부착으로 updateTag("notices") 즉시 무효화 연결.
 export async function getNotices(
   p: NoticeListParams = {},
 ): Promise<Page<NoticeCardResponse>> {
   const res = await fetch(apiUrl(`/api/notices${buildNoticeQuery(p)}`), {
-    next: { revalidate: 60 },
+    next: { revalidate: 60, tags: ["notices"] },
   });
   if (!res.ok) throw new Error(`GET /api/notices 실패: ${res.status}`);
   return (await res.json()) as Page<NoticeCardResponse>;

@@ -20,6 +20,7 @@ import { MarkdownEditor } from "@/components/admin/MarkdownEditor";
 import { TagMultiSelect } from "@/components/admin/TagMultiSelect";
 import { adminOnError } from "@/lib/admin/mutationHandlers";
 import { notify } from "@/lib/notify";
+import { revalidateEvents } from "@/lib/admin/revalidate";
 import { toServerDateTime, toLocalInput } from "@/lib/date";
 import { cn } from "@/lib/utils";
 import { typo } from "@/constants/typography";
@@ -39,8 +40,8 @@ export interface EventFormDialogProps {
   initial?: EventDetailResponse;
 }
 
-// 저장 후 ISR 반영 지연 안내 — 사용자가 즉시 변경을 볼 수 없는 이유를 설명한다.
-const SAVED_NOTICE = "저장했습니다. 공개 페이지 반영은 최대 1분 걸릴 수 있습니다.";
+// 저장 성공 안내 — updateTag로 ISR 캐시를 즉시 무효화하므로 지연 없음.
+const SAVED_NOTICE = "저장했습니다.";
 
 // 폼 값 → 서버 요청 body 변환. offset 없는 LocalDateTime 직렬화는 toServerDateTime이 담당.
 function toBody(v: EventFormValues): EventCreateRequest {
@@ -95,7 +96,9 @@ export function EventFormDialog({ open, onOpenChange, mode, initial }: EventForm
         fes.forEach((fe) => setError(fe.field as keyof EventFormValues, { message: fe.reason })),
       onReedit: () => router.refresh(),
     }),
-    onSuccess: () => {
+    onSuccess: async () => {
+      // updateTag 서버 액션으로 events 태그 ISR 캐시를 즉시 무효화한 뒤 알림·새로고침·닫기.
+      await revalidateEvents();
       notify.success(SAVED_NOTICE);
       router.refresh();
       onOpenChange(false);
@@ -169,6 +172,7 @@ export function EventFormDialog({ open, onOpenChange, mode, initial }: EventForm
                   value={field.value}
                   onChange={field.onChange}
                   id="event-description"
+                  rows={5}
                 />
               )}
             />

@@ -20,6 +20,7 @@ import {
   type NoticeUpdateRequest,
 } from "@/lib/api/notices.admin";
 import type { NoticeDetailResponse } from "@/lib/api/types";
+import { revalidateNotices } from "@/lib/admin/revalidate";
 import { noticeSchema, type NoticeFormValues } from "./schemas";
 
 export interface NoticeFormProps {
@@ -27,8 +28,7 @@ export interface NoticeFormProps {
   initial?: NoticeDetailResponse;
 }
 
-// 공개 반영 지연(ISR 60초)을 표준 문구로 안내(가이드 4·15장).
-const SAVED_NOTICE = "저장했습니다. 공개 페이지 반영은 최대 1분 걸릴 수 있습니다.";
+const SAVED_NOTICE = "저장했습니다.";
 
 // 선택 필드 빈 문자열은 전송에서 제외(PUT 전체 교체 시 의미 없는 빈값 방지).
 function toBody(v: NoticeFormValues): NoticeCreateRequest {
@@ -74,7 +74,9 @@ export function NoticeForm({ mode, initial }: NoticeFormProps) {
         ),
       onReedit: () => router.refresh(),
     }),
-    onSuccess: (res) => {
+    onSuccess: async (res) => {
+      // 공지 ISR 캐시를 즉시 무효화해 공개 목록에 바로 반영(updateTag server action).
+      await revalidateNotices();
       notify.success(SAVED_NOTICE);
       router.push(`/notices/${res.id}`);
     },

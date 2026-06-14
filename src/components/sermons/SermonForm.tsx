@@ -18,6 +18,7 @@ import {
   type SermonCreateRequest,
   type SermonUpdateRequest,
 } from "@/lib/api/sermons.admin";
+import { revalidateSermons } from "@/lib/admin/revalidate";
 import type { SermonDetailResponse } from "@/lib/api/types";
 import { sermonSchema, type SermonFormValues } from "./schemas";
 
@@ -26,8 +27,8 @@ export interface SermonFormProps {
   initial?: SermonDetailResponse;
 }
 
-// 공개 반영 지연(ISR 60초)을 표준 문구로 안내(가이드 4·15장).
-const SAVED_NOTICE = "저장했습니다. 공개 페이지 반영은 최대 1분 걸릴 수 있습니다.";
+// 쓰기 직후 updateTag로 캐시를 즉시 무효화하므로 지연 안내 불필요.
+const SAVED_NOTICE = "저장했습니다.";
 
 // 선택 필드 빈 문자열은 전송에서 제외(PUT 전체 교체 시 의미 없는 빈값 방지).
 function toBody(v: SermonFormValues): SermonCreateRequest {
@@ -84,7 +85,9 @@ export function SermonForm({ mode, initial }: SermonFormProps) {
         ),
       onReedit: () => router.refresh(),
     }),
-    onSuccess: (res) => {
+    onSuccess: async (res) => {
+      // 쓰기 성공 즉시 sermons 태그 캐시 무효화 → 다음 공개 요청이 fresh 데이터를 받음.
+      await revalidateSermons();
       notify.success(SAVED_NOTICE);
       router.push(`/sermons/${res.id}`);
     },

@@ -11,6 +11,7 @@ import { EventFormDialog } from "./EventFormDialog";
 import { deleteEvent } from "@/lib/api/events.admin";
 import { adminOnError } from "@/lib/admin/mutationHandlers";
 import { notify } from "@/lib/notify";
+import { revalidateEvents } from "@/lib/admin/revalidate";
 import type { EventDetailResponse } from "@/lib/api/types";
 
 // ISR 공개 페이지 위 client island — 일정 목록 toolbar의 "새 일정" 버튼.
@@ -29,7 +30,8 @@ export function EventListAction() {
 
 // 일정 상세(캘린더 모달·딥링크 페이지) 위 수정/삭제 액션 island.
 // event: EventDetailResponse — RSC 레이어에서 받은 상세 응답을 그대로 전달한다.
-export function EventDetailActions({ event }: { event: EventDetailResponse }) {
+// onDeleted: 삭제 성공 후 호출하는 콜백 — 캘린더 모달 닫기 등 부모 정리에 쓴다.
+export function EventDetailActions({ event, onDeleted }: { event: EventDetailResponse; onDeleted?: () => void }) {
   const router = useRouter();
   const [editOpen, setEditOpen] = useState(false);
   const [delOpen, setDelOpen] = useState(false);
@@ -37,10 +39,12 @@ export function EventDetailActions({ event }: { event: EventDetailResponse }) {
   const remove = useMutation({
     mutationFn: () => deleteEvent(event.id),
     onError: adminOnError(),
-    onSuccess: () => {
-      // 삭제 후 ISR 재검증 전까지 지연이 있음을 안내한다.
-      notify.success("삭제했습니다. 공개 페이지 반영은 최대 1분 걸릴 수 있습니다.");
+    onSuccess: async () => {
+      // updateTag 서버 액션으로 events 캐시 즉시 무효화 후 모달 닫기·부모 콜백·새로고침.
+      await revalidateEvents();
+      notify.success("삭제했습니다.");
       setDelOpen(false);
+      onDeleted?.();
       router.refresh();
     },
   });

@@ -3,16 +3,18 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-const { createEventMock, updateEventMock, refreshMock, notifySuccess } = vi.hoisted(() => ({
+const { createEventMock, updateEventMock, refreshMock, notifySuccess, revalidateEventsMock } = vi.hoisted(() => ({
   createEventMock: vi.fn(),
   updateEventMock: vi.fn(),
   refreshMock: vi.fn(),
   notifySuccess: vi.fn(),
+  revalidateEventsMock: vi.fn(),
 }));
 vi.mock("@/lib/api/events.admin", () => ({ createEvent: createEventMock, updateEvent: updateEventMock }));
 vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh: refreshMock, push: vi.fn() }) }));
 vi.mock("@/lib/notify", () => ({ notify: { success: notifySuccess, error: vi.fn() } }));
 vi.mock("@/lib/api/tags", () => ({ getTags: vi.fn().mockResolvedValue([]) }));
+vi.mock("@/lib/admin/revalidate", () => ({ revalidateEvents: revalidateEventsMock }));
 
 import { EventFormDialog } from "./EventFormDialog";
 
@@ -43,6 +45,7 @@ describe("EventFormDialog", () => {
         expect.objectContaining({ title: "수련회", startAt: "2026-06-14T10:00:00" }),
       ),
     );
+    await waitFor(() => expect(revalidateEventsMock).toHaveBeenCalled());
     expect(refreshMock).toHaveBeenCalled();
     expect(notifySuccess).toHaveBeenCalled();
     expect(onOpenChange).toHaveBeenCalledWith(false);

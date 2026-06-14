@@ -28,7 +28,7 @@ describe("getSermons", () => {
     vi.stubGlobal("fetch", spy);
     await getSermons({ tagId: 3 });
     expect(spy).toHaveBeenCalledWith("/api/sermons?tagId=3", {
-      next: { revalidate: 60 },
+      next: { revalidate: 60, tags: ["sermons"] },
     });
   });
   it("비 200이면 throw", async () => {

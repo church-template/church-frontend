@@ -55,7 +55,8 @@ export function EventDetailModal({
           {shown ? (
             <>
               <EventDetailView event={shown} />
-              <EventDetailActions event={shown} />
+              {/* onDeleted: 삭제 완료 후 모달을 닫는다 — 삭제된 일정이 열린 채 남지 않도록. */}
+              <EventDetailActions event={shown} onDeleted={onClose} />
             </>
           ) : (
             <Skeleton className="h-40 w-full" />

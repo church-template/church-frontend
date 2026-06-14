@@ -9,6 +9,7 @@ import { RequirePermission } from "@/components/admin/RequirePermission";
 import { DeleteConfirmDialog } from "@/components/admin/DeleteConfirmDialog";
 import { Button, buttonVariants } from "@/components/ui/Button";
 import { deleteSermon } from "@/lib/api/sermons.admin";
+import { revalidateSermons } from "@/lib/admin/revalidate";
 import { adminOnError } from "@/lib/admin/mutationHandlers";
 import { notify } from "@/lib/notify";
 
@@ -30,8 +31,10 @@ export function SermonDetailActions({ id }: { id: number }) {
   const remove = useMutation({
     mutationFn: () => deleteSermon(id),
     onError: adminOnError(),
-    onSuccess: () => {
-      notify.success("삭제했습니다. 공개 페이지 반영은 최대 1분 걸릴 수 있습니다.");
+    onSuccess: async () => {
+      // 삭제 즉시 sermons 태그 캐시 무효화 → 다음 공개 목록 요청이 fresh 데이터를 받음.
+      await revalidateSermons();
+      notify.success("삭제했습니다.");
       setOpen(false);
       router.push("/sermons");
     },
