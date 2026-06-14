@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { useSyncExternalStore } from "react";
 import type { LoginResponse, MemberSummary } from "./types";
 
 interface AuthState {
@@ -39,4 +40,13 @@ export const useAuthStore = create<AuthState>()(
 // 첫 렌더 hydration 불일치 방지용 가드(회원 영역 소비측에서 사용).
 export function hasHydrated(): boolean {
   return useAuthStore.persist.hasHydrated();
+}
+
+// persist 복원 완료 여부를 구독형으로 읽는다 — effect 내 동기 setState 없이(SSR 스냅샷 false).
+export function useHasHydrated(): boolean {
+  return useSyncExternalStore(
+    (onChange) => useAuthStore.persist.onFinishHydration(onChange),
+    () => useAuthStore.persist.hasHydrated(),
+    () => false,
+  );
 }
