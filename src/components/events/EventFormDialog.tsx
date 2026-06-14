@@ -38,6 +38,8 @@ export interface EventFormDialogProps {
   onOpenChange: (v: boolean) => void;
   mode: "create" | "edit";
   initial?: EventDetailResponse;
+  // 저장 성공 후 호출 — 상세 모달 안에서 수정 시 부모 모달을 닫아 옛 데이터 잔존을 막는다.
+  onSaved?: () => void;
 }
 
 // 저장 성공 안내 — updateTag로 ISR 캐시를 즉시 무효화하므로 지연 없음.
@@ -57,7 +59,7 @@ function toBody(v: EventFormValues): EventCreateRequest {
   };
 }
 
-export function EventFormDialog({ open, onOpenChange, mode, initial }: EventFormDialogProps) {
+export function EventFormDialog({ open, onOpenChange, mode, initial, onSaved }: EventFormDialogProps) {
   const router = useRouter();
   const {
     register,
@@ -102,6 +104,7 @@ export function EventFormDialog({ open, onOpenChange, mode, initial }: EventForm
       notify.success(SAVED_NOTICE);
       router.refresh();
       onOpenChange(false);
+      onSaved?.();
     },
   });
 

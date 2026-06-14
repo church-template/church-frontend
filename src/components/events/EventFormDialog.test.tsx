@@ -64,4 +64,14 @@ describe("EventFormDialog", () => {
       expect(updateEventMock).toHaveBeenCalledWith(7, expect.objectContaining({ version: 3 })),
     );
   });
+
+  it("저장 성공 시 onSaved 콜백을 호출한다(상세 모달 닫기용)", async () => {
+    createEventMock.mockResolvedValue({ id: 7 });
+    const onSaved = vi.fn();
+    renderDialog(<EventFormDialog open mode="create" onOpenChange={() => {}} onSaved={onSaved} />);
+    fireEvent.change(screen.getByLabelText("제목"), { target: { value: "수련회" } });
+    fireEvent.change(screen.getByLabelText("시작"), { target: { value: "2026-06-14T10:00" } });
+    fireEvent.click(screen.getByRole("button", { name: "저장" }));
+    await waitFor(() => expect(onSaved).toHaveBeenCalled());
+  });
 });

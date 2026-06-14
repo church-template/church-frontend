@@ -30,8 +30,8 @@ export function EventListAction() {
 
 // 일정 상세(캘린더 모달·딥링크 페이지) 위 수정/삭제 액션 island.
 // event: EventDetailResponse — RSC 레이어에서 받은 상세 응답을 그대로 전달한다.
-// onDeleted: 삭제 성공 후 호출하는 콜백 — 캘린더 모달 닫기 등 부모 정리에 쓴다.
-export function EventDetailActions({ event, onDeleted }: { event: EventDetailResponse; onDeleted?: () => void }) {
+// onClose: 수정·삭제 성공 후 호출하는 콜백 — 캘린더 모달 닫기 등 부모 정리에 쓴다(수정 시 모달에 옛 데이터가 남지 않도록).
+export function EventDetailActions({ event, onClose }: { event: EventDetailResponse; onClose?: () => void }) {
   const router = useRouter();
   const [editOpen, setEditOpen] = useState(false);
   const [delOpen, setDelOpen] = useState(false);
@@ -44,7 +44,7 @@ export function EventDetailActions({ event, onDeleted }: { event: EventDetailRes
       await revalidateEvents();
       notify.success("삭제했습니다.");
       setDelOpen(false);
-      onDeleted?.();
+      onClose?.();
       router.refresh();
     },
   });
@@ -59,7 +59,7 @@ export function EventDetailActions({ event, onDeleted }: { event: EventDetailRes
           삭제
         </Button>
       </div>
-      <EventFormDialog open={editOpen} onOpenChange={setEditOpen} mode="edit" initial={event} />
+      <EventFormDialog open={editOpen} onOpenChange={setEditOpen} mode="edit" initial={event} onSaved={onClose} />
       <DeleteConfirmDialog
         open={delOpen}
         onOpenChange={setDelOpen}
