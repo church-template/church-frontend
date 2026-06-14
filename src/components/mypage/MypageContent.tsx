@@ -17,6 +17,7 @@ import { ProfileCard } from "./ProfileCard";
 import { PasswordChangeSection } from "./PasswordChangeSection";
 import { AgreementStatus } from "./AgreementStatus";
 import { WithdrawDialog } from "./WithdrawDialog";
+import { ManageHub } from "./ManageHub";
 
 export function MypageContent() {
   const router = useRouter();
@@ -66,6 +67,7 @@ export function MypageContent() {
                 <AgreementStatus me={me} />
               </section>
             </Reveal>
+            <ManageHub delay={180} />
             <Reveal delay={240}>
               <div className="flex items-center justify-between gap-md pt-sm">
                 <Button variant="secondary" loading={loggingOut} onClick={onLogout}>로그아웃</Button>

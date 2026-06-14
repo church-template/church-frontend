@@ -2,7 +2,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { authFetch } from "./authFetch";
 import { parseJson } from "./apiError";
-import { hasPermission } from "./permissions";
+import { hasPermission, hasAnyPermission } from "./permissions";
 import { useAuthStore } from "./authStore";
 import type { MeResponse } from "./types";
 
@@ -20,4 +20,13 @@ export function useMe() {
 export function usePermission(perm: string): boolean {
   const { data } = useMe();
   return hasPermission(perm, data);
+}
+
+// 단일 권한 분기 훅. 기존 usePermission과 동일 동작 — 이름 일관성용 별칭.
+export const useHasPermission = usePermission;
+
+// 복수 권한 분기 훅(하나라도 보유 시 true). 컴포넌트 게이트는 RequirePermission, 로직 분기는 이 훅.
+export function useHasAnyPermission(perms: string[]): boolean {
+  const { data } = useMe();
+  return hasAnyPermission(perms, data);
 }

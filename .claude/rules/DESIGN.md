@@ -501,6 +501,9 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
   영역(행 높이 ≥ 48px — 고령 터치). 에러 메시지는 text-input과 동일(아래 caption, semantic 토큰).
 - 검증 메시지는 입력 아래 `{typography.caption}`, 색은 semantic 토큰.
 
+### 마이페이지
+- **`manage-hub`**: 마이페이지 관리 허브 섹션. `useMe().permissions` 기준 권한 보유 도메인만 카드로 노출(보유 0이면 섹션 비노출). 카드 = `{rounded.xl}`(24px) + 1px 헤어라인, hover 시 보더 `{colors.primary}` 전이. 공개 도메인 카드는 해당 공개 페이지로, 운영 도메인은 `/mypage/manage/*`로 링크. 어드민 화면이라 가독성 우선 단순 변형이되 토큰 공유(hex·px 인라인 금지).
+
 ## Do / Don't
 
 ### Do

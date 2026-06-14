@@ -78,4 +78,22 @@ describe("MypageContent", () => {
     expect(signOutMock).toHaveBeenCalledTimes(1);
     expect(removeSpy).toHaveBeenCalledWith({ queryKey: ["me"] });
   });
+
+  it("관리 권한 보유 회원에게 관리 허브가 노출된다", () => {
+    useMeMock.mockReturnValue({
+      data: { ...me, permissions: ["SERMON_WRITE"] },
+      isPending: false,
+      isError: false,
+      refetch,
+    });
+    renderContent();
+    expect(screen.getByText("관리")).toBeDefined();
+    expect(screen.getByText("설교 관리")).toBeDefined();
+  });
+
+  it("관리 권한이 없으면 관리 허브가 노출되지 않는다", () => {
+    renderContent(); // beforeEach 기본 me.permissions = []
+    expect(screen.getByRole("heading", { level: 1, name: "마이페이지" })).toBeDefined();
+    expect(screen.queryByText("관리")).toBeNull();
+  });
 });
