@@ -3,18 +3,20 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ApiError } from "@/lib/auth/apiError";
 
-const { createSermonMock, updateSermonMock, pushMock, refreshMock, notifySuccess } = vi.hoisted(() => ({
+const { createSermonMock, updateSermonMock, pushMock, refreshMock, notifySuccess, revalidateSermonsMock } = vi.hoisted(() => ({
   createSermonMock: vi.fn(),
   updateSermonMock: vi.fn(),
   pushMock: vi.fn(),
   refreshMock: vi.fn(),
   notifySuccess: vi.fn(),
+  revalidateSermonsMock: vi.fn(),
 }));
 vi.mock("@/lib/api/sermons.admin", () => ({ createSermon: createSermonMock, updateSermon: updateSermonMock }));
 vi.mock("next/navigation", () => ({ useRouter: () => ({ push: pushMock, refresh: refreshMock }) }));
 vi.mock("@/lib/notify", () => ({ notify: { success: notifySuccess, error: vi.fn() } }));
 // 태그 옵션 fetch는 폼 테스트 범위 밖 — 빈 배열로 고정
 vi.mock("@/lib/api/tags", () => ({ getTags: vi.fn().mockResolvedValue([]) }));
+vi.mock("@/lib/admin/revalidate", () => ({ revalidateSermons: revalidateSermonsMock }));
 
 import { SermonForm } from "./SermonForm";
 
@@ -33,8 +35,9 @@ describe("SermonForm", () => {
     expect(createSermonMock).not.toHaveBeenCalled();
   });
 
-  it("등록 성공 시 상세로 이동하고 지연 안내 토스트를 띄운다", async () => {
+  it("등록 성공 시 캐시 무효화 후 상세로 이동한다", async () => {
     createSermonMock.mockResolvedValue({ id: 9 });
+    revalidateSermonsMock.mockResolvedValue(undefined);
     renderForm(<SermonForm mode="create" />);
     fireEvent.change(screen.getByLabelText("제목"), { target: { value: "주일설교" } });
     fireEvent.change(screen.getByLabelText("설교자"), { target: { value: "김목사" } });
@@ -45,6 +48,7 @@ describe("SermonForm", () => {
         expect.objectContaining({ title: "주일설교", preacher: "김목사", preachedAt: "2026-06-01" }),
       ),
     );
+    await waitFor(() => expect(revalidateSermonsMock).toHaveBeenCalled());
     expect(pushMock).toHaveBeenCalledWith("/sermons/9");
     expect(notifySuccess).toHaveBeenCalled();
   });
