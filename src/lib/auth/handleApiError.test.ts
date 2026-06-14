@@ -96,8 +96,8 @@ describe("handleApiError", () => {
   });
 
   it("미정의 코드(default): title 토스트", () => {
-    handleApiError(err("ROLE_IN_USE", { status: 409, title: "역할 사용 중" }));
-    expect(notify.error).toHaveBeenCalledWith("역할 사용 중");
+    handleApiError(err("SOME_UNKNOWN_CODE", { status: 409, title: "알 수 없는 오류" }));
+    expect(notify.error).toHaveBeenCalledWith("알 수 없는 오류");
   });
 
   // 폴백 rung(?? 체인·핸들러 부재) 분기 커버리지
@@ -134,5 +134,31 @@ describe("handleApiError", () => {
   it("default: title 없으면 기본 메시지", () => {
     handleApiError(err("INTERNAL_ERROR", { status: 500 }));
     expect(notify.error).toHaveBeenCalledWith("오류가 발생했습니다.");
+  });
+
+  it("ROLE_IN_USE: 고정 안내 토스트", () => {
+    handleApiError(err("ROLE_IN_USE", { status: 409 }));
+    expect(notify.error).toHaveBeenCalledWith(
+      "회원에게 할당된 역할이라 삭제할 수 없습니다.",
+    );
+  });
+
+  it("DEPARTMENT_HAS_CHILDREN: 고정 안내 토스트", () => {
+    handleApiError(err("DEPARTMENT_HAS_CHILDREN", { status: 409 }));
+    expect(notify.error).toHaveBeenCalledWith(
+      "하위 부서가 있어 삭제할 수 없습니다. 하위 부서를 먼저 정리해 주세요.",
+    );
+  });
+
+  it("FILE_SIZE_EXCEEDED: 한도 안내 토스트", () => {
+    handleApiError(err("FILE_SIZE_EXCEEDED", { status: 413 }));
+    expect(notify.error).toHaveBeenCalledWith(
+      "파일 용량이 한도를 초과했습니다. 더 작은 파일을 선택해 주세요.",
+    );
+  });
+
+  it("FILE_STORAGE_ERROR: default 일반 오류 토스트(title 폴백)", () => {
+    handleApiError(err("FILE_STORAGE_ERROR", { status: 500, title: "저장 실패" }));
+    expect(notify.error).toHaveBeenCalledWith("저장 실패");
   });
 });

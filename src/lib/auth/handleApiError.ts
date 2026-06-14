@@ -46,6 +46,16 @@ export function handleApiError(error: ApiError, handlers: ApiErrorHandlers = {})
       if (handlers.onDuplicate) handlers.onDuplicate(error);
       else notify.error(error.detail ?? error.title ?? "이미 존재하는 값입니다.");
       break;
+    case "ROLE_IN_USE":
+      notify.error("회원에게 할당된 역할이라 삭제할 수 없습니다.");
+      break;
+    case "DEPARTMENT_HAS_CHILDREN":
+      notify.error("하위 부서가 있어 삭제할 수 없습니다. 하위 부서를 먼저 정리해 주세요.");
+      break;
+    case "FILE_SIZE_EXCEEDED":
+      notify.error("파일 용량이 한도를 초과했습니다. 더 작은 파일을 선택해 주세요.");
+      break;
+    // FILE_STORAGE_ERROR·INTERNAL_ERROR는 default(서버 title ?? 일반)로 처리 — case 불필요
     default:
       notify.error(error.title ?? "오류가 발생했습니다.");
   }
