@@ -1,38 +1,27 @@
+// src/lib/api/bulletins.test.ts
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { getBulletins } from "./bulletins";
 
-afterEach(() => vi.unstubAllGlobals());
+const { fetchMock } = vi.hoisted(() => ({ fetchMock: vi.fn() }));
+vi.stubGlobal("fetch", fetchMock);
+vi.mock("@/lib/auth/apiBase", () => ({ apiUrl: (p: string) => `http://test${p}` }));
 
-const okResponse = (body: unknown) =>
-  ({ ok: true, status: 200, json: async () => body }) as Response;
+import { getBulletins, getBulletin } from "./bulletins";
 
-// buildListQuery 자체는 page.test.ts가 커버 — 여기선 호출 URL·옵션·에러만 검증.
-describe("getBulletins", () => {
-  it("'/api/bulletins'+쿼리를 revalidate 60으로 호출", async () => {
-    const spy = vi.fn(async () => okResponse({ content: [], page: {} }));
-    vi.stubGlobal("fetch", spy);
-    await getBulletins({ page: 2 });
-    expect(spy).toHaveBeenCalledWith("/api/bulletins?page=2", {
-      next: { revalidate: 60 },
-    });
+afterEach(() => vi.clearAllMocks());
+
+describe("bulletins public", () => {
+  it("getBulletins는 bulletins 태그로 캐시한다", async () => {
+    fetchMock.mockResolvedValue({ ok: true, json: async () => ({ content: [], page: {} }) });
+    await getBulletins({ page: 0 });
+    const init = fetchMock.mock.calls[0][1];
+    expect(init.next.tags).toEqual(["bulletins"]);
   });
 
-  it("파라미터 생략 시 쿼리 없이 호출(서버 기본 serviceDate,desc 신뢰)", async () => {
-    const spy = vi.fn(async () => okResponse({ content: [], page: {} }));
-    vi.stubGlobal("fetch", spy);
-    await getBulletins();
-    expect(spy).toHaveBeenCalledWith("/api/bulletins", {
-      next: { revalidate: 60 },
-    });
-  });
-
-  it("비 200이면 throw", async () => {
-    vi.stubGlobal(
-      "fetch",
-      vi.fn(async () => ({ ok: false, status: 500 }) as Response),
-    );
-    await expect(getBulletins({})).rejects.toThrow(
-      "GET /api/bulletins 실패: 500",
-    );
+  it("getBulletin은 no-store로 최신 version을 읽는다", async () => {
+    fetchMock.mockResolvedValue({ ok: true, json: async () => ({ id: 1, version: 4 }) });
+    const b = await getBulletin(1);
+    const init = fetchMock.mock.calls[0][1];
+    expect(init.cache).toBe("no-store");
+    expect(b.version).toBe(4);
   });
 });

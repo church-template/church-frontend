@@ -9,6 +9,11 @@ vi.mock("@/components/common/Pagination", () => ({
     <div data-testid="pagination" data-total={page.totalPages} />
   ),
 }));
+// 어드민 인라인 액션은 클라이언트 컴포넌트(QueryClient 필요) — 무력화.
+vi.mock("@/components/bulletins/BulletinAdminActions", () => ({
+  BulletinListAction: () => null,
+  BulletinRowActions: () => null,
+}));
 
 import BulletinsPage from "./page";
 

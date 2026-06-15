@@ -6,6 +6,7 @@ import { formatDate } from "@/lib/date";
 import { apiUrl } from "@/lib/auth/apiBase";
 import { getBulletins } from "@/lib/api/bulletins";
 import { BulletinRow } from "@/components/cards/BulletinRow";
+import { BulletinListAction, BulletinRowActions } from "@/components/bulletins/BulletinAdminActions";
 import { Pagination } from "@/components/common/Pagination";
 import { EmptyState } from "@/components/common/EmptyState";
 
@@ -32,7 +33,10 @@ export default async function BulletinsPage({
 
   return (
     <Container as="section" className="py-section">
-      <h1 className={cn(typo.displayMd, "text-ink")}>주보</h1>
+      <div className="flex items-center justify-between gap-base">
+        <h1 className={cn(typo.displayMd, "text-ink")}>주보</h1>
+        <BulletinListAction />
+      </div>
 
       {data.content.length === 0 ? (
         <EmptyState message="등록된 주보가 없습니다." className="mt-xl" />
@@ -45,6 +49,7 @@ export default async function BulletinsPage({
               date={formatDate(b.serviceDate)}
               author={b.author}
               pdfUrl={apiUrl(`/api/media/${b.mediaId}`)}
+              actions={<BulletinRowActions b={b} />}
             />
           ))}
         </div>
