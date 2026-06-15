@@ -520,7 +520,14 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 - **`datetime-picker`**: 일정 시작·종료 입력. 네이티브 `<input type="datetime-local">`(종일이면 `date`) 래퍼, 라이브러리 없이. `Input` 토큰·error 배선 상속. 직렬화는 `toServerDateTime`(offset 없는 LocalDateTime).
 - **`event-form-modal`**: 일정 등록·수정 팝업 Dialog 폼. DateTimePicker·MarkdownEditor·TagMultiSelect·Checkbox(종일) 조합. 종료>시작 검증, 낙관락 version.
 <!-- admin:04 부서 — admin-department-tree -->
-<!-- admin:05 미디어 — admin-data-table · media-uploader · media-references-list -->
+<!-- admin:05 미디어 — admin-data-table · media-uploader · media-picker · media-references-list · bulletin-form-modal · album-form-modal · gallery-photo-manager (크로스도메인 공유는 admin-data-table·media-uploader만, 나머지는 05 전용) -->
+- **`admin-data-table`**: 어드민 목록 공용 테이블(단일 생산, 06·07 소비). `Column<T>`(key·header·cell·className) + rows + rowKey + actions(후행 셀) + empty/loading. 정렬·선택·페이지네이션 미내장(페이지는 `common/Pagination` 조합). 헤어라인 행 구분, `typo.*`.
+- **`media-uploader`**: 미디어 업로드 위젯(단일 생산). 네이티브 파일 선택 + 클라 사전검증(accept별 MIME·10MB) + `POST /api/admin/media`. `accept`(image|pdf|all, all=라이브러리 전용), `multiple`. 가독성 우선 단순 변형.
+- **`media-picker`**: 미디어 선택 허브(Dialog+Tabs). "라이브러리"(기존 그리드·type 필터·선택) / "새 업로드"(media-uploader). `onConfirm(mediaIds)`. 갤러리(image·multi)·주보(pdf·single) 공용.
+- **`media-references-list`**: 차단형 삭제 안내 Dialog. 참조 type/title 목록 표시, 삭제 버튼 없음(편집 유도).
+- **`bulletin-form-modal`**: 주보 등록·수정 Dialog. Input(제목)·DateTimePicker(예배일)·MediaPicker(pdf·single). 낙관락 version(query), 수정은 getBulletin(no-store) 시드.
+- **`album-form-modal`**: 갤러리 앨범 등록·수정 Dialog. Input(제목)·MarkdownEditor(설명)·TagMultiSelect. 낙관락 version(body).
+- **`gallery-photo-manager`**: 앨범 상세 사진 관리. "사진 추가"(MediaPicker image·multi → addPhotos) + 사진별 제거(라이트박스 버튼 밖 오버레이 → removePhoto).
 <!-- admin:06 분류(태그·직분) — tag/position form-dialog (admin-data-table 소비) -->
 <!-- admin:07 거버넌스 — role-permission-matrix · reset-password-reveal · agreement-reset-dialog -->
 
