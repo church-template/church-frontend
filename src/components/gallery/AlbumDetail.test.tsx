@@ -11,6 +11,8 @@ vi.mock("next/link", () => ({
 const { useAlbumMock } = vi.hoisted(() => ({ useAlbumMock: vi.fn() }));
 vi.mock("./queries", () => ({ useAlbum: useAlbumMock }));
 vi.mock("./PhotoGrid", () => ({ PhotoGrid: () => "PHOTOGRID" }));
+// AlbumDetailActions(useRouter·RequirePermission 포함) 무력화 — 권한 게이트 동작은 GalleryAdminActions.test에서 검증.
+vi.mock("./GalleryAdminActions", () => ({ AlbumDetailActions: () => null, AlbumListAction: () => null }));
 vi.mock("@/components/common/MarkdownContent", () => ({
   MarkdownContent: ({ source }: { source: string }) => <div>{source}</div>,
 }));
