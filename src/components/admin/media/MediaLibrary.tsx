@@ -103,14 +103,14 @@ export function MediaLibrary() {
           <input
             type="date"
             aria-label="시작일"
-            defaultValue={params.from ?? ""}
+            value={params.from ?? ""}
             onChange={(e) => setParam("from", e.target.value || undefined)}
             className={cn(typo.datetime, "h-12 rounded-md border border-hairline bg-canvas px-base text-ink")}
           />
           <input
             type="date"
             aria-label="종료일"
-            defaultValue={params.to ?? ""}
+            value={params.to ?? ""}
             onChange={(e) => setParam("to", e.target.value || undefined)}
             className={cn(typo.datetime, "h-12 rounded-md border border-hairline bg-canvas px-base text-ink")}
           />

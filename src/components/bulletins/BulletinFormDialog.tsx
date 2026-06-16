@@ -65,7 +65,12 @@ export function BulletinFormDialog({ open, onOpenChange, mode, bulletinId, onSav
         : createBulletin({ title: v.title, serviceDate: v.serviceDate, mediaId: v.mediaId }),
     onError: adminOnError({
       onFieldErrors: (fes) => fes.forEach((fe) => setError(fe.field as keyof BulletinFormValues, { message: fe.reason })),
-      onReedit: () => { if (bulletinId != null) getBulletin(bulletinId).then((b) => { setVersion(b.version); reset({ title: b.title, serviceDate: b.serviceDate, mediaId: b.mediaId }); }); },
+      onReedit: () => {
+        if (bulletinId != null)
+          getBulletin(bulletinId)
+            .then((b) => { setVersion(b.version); reset({ title: b.title, serviceDate: b.serviceDate, mediaId: b.mediaId }); })
+            .catch((e) => adminOnError()(e));
+      },
     }),
     onSuccess: async () => {
       await revalidateBulletins();
