@@ -528,6 +528,10 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 - **`bulletin-form-modal`**: 주보 등록·수정 Dialog. Input(제목)·DateTimePicker(예배일)·MediaPicker(pdf·single). 낙관락 version(query), 수정은 getBulletin(no-store) 시드.
 - **`album-form-modal`**: 갤러리 앨범 등록·수정 Dialog. Input(제목)·MarkdownEditor(설명)·TagMultiSelect. 낙관락 version(body).
 - **`gallery-photo-manager`**: 앨범 상세 사진 관리. "사진 추가"(MediaPicker image·multi → addPhotos) + 사진별 제거(라이트박스 버튼 밖 오버레이 → removePhoto).
+<!-- admin:04 부서 -->
+- **`department-admin-manager`**: 어드민 부서 계층 관리 화면(트랙 04). 공개 `GET /api/departments`(no-store)를 `buildDepartmentTree`로 조립해 **접이식 단일 트리**(`department-tree`)로 표시. 페이지 Container 폭 그대로 사용(공지·미디어와 동일, 별도 폭 캡 없음) + 전체 펼치기/접기 + 안내 배너(lucide `Info`). 접힘 상태 `Set`(effect 미사용). 공개 격리라 ISR revalidate 미사용·어드민 쿼리 캐시만 무효화.
+- **`department-tree`**: 접이식 부서 트리(트랙 04). `flattenVisible`로 가시 행만 렌더 — 자식 있는 노드만 chevron(▸/▾, `aria-expanded`), 잎 노드는 동일 폭 스페이서(`w-6`)로 정렬, depth 들여쓰기 토큰. 행은 R1(이름·담당 `flex-1 truncate` 좌, 액션 `shrink-0 whitespace-nowrap` 우). 노드별 `＋하위·수정·삭제`(아이콘+`lg:` 텍스트).
+- **`department-form-modal`**: 부서 생성·수정 Dialog(트랙 04). 이름·담당(`Input`)·상위 부서(native `select`, edit 시 자기+하위 제외로 순환 방지)·정렬 순서(number)·설명(`markdown-editor`). 생성=POST, 수정=상세 시드 후 **항상 PUT**(루트화=상위 `(없음)`)·낙관락 version.
 <!-- admin:06 분류(태그·직분) — tag/position form-dialog (admin-data-table 소비) -->
 <!-- admin:07 거버넌스 — role-permission-matrix · reset-password-reveal · agreement-reset-dialog -->
 
