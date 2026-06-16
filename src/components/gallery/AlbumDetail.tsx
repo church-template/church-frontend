@@ -10,6 +10,7 @@ import { Skeleton } from "@/components/common/Skeleton";
 import { MarkdownContent } from "@/components/common/MarkdownContent";
 import { useAlbum } from "./queries";
 import { PhotoGrid } from "./PhotoGrid";
+import { AlbumDetailActions } from "./GalleryAdminActions";
 
 // 상세 클라이언트 — 제목·메타·태그·description(마크다운)·사진 그리드.
 export function AlbumDetail({ id }: { id: number }) {
@@ -44,6 +45,7 @@ export function AlbumDetail({ id }: { id: number }) {
             {formatDate(album.createdAt)} · 사진 {album.photos.length}장
             {album.author ? ` · ${album.author}` : ""}
           </p>
+          <AlbumDetailActions album={album} />
           {album.tags.length > 0 ? (
             <div className="mt-base flex flex-wrap gap-xs">
               {album.tags.map((t) => (
@@ -59,7 +61,7 @@ export function AlbumDetail({ id }: { id: number }) {
               <MarkdownContent source={album.description} className="mt-lg" />
             </>
           ) : null}
-          <PhotoGrid photos={album.photos} albumTitle={album.title} />
+          <PhotoGrid photos={album.photos} albumTitle={album.title} albumId={album.id} />
         </>
       )}
     </div>

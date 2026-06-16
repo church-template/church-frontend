@@ -123,7 +123,6 @@ export interface EventDetailResponse {
 }
 
 // 주보 카드 — 본문 없음, PDF는 mediaId FK(가이드 10장, OpenAPI BulletinCardResponse).
-// 상세 타입은 선언하지 않는다(상세 페이지 없음 — 스펙 D2).
 export interface BulletinCardResponse {
   id: number;
   title: string;
@@ -131,6 +130,18 @@ export interface BulletinCardResponse {
   mediaId: number;
   createdAt: string; // LocalDateTime
   author?: string | null; // 서버 마스킹 적용(가이드 7장) — 그대로 표기
+}
+
+// 주보 상세(공개 GET /api/bulletins/{id}) — 어드민 수정 시 낙관락 version 시드에 사용(스펙 §3.3·§5.3).
+export interface BulletinDetailResponse {
+  id: number;
+  title: string;
+  serviceDate: string; // date (yyyy-MM-dd)
+  mediaId: number;
+  author?: string | null;
+  createdAt: string; // LocalDateTime
+  updatedAt: string;
+  version: number; // 낙관락
 }
 
 // 갤러리(회원전용, GALLERY_VIEW) — OpenAPI Gallery*Response. 다른 Response와 달리 authFetch로만 조회.
@@ -160,6 +171,6 @@ export interface GalleryAlbumDetailResponse {
   author?: string | null;
   createdAt: string;
   updatedAt: string;
-  version: number; // 조회 전용 — 표시·전송 안 함(미사용 보존)
+  version: number; // 낙관락 — 앨범 PATCH에서 읽어 전송(스펙 §8)
   photos: GalleryPhotoResponse[];
 }

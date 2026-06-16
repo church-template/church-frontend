@@ -17,3 +17,7 @@ export async function revalidateSermons() {
 export async function revalidateNotices() {
   updateTag("notices");
 }
+
+export async function revalidateBulletins() {
+  updateTag("bulletins");
+}

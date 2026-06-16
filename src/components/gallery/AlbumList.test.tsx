@@ -18,6 +18,8 @@ vi.mock("next/navigation", () => ({ useSearchParams: () => new URLSearchParams("
 // 자식 컴포넌트는 격리 — 링크 중복/Suspense 회피.
 vi.mock("@/components/common/TagFilter", () => ({ TagFilter: () => null }));
 vi.mock("@/components/common/Pagination", () => ({ Pagination: () => "PAGINATION" }));
+// AlbumListAction(RequirePermission 포함) 무력화 — 권한 게이트 동작은 GalleryAdminActions.test에서 검증.
+vi.mock("./GalleryAdminActions", () => ({ AlbumListAction: () => null, AlbumDetailActions: () => null }));
 
 import { AlbumList } from "./AlbumList";
 
