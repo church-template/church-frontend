@@ -99,4 +99,11 @@ describe("DepartmentManager (접이식 트리)", () => {
     renderManager();
     await waitFor(() => expect(screen.getByText(/자동 반영되지 않습니다/)).toBeDefined());
   });
+
+  it("목록 조회 실패 시 빈 목록 대신 에러 안내를 보인다", async () => {
+    listMock.mockRejectedValue(new Error("network"));
+    renderManager();
+    await waitFor(() => expect(screen.getByText(/불러오지 못했습니다/)).toBeDefined());
+    expect(screen.queryByText("등록된 부서가 없습니다.")).toBeNull();
+  });
 });

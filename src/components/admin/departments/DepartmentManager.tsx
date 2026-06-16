@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Info } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -19,11 +19,16 @@ import type { DepartmentNode } from "@/lib/api/types";
 
 export function DepartmentManager() {
   const qc = useQueryClient();
-  const { data: departments = [], isLoading } = useQuery({
+  const { data: departments = [], isLoading, isError, error } = useQuery({
     queryKey: adminKeys.list("departments"),
     queryFn: listDepartmentsAdmin,
   });
   const roots = buildDepartmentTree(departments);
+
+  // 목록 조회 실패는 토스트로 알린다(빈 목록과 혼동 방지). notify 호출이라 effect 내 React setState 아님.
+  useEffect(() => {
+    if (isError) adminOnError()(error);
+  }, [isError, error]);
 
   const [collapsed, setCollapsed] = useState<Set<number>>(new Set()); // 기본 전체 펼침
   const [createParentId, setCreateParentId] = useState<number | null | undefined>(undefined); // undefined=닫힘
@@ -71,6 +76,10 @@ export function DepartmentManager() {
         <div className="mt-base">
           {isLoading ? (
             <p className={cn(typo.bodyMd, "text-muted")}>불러오는 중…</p>
+          ) : isError ? (
+            <p className={cn(typo.bodyMd, "text-muted")}>
+              부서 목록을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.
+            </p>
           ) : (
             <DepartmentTree
               roots={roots}

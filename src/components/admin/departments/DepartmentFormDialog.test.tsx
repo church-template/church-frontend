@@ -115,4 +115,11 @@ describe("DepartmentFormDialog", () => {
       expect(createMock).toHaveBeenCalledWith(expect.objectContaining({ name: "1학년부", parentId: 2 })),
     );
   });
+
+  it("시드 조회 실패 시 저장 버튼이 비활성(잘못된 PUT 방지)이다", async () => {
+    getDetailMock.mockRejectedValue(new Error("network"));
+    renderDialog(<DepartmentFormDialog open onOpenChange={() => {}} mode="edit" editId={2} departments={departments} />);
+    await waitFor(() => expect(notifyError).toHaveBeenCalled());
+    expect((screen.getByRole("button", { name: "저장" }) as HTMLButtonElement).disabled).toBe(true);
+  });
 });

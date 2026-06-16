@@ -120,7 +120,8 @@ export function DepartmentFormDialog({
     retry: false, // 재시도하면 제출 버튼이 ~30초간 말없이 멈춤 — 즉시 실패 후 토스트(Bulletin 정책)
   });
   const version = detail.data?.version ?? 0;
-  const seeding = isEdit && detail.isFetching; // 시드 조회 중 — 제출 차단(stale version 409 방지)
+  // edit는 상세 시드가 완료돼야(데이터 있음·非fetching·非error) 제출 허용 — 시드 진행 중/실패 시 stale version(0) PUT 차단.
+  const canSubmit = mode === "create" || (!!detail.data && !detail.isFetching && !detail.isError);
 
   const parentOptions = parentOptionsFor(departments, mode, editId);
 
@@ -148,7 +149,7 @@ export function DepartmentFormDialog({
     onError: adminOnError({
       onFieldErrors: (fes) =>
         fes.forEach((fe) => setError(fe.field as keyof DepartmentFormValues, { message: fe.reason })),
-      // 409 충돌 → 최신본 재조회. 새 version·값은 위 시드 effect가 폼에 반영(seeding=isFetching로 제출 차단).
+      // 409 충돌 → 최신본 재조회. 새 version·값은 위 시드 effect가 폼에 반영(refetch 중엔 canSubmit=false로 제출 차단).
       onReedit: () => {
         if (isEdit) void detail.refetch();
       },
@@ -168,7 +169,13 @@ export function DepartmentFormDialog({
         <DialogHeader>
           <DialogTitle>{mode === "edit" ? "부서 수정" : "새 부서"}</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit((v) => mutation.mutate(v))} className="flex flex-col gap-base">
+        <form
+          onSubmit={handleSubmit((v) => {
+            if (!canSubmit) return; // 시드 미완료 edit 제출 방지(disabled 우회 방어)
+            mutation.mutate(v);
+          })}
+          className="flex flex-col gap-base"
+        >
           <div className="flex flex-col gap-xxs">
             <label htmlFor="dept-name" className={cn(typo.bodySm, "text-ink")}>부서명</label>
             <Input id="dept-name" error={errors.name?.message} {...register("name")} />
@@ -230,7 +237,7 @@ export function DepartmentFormDialog({
           </div>
           <DialogFooter>
             <Button type="button" variant="secondary" onClick={() => onOpenChange(false)}>취소</Button>
-            <Button type="submit" variant="primary" loading={mutation.isPending} disabled={seeding}>저장</Button>
+            <Button type="submit" variant="primary" loading={mutation.isPending} disabled={!canSubmit}>저장</Button>
           </DialogFooter>
         </form>
       </DialogContent>

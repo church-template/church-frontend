@@ -9,6 +9,10 @@ describe("departmentSchema", () => {
     expect(r.success).toBe(false);
   });
 
+  it("공백만 입력된 name은 실패한다", () => {
+    expect(departmentSchema.safeParse({ ...base, name: "   " }).success).toBe(false);
+  });
+
   it("유효한 값은 통과한다", () => {
     const r = departmentSchema.safeParse({ name: "청년부", description: "설명", leader: "김집사", parentId: 1, sortOrder: 10 });
     expect(r.success).toBe(true);
