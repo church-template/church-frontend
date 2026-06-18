@@ -533,6 +533,10 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 - **`department-tree`**: 접이식 부서 트리(트랙 04). `flattenVisible`로 가시 행만 렌더 — 자식 있는 노드만 chevron(▸/▾, `aria-expanded`), 잎 노드는 동일 폭 스페이서(`w-6`)로 정렬, depth 들여쓰기 토큰. 행은 R1(이름·담당 `flex-1 truncate` 좌, 액션 `shrink-0 whitespace-nowrap` 우). 노드별 `＋하위·수정·삭제`(아이콘+`lg:` 텍스트).
 - **`department-form-modal`**: 부서 생성·수정 Dialog(트랙 04). 이름·담당(`Input`)·상위 부서(native `select`, edit 시 자기+하위 제외로 순환 방지)·정렬 순서(number)·설명(`markdown-editor`). 생성=POST, 수정=상세 시드 후 **항상 PUT**(루트화=상위 `(없음)`)·낙관락 version.
 <!-- admin:06 분류(태그·직분) — tag/position form-dialog (admin-data-table 소비) -->
+- **`tag-manager`**: 태그 목록·CRUD 화면(트랙 06). `DataTable`(이름) + 툴바 `새 태그` + 행 `수정`·`삭제`(`DeleteConfirmDialog`, 비차단 삭제 경고문). 목록은 공개 `getTags`(`["tags"]` 키 공유) 재사용, mutation onSuccess에서 `["tags"]` invalidate + `revalidateTags()`로 공개 ISR 무효화.
+- **`tag-form-modal`**: 태그 생성·수정 Dialog(트랙 06). `Input`(이름) 단일 필드. version 없음 — 행 값 시드(상세 GET 불요). 중복 시 name 인라인 에러(`onDuplicate`).
+- **`position-manager`**: 직분 목록·CRUD 화면(트랙 06). `DataTable`(이름·정렬순서) + 상단 "권한 무관 표시용" 안내 배너(lucide `Info`). 공개 소비자 없음 — `["positions"]` 클라 쿼리만 무효화.
+- **`position-form-modal`**: 직분 생성·수정 Dialog(트랙 06). `Input`(이름) + number `Input`(정렬 순서, `Controller`로 null↔"" 매핑). 생성 시 정렬순서 생략→백엔드 자동부여, 수정 시 비움→미변경(body 생략).
 <!-- admin:07 거버넌스 — role-permission-matrix · reset-password-reveal · agreement-reset-dialog -->
 
 ## Do / Don't

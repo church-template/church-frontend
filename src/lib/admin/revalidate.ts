@@ -21,3 +21,7 @@ export async function revalidateNotices() {
 export async function revalidateBulletins() {
   updateTag("bulletins");
 }
+
+export async function revalidateTags() {
+  updateTag("tags");
+}
