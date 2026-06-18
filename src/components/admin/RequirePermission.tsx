@@ -15,7 +15,8 @@ interface Props {
 // 보안 경계 아님: 서버가 /api/admin/** 2단 방어. 로딩 중·미보유는 children 비렌더.
 export function RequirePermission({ permission, perms, mode = "any", fallback = null, children }: Props) {
   const { data: me, isLoading } = useMe();
-  if (isLoading) return <>{fallback}</>;
+  // 로딩 중엔 fallback(접근거부 UI) 대신 null — 권한 보유자에게 '권한 없음' 플래시 방지.
+  if (isLoading) return null;
   const ok = permission
     ? hasPermission(permission, me)
     : perms

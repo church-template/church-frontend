@@ -75,6 +75,8 @@ export function PositionFormDialog({ open, onOpenChange, mode, initial }: Positi
                   id="position-sortOrder"
                   type="number"
                   inputMode="numeric"
+                  min={0}
+                  step={1}
                   value={field.value === null ? "" : String(field.value)}
                   onChange={(e) => field.onChange(e.target.value === "" ? null : Number(e.target.value))}
                   error={errors.sortOrder?.message}
