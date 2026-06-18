@@ -174,3 +174,10 @@ export interface GalleryAlbumDetailResponse {
   version: number; // 낙관락 — 앨범 PATCH에서 읽어 전송(스펙 §8)
   photos: GalleryPhotoResponse[];
 }
+
+export interface PositionResponse {
+  id: number;
+  name: string;
+  sortOrder: number;
+  createdAt: string; // ISO. 화면 미표시(정렬·진단용)
+}

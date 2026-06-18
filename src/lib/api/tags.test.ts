@@ -9,7 +9,7 @@ describe("getTags", () => {
     const spy = vi.fn(async () => ({ ok: true, json: async () => tags }) as Response);
     vi.stubGlobal("fetch", spy);
     expect(await getTags()).toEqual(tags);
-    expect(spy).toHaveBeenCalledWith("/api/tags", { next: { revalidate: 300 } });
+    expect(spy).toHaveBeenCalledWith("/api/tags", { next: { revalidate: 300, tags: ["tags"] } });
   });
   it("비 200이면 throw", async () => {
     vi.stubGlobal("fetch", vi.fn(async () => ({ ok: false, status: 500 }) as Response));
