@@ -12,6 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogClose,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
@@ -19,6 +20,7 @@ import { MarkdownEditor } from "@/components/admin/MarkdownEditor";
 import { adminOnError } from "@/lib/admin/mutationHandlers";
 import { notify } from "@/lib/notify";
 import { adminKeys } from "@/lib/admin/queryKeys";
+import { ACTION } from "@/constants/actionButton";
 import { buildDepartmentTree } from "@/lib/api/departments";
 import { collectDescendantIds, findNode } from "./treeUtils";
 import {
@@ -238,8 +240,10 @@ export function DepartmentFormDialog({
             />
           </div>
           <DialogFooter>
-            <Button type="button" variant="secondary" onClick={() => onOpenChange(false)}>취소</Button>
-            <Button type="submit" variant="primary" loading={mutation.isPending} disabled={!canSubmit}>저장</Button>
+            <DialogClose asChild>
+              <Button type="button" variant="tertiary">{ACTION.cancel.label}</Button>
+            </DialogClose>
+            <Button type="submit" variant="primary" loading={mutation.isPending} disabled={!canSubmit}>{ACTION.save.label}</Button>
           </DialogFooter>
         </form>
       </DialogContent>
