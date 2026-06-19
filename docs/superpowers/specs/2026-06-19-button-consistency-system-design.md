@@ -44,7 +44,7 @@
 
 | 액션 | variant | 비고 |
 |---|---|---|
-| 연결해제(역할 회수) | `tertiary` `iconOnly` | `X`, `aria-label="역할 회수"`. 삭제와 의미 구분(연결 해제). |
+| 연결해제(역할 회수·사진 제거) | `tertiary`/오버레이 `iconOnly` | `X` 유지(Trash2 아님). 라벨 `회수`/`제거` 유지 — **영구 삭제 아님(원본 미디어·역할 보존)**. 삭제와 의미·아이콘 구분. |
 | 토글(펼치기/접기·전문 보기·필터) | `tertiary` (또는 `iconOnly`) | chevron은 `iconOnly`. 필터 토글은 상태기반 강조 유지(아래 4.3). |
 | 라이트박스 nav | `tertiary` `iconOnly` | `ChevronLeft`/`ChevronRight` + `aria-label`. |
 | 복사 | `tertiary` `iconOnly` | `Copy` + `aria-label="복사"`. |
@@ -80,6 +80,7 @@
 ### 4.3 비대상(Non-goals)
 
 - `PhotoGrid` 썸네일 트리거(이미지 전체가 클릭 영역, `aria-label` 적절) — 버튼 형식 통일 대상 아님, 유지.
+- **인라인 텍스트 링크** — `AgreementStatus` 재동의하기 →(primary-soft 배너 CTA), `TermsDialog` 전문 보기(체크박스 옆 밑줄 더보기), `WithdrawDialog` 회원 탈퇴(밑줄 `DialogTrigger` — 파괴 트리거를 일부러 조용히). 의도된 텍스트 링크라 Button 흡수 비대상, 유지.
 - `MediaLibrary` 필터 토글(`전체`/`이미지`/`PDF`의 상태기반 `primary|secondary`) — 유효 패턴, 유지.
 - 인증/위저드 도메인 카피 문구 — 유지(variant만 규칙 적용).
 - 어드민 화면의 비(非)버튼 레이아웃·디자인 — 범위 밖(DESIGN.md Known Gaps).
@@ -156,7 +157,7 @@ export const ACTION = {
 |---|---|---|
 | `gallery/GalleryAdminActions.tsx:20,45,46` | 새 앨범 primary / 수정·삭제 secondary | **I** Plus · **V+I** `tertiary`+Pencil/Trash2 |
 | `gallery/GalleryPhotoManager.tsx:36` | 사진 추가 secondary | 유지(picker 트리거, 행 밖 보조) |
-| `gallery/GalleryPhotoManager.tsx:60` | 사진 제거 raw-button X | **R**+**L** Button `iconOnly` `aria="삭제"` |
+| `gallery/GalleryPhotoManager.tsx:60` | 사진 제거 raw-button X(오버레이) | **R** Button `iconOnly`+오버레이 className 유지, `aria="사진 제거"`·X 아이콘 유지(연결해제) |
 | `gallery/PhotoLightbox.tsx:59,68` | 이전/다음 raw-button | **R** Button `iconOnly` |
 | `gallery/AlbumFormDialog.tsx:88` | 저장(취소 없음) | **F** 취소 추가 |
 | `gallery/GalleryGate.tsx:34` | 로그인 raw-`<a>` | **R** `buttonVariants()` `<Link>` |
@@ -170,17 +171,18 @@ export const ACTION = {
 | `mypage/ProfileCard.tsx:41` | 수정 tertiary | **I** Pencil |
 | `mypage/ProfileEditForm.tsx:106,107` | `[저장, 취소]`(취소 tertiary) | **F** `[취소, 저장]` |
 | `mypage/PasswordChangeSection.tsx:88,89` | `변경` primary / 취소 tertiary | **L** `저장` · **F** `[취소, 저장]` |
-| `mypage/WithdrawDialog.tsx:72` | 회원 탈퇴 raw-`<button>` | **R** Button `tertiary` |
-| `mypage/AgreementStatus.tsx:28` | 재동의하기 raw-`<a>` | **R** `buttonVariants("tertiary")` `<Link>` |
-| `auth/TermsDialog.tsx:18` | 전문 보기 raw-`<button>` | **R** Button `tertiary` |
+| `mypage/WithdrawDialog.tsx:72` | 회원 탈퇴 DialogTrigger(밑줄 링크) | 비대상(파괴 트리거는 조용한 인라인 링크 유지) |
+| `mypage/AgreementStatus.tsx:28` | 재동의하기 인라인 링크 | 비대상(인라인 CTA 링크 유지) |
+| `auth/TermsDialog.tsx:18` | 전문 보기 인라인 링크(DialogTrigger) | 비대상(밑줄 더보기 링크 유지) |
 | `auth/SignupForm.tsx`·`AgreementsForm.tsx`·`LoginForm.tsx` | 제출/nav primary·tertiary | 규칙 합치(대부분 변경 없음) |
 
 ## 6. 영향받는 라벨 변경 요약 (회귀 테스트 갱신 필요)
 
 - `역할 추가` → `새 역할`
 - `변경` → `저장` (PasswordChangeSection)
-- `사진 제거` → `삭제` (GalleryPhotoManager, visible/aria)
 - 로그아웃 `destructive` → `secondary` (색만, 라벨 동일)
+
+> 연결해제 라벨(`사진 제거`·`역할 회수`)은 **유지**(영구 삭제가 아니므로 `삭제`로 바꾸지 않는다).
 
 ## 7. 검증 기준 (Definition of Done)
 
