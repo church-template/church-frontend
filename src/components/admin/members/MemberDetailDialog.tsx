@@ -41,14 +41,19 @@ export function MemberDetailDialog({ uuid, open, onOpenChange }: Props) {
         {detail.isPending && open ? (
           <div className="flex flex-col gap-sm"><Skeleton className="h-8 w-full" /><Skeleton className="h-8 w-2/3" /></div>
         ) : m ? (
+          // 섹션 사이 1px 헤어라인 divider로 끊어 정보가 한 번에 쏟아지지 않게 한다(가독성).
           <div className="flex flex-col gap-lg">
             <div className="flex flex-wrap items-center gap-xs">
               <Badge variant={m.approved ? "primary" : "default"}>{m.approved ? "승인" : "대기"}</Badge>
               {m.position ? <span className={cn(typo.bodySm, "text-muted")}>{m.position}</span> : null}
               <span className={cn(typo.datetime, "text-muted")}>가입 {formatDate(m.createdAt)}</span>
             </div>
+            {/* 헤더 메타↔본문 경계: 2px ink 앵커 divider(섹션 사이 1px 헤어라인보다 두껍게)로 위계 강조. */}
+            <hr className="border-0 border-t-2 border-ink" aria-hidden />
             <MemberProfileForm member={m} />
+            <hr className="border-0 border-t border-hairline" aria-hidden />
             <MemberRolesSection member={m} />
+            <hr className="border-0 border-t border-hairline" aria-hidden />
             <section className="flex flex-col gap-xs">
               <h3 className={cn(typo.titleSm, "text-ink")}>약관 동의</h3>
               <div className="flex flex-wrap items-center gap-xs">
@@ -58,6 +63,7 @@ export function MemberDetailDialog({ uuid, open, onOpenChange }: Props) {
                 {m.agreedAt ? <span className={cn(typo.datetime, "text-muted")}>{formatDate(m.agreedAt)}</span> : null}
               </div>
             </section>
+            <hr className="border-0 border-t border-hairline" aria-hidden />
             <ResetPasswordSection uuid={m.uuid} />
           </div>
         ) : null}

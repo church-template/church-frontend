@@ -37,10 +37,13 @@ export function ResetPasswordSection({ uuid }: { uuid: string }) {
           </div>
         </div>
       ) : confirming ? (
-        <div className="flex items-center gap-xs">
+        // 질문은 한 줄, 버튼은 아래 줄에 — 한 줄에 끼우면 버튼이 찌그러져 글자가 세로로 줄바꿈된다.
+        <div className="flex flex-col gap-sm">
           <span className={cn(typo.bodySm, "text-body")}>비밀번호를 임시값으로 초기화할까요?</span>
-          <Button type="button" variant="destructive" loading={reset.isPending} onClick={() => reset.mutate()}>초기화</Button>
-          <Button type="button" variant="secondary" onClick={() => setConfirming(false)}>취소</Button>
+          <div className="flex gap-xs">
+            <Button type="button" variant="destructive" loading={reset.isPending} className="shrink-0 whitespace-nowrap" onClick={() => reset.mutate()}>초기화</Button>
+            <Button type="button" variant="secondary" className="shrink-0 whitespace-nowrap" onClick={() => setConfirming(false)}>취소</Button>
+          </div>
         </div>
       ) : (
         <div><Button type="button" variant="secondary" onClick={() => setConfirming(true)}>비밀번호 초기화</Button></div>
