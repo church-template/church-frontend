@@ -10,6 +10,7 @@ import { adminOnError } from "@/lib/admin/mutationHandlers";
 import { notify } from "@/lib/notify";
 import { deleteAlbum } from "@/lib/api/gallery.admin";
 import type { GalleryAlbumDetailResponse } from "@/lib/api/types";
+import { ACTION, CREATE_ICON } from "@/constants/actionButton";
 import { AlbumFormDialog } from "./AlbumFormDialog";
 
 // 목록 toolbar 등록 버튼.
@@ -17,7 +18,10 @@ export function AlbumListAction() {
   const [open, setOpen] = useState(false);
   return (
     <RequirePermission permission="GALLERY_WRITE">
-      <Button type="button" variant="primary" onClick={() => setOpen(true)}>새 앨범</Button>
+      <Button type="button" variant="primary" onClick={() => setOpen(true)}>
+        <CREATE_ICON size={18} aria-hidden />
+        새 앨범
+      </Button>
       <AlbumFormDialog open={open} onOpenChange={setOpen} mode="create" />
     </RequirePermission>
   );
@@ -42,8 +46,14 @@ export function AlbumDetailActions({ album }: { album: GalleryAlbumDetailRespons
   return (
     <RequirePermission permission="GALLERY_WRITE">
       <div className="mt-base flex gap-xs">
-        <Button type="button" variant="secondary" onClick={() => setEditOpen(true)}>수정</Button>
-        <Button type="button" variant="secondary" aria-label="앨범 삭제" onClick={() => setDelOpen(true)}>삭제</Button>
+        <Button type="button" variant="tertiary" aria-label="앨범 수정" onClick={() => setEditOpen(true)}>
+          <ACTION.edit.Icon size={18} aria-hidden />
+          <span className="hidden lg:inline">{ACTION.edit.label}</span>
+        </Button>
+        <Button type="button" variant="tertiary" aria-label="앨범 삭제" onClick={() => setDelOpen(true)}>
+          <ACTION.delete.Icon size={18} aria-hidden />
+          <span className="hidden lg:inline">{ACTION.delete.label}</span>
+        </Button>
       </div>
       <AlbumFormDialog open={editOpen} onOpenChange={setEditOpen} mode="edit" initial={album} />
       <DeleteConfirmDialog

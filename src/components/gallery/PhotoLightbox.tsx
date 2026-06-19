@@ -1,6 +1,7 @@
 "use client";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 import { typo } from "@/constants/typography";
 import { apiUrl } from "@/lib/auth/apiBase";
@@ -56,24 +57,29 @@ export function PhotoLightbox({ photos, albumTitle, index, onIndexChange }: Phot
                 /* max-h-[70vh]: 뷰포트 높이 제약(색·간격 토큰이 아닌 레이아웃 값) — dept-hero 70vh 선례와 동일 */
                 className="max-h-[70vh] w-auto rounded-md object-contain"
               />
-              <button
+              {/* iconOnly 흡수: 오버레이 위치·크기·색 className이 마지막이라 iconOnly 기본값을 덮는다 */}
+              <Button
                 type="button"
+                variant="tertiary"
+                iconOnly
                 onClick={() => go(-1)}
                 disabled={!hasPrev}
                 aria-label="이전 사진"
                 className="absolute left-xs top-1/2 -translate-y-1/2 rounded-full bg-surface-card/80 p-xs text-ink disabled:opacity-30"
               >
                 <ChevronLeft size={24} aria-hidden />
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
+                variant="tertiary"
+                iconOnly
                 onClick={() => go(1)}
                 disabled={!hasNext}
                 aria-label="다음 사진"
                 className="absolute right-xs top-1/2 -translate-y-1/2 rounded-full bg-surface-card/80 p-xs text-ink disabled:opacity-30"
               >
                 <ChevronRight size={24} aria-hidden />
-              </button>
+              </Button>
             </div>
             <div className={cn(typo.datetime, "text-center text-muted")}>
               {index! + 1} / {photos.length}
