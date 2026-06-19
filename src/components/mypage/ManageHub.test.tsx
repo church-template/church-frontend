@@ -27,6 +27,19 @@ describe("ManageHub", () => {
     expect(screen.queryByText("역할·권한 관리")).toBeNull();
   });
 
+  it("테마별 카테고리로 묶고, 카드 0개인 카테고리 제목은 숨긴다", () => {
+    mockMe(["SERMON_WRITE", "GALLERY_WRITE"]); // content + media 카테고리
+    render(<ManageHub />);
+    // 보유 카테고리 제목 + 카드 노출
+    expect(screen.queryByText("콘텐츠")).not.toBeNull();
+    expect(screen.queryByText("설교 관리")).not.toBeNull();
+    expect(screen.queryByText("미디어·업로드")).not.toBeNull();
+    expect(screen.queryByText("갤러리 관리")).not.toBeNull();
+    // 권한 없는 카테고리는 제목째 숨김
+    expect(screen.queryByText("조직")).toBeNull();
+    expect(screen.queryByText("회원·권한")).toBeNull();
+  });
+
   it("관리 권한이 하나도 없으면 섹션 자체를 렌더하지 않는다", () => {
     mockMe(["GALLERY_VIEW"]);
     const { container } = render(<ManageHub />);

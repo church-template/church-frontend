@@ -502,7 +502,7 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 - 검증 메시지는 입력 아래 `{typography.caption}`, 색은 semantic 토큰.
 
 ### 마이페이지
-- **`manage-hub`**: 마이페이지 관리 허브 섹션. `useMe().permissions` 기준 권한 보유 도메인만 카드로 노출(보유 0이면 섹션 비노출). 카드 = `{rounded.xl}`(24px) + 1px 헤어라인, hover 시 보더 `{colors.primary}` 전이. 공개 도메인 카드는 해당 공개 페이지로, 운영 도메인은 `/mypage/manage/*`로 링크. 어드민 화면이라 가독성 우선 단순 변형이되 토큰 공유(hex·px 인라인 금지).
+- **`manage-hub`**: 마이페이지 관리 허브 섹션. `useMe().permissions` 기준 권한 보유 도메인만 카드로 노출(보유 0이면 섹션 비노출). 카드 = `{rounded.xl}`(24px) + 1px 헤어라인, hover 시 보더 `{colors.primary}` 전이. 공개 도메인 카드는 해당 공개 페이지로, 운영 도메인은 `/mypage/manage/*`로 링크. 어드민 화면이라 가독성 우선 단순 변형이되 토큰 공유(hex·px 인라인 금지). **카드는 테마 카테고리(콘텐츠·미디어/업로드·조직·회원/권한, `MANAGE_CATEGORIES` 순서)로 묶어 섹션 분리**: 카테고리 제목 `{typography.title-sm}`(600) ↔ 카드 라벨 `{typography.body-md}`(400)의 **굵기 대비** + 카테고리 경계 1px 헤어라인 divider(첫 그룹 제외 `border-t` + 상하 여백)로 '정보가 바뀌는 지점'을 드러낸다(그림자 단계 추가 없이 헤어라인+무게 위계만). 보유 카드 0개인 카테고리는 제목째 비노출. 관리 제목 아래에는 2px `{colors.ink}` 앵커 구분선(`border-t-2`, 카테고리 사이 1px 헤어라인보다 두껍게)을 두어 제목↔카테고리 위계를 강조한다.
 
 ### 어드민 공용 (Admin Shared)
 
