@@ -178,6 +178,17 @@ body {
   font-family: var(--font-sans);
 }
 
+/* 버튼 커서 — Tailwind v4 preflight가 button/[role=button]의 cursor:pointer 리셋을
+ * 제거(브라우저 기본 default 따름)해 호버 시 손가락 커서가 안 나온다. v3 동작을 base
+ * 레이어에서 복원(유틸로 개별 오버라이드 가능). 비활성은 제외 — Button이
+ * disabled:cursor-not-allowed로 별도 처리하고, 여기 :not(:disabled)로 손대지 않는다. */
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
 /* ============================================================
  * 동작 컴포넌트(T04) — z-index 유틸(토큰 참조) · 자체 키프레임
  * ============================================================ */
