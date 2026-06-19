@@ -540,6 +540,12 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 - **`role-manager`**: 역할 목록·CRUD 화면(트랙 07A). `DataTable`(역할명·우선순위·권한수·시스템) + 행 `수정`·`권한`·`삭제`. 위계 가드(`canManageRole`=`!isSystem && priority ≤ 내 maxPriority`)로 시스템·상위 역할 행은 액션 비활성. 상단 안내 배너(lucide `Info`). 공개 소비자 없음 — `["admin","roles","list"]` 클라 쿼리만 무효화.
 - **`role-form-modal`**: 역할 생성·수정 Dialog(트랙 07A). `Input`(이름)+number(우선순위, `≤ maxPriority` zod 검증·헬퍼 텍스트)+`Input`(설명). 중복 시 name 인라인 에러. 수정 onSuccess는 `["roles"]`·`["me"]` 동시 무효화(자기 보유 역할 변경 대비).
 - **`role-permissions-modal`**: 역할별 권한 매트릭스 Dialog(트랙 07A). `getPermissions` 카탈로그 기반 `Checkbox` 2열, 역할 보유 권한으로 시드(keyed 마운트 초기화), 저장 시 선택 권한 **이름 배열**로 전체 교체 PUT. onSuccess `["roles"]`·`["me"]` 무효화.
+- **`member-manager`**: 회원 목록·검색·CRUD 오케스트레이터(트랙 07B). `DataTable`(이름·전화·직분·역할·승인·가입일) + URL 구동 검색·`Pagination`(MediaLibrary 동형) + 상세 다이얼로그 + 전역 약관 패널. 페이지 게이트 `MEMBER_MANAGE`. 공개 소비자 없음 — 클라 쿼리만 무효화.
+- **`agreement-reset-panel`**: 전역 약관/개인정보 재동의 리셋(트랙 07B). 안내 배너(lucide `Info`) + `DeleteConfirmDialog`(button-destructive) 강한 확인창. 전체 회원 영향이라 회원 카드 무효화 없음(notify만).
+- **`member-detail-dialog`**: 회원 상세 Dialog(트랙 07B). 승인 Badge·직분·역할 chips·권한 수·동의상태(약관/개인정보 Badge + agreedAt) + 인라인 편집·역할·비번 섹션 조합. `getMember`(no-store 성격, retry false) 시드.
+- **`member-profile-form`**: 상세 다이얼로그 내 인라인 편집(이름·전화·이메일, 트랙 07B). `formatPhone` 입력 정규화, 전화 중복 시 phone 인라인 에러. 자기 수정 시 `["me"]` 무효화.
+- **`member-roles-section`**: 보유 역할 chips·회수(×) + 부여(native select, `getRoles` 재사용 필터, 트랙 07B). `canAssignRole`(strict)·자기 가드, `useHasPermission("ROLE_MANAGE")`로 상호작용/읽기전용 전환.
+- **`reset-password-section`**: 인라인 확인 → 임시 비밀번호 1회 표시(복사, 트랙 07B). 캐시 미저장, 다이얼로그 닫힘 시 언마운트로 휘발.
 <!-- admin:07 거버넌스 — role-permission-matrix · reset-password-reveal · agreement-reset-dialog -->
 
 ## Do / Don't
