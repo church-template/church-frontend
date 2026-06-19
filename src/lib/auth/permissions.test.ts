@@ -11,6 +11,7 @@ const me: MeResponse = {
   roles: ["MEMBER"],
   permissions: ["GALLERY_VIEW", "SERMON_WRITE"],
   maxPriority: 0,
+  approved: true,
   termsAgreed: true,
   privacyAgreed: true,
   agreedAt: "2026-01-01T00:00:00",

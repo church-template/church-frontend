@@ -44,6 +44,7 @@ export interface MeResponse {
   roles: string[];
   permissions: string[];
   maxPriority: number;
+  approved: boolean; // 교인 승인 여부(백엔드 단일 소스 isApproved). roles 직접 판정 금지 — 어드민은 MEMBER 없이도 승인
   termsAgreed: boolean;
   privacyAgreed: boolean;
   agreedAt: string | null; // OpenAPI @JsonInclude(NON_NULL) — 미동의 시 누락 가능

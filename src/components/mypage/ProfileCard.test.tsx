@@ -10,7 +10,7 @@ import { ProfileCard } from "./ProfileCard";
 
 const base = {
   uuid: "u1", name: "홍길동", phone: "01012345678", email: "hong@example.com", position: "집사",
-  roles: ["MEMBER"], permissions: ["SERMON_WRITE"], maxPriority: 0,
+  roles: ["MEMBER"], permissions: ["SERMON_WRITE"], maxPriority: 0, approved: true,
   termsAgreed: true, privacyAgreed: true, agreedAt: null,
 };
 let qc: QueryClient;
@@ -25,17 +25,18 @@ beforeEach(() => { qc = new QueryClient({ defaultOptions: { queries: { retry: fa
 afterEach(() => vi.clearAllMocks());
 
 describe("ProfileCard", () => {
-  it("이름·전화·직분·권한칩·교인 배지를 표시한다", () => {
+  it("이름·전화·직분·권한칩·승인 배지·역할칩을 표시한다", () => {
     renderCard();
     expect(screen.getByRole("heading", { name: "홍길동" })).toBeDefined();
     expect(screen.getByText("01012345678")).toBeDefined();
     expect(screen.getByText("집사")).toBeDefined();
     expect(screen.getByText("설교 관리")).toBeDefined();
-    expect(screen.getByText("교인")).toBeDefined();
+    expect(screen.getByText("승인")).toBeDefined();
+    expect(screen.getByText("MEMBER")).toBeDefined(); // 역할(RBAC) 칩
   });
 
-  it("MEMBER 미보유는 승인 대기 배지", () => {
-    renderCard({ ...base, roles: ["USER"] });
+  it("미승인(approved=false)은 승인 대기 배지", () => {
+    renderCard({ ...base, approved: false });
     expect(screen.getByText("승인 대기")).toBeDefined();
   });
 

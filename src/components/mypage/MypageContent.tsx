@@ -70,8 +70,8 @@ export function MypageContent() {
             <ManageHub delay={180} />
             <Reveal delay={240}>
               <div className="flex items-center justify-between gap-md pt-sm">
-                <Button variant="secondary" loading={loggingOut} onClick={onLogout}>로그아웃</Button>
                 <WithdrawDialog />
+                <Button variant="destructive" loading={loggingOut} onClick={onLogout}>로그아웃</Button>
               </div>
             </Reveal>
           </div>

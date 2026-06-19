@@ -11,7 +11,9 @@ import { ProfileEditForm } from "./ProfileEditForm";
 
 export function ProfileCard({ me }: { me: MeResponse }) {
   const [editing, setEditing] = useState(false);
-  const approved = me.roles.includes("MEMBER");
+  // 승인 판정은 백엔드 단일 소스(me.approved) — roles.includes("MEMBER")로 직접 계산하면
+  // 어드민/슈퍼어드민(MEMBER 없이 승인)이 manage 화면과 어긋난다(가이드 1.5 라이브 권한).
+  const approved = me.approved;
 
   return (
     <section className="rounded-xl border border-hairline bg-surface-card p-xl">
@@ -24,9 +26,13 @@ export function ProfileCard({ me }: { me: MeResponse }) {
             {me.name.slice(0, 1)}
           </span>
           <div className="flex flex-col gap-xxs">
-            <div className="flex items-center gap-sm">
+            <div className="flex flex-wrap items-center gap-sm">
               <h2 className={cn(typo.titleLg, "text-ink")}>{me.name}</h2>
-              <Badge variant={approved ? "primary" : "default"}>{approved ? "교인" : "승인 대기"}</Badge>
+              <Badge variant={approved ? "primary" : "default"}>{approved ? "승인" : "승인 대기"}</Badge>
+              {/* 본인 역할(RBAC) 칩 — 승인 배지 옆에 나열 */}
+              {me.roles.map((r) => (
+                <Badge key={r}>{r}</Badge>
+              ))}
             </div>
             <span className={cn(typo.bodySm, "text-muted")}>{me.email || "이메일 미등록"}</span>
           </div>

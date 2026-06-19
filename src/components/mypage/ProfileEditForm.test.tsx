@@ -15,7 +15,7 @@ import { ProfileEditForm } from "./ProfileEditForm";
 
 const me = {
   uuid: "u1", name: "홍길동", phone: "01012345678", email: "hong@example.com", position: "집사",
-  roles: ["MEMBER"], permissions: [], maxPriority: 0,
+  roles: ["MEMBER"], permissions: [], maxPriority: 0, approved: true,
   termsAgreed: true, privacyAgreed: true, agreedAt: null,
 };
 let qc: QueryClient;
