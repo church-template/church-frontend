@@ -17,6 +17,9 @@ import { listMembers, type MemberCardResponse, type MemberListParams } from "@/l
 import { AgreementResetPanel } from "./AgreementResetPanel";
 import { MemberDetailDialog } from "./MemberDetailDialog";
 
+// 교인 목록 페이지 크기 — 10명 단위로 본다.
+const PAGE_SIZE = 10;
+
 export function MemberManager() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -25,6 +28,7 @@ export function MemberManager() {
   const params: MemberListParams = {
     q: searchParams.get("q") || undefined,
     page: Number(searchParams.get("page") ?? "0") || 0,
+    size: PAGE_SIZE,
   };
 
   const members = useQuery({
