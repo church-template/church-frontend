@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 // 하이픈 허용 입력 → 숫자만 세어 자릿수 검증. 전송은 입력 그대로(서버가 정규화 — 가이드 11장).
-const phoneSchema = z
+export const phoneSchema = z
   .string()
   .min(1, "전화번호를 입력해 주세요.")
   .regex(/^[0-9-]+$/, "전화번호는 숫자와 하이픈만 입력할 수 있습니다.")
