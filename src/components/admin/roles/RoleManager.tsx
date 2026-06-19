@@ -1,9 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Info } from "lucide-react";
+import { Info, KeyRound } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { typo } from "@/constants/typography";
+import { ACTION, CREATE_ICON, createLabel } from "@/constants/actionButton";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { DataTable, type Column } from "@/components/admin/DataTable";
@@ -59,7 +60,10 @@ export function RoleManager() {
       </div>
 
       <div className="mt-lg flex justify-end">
-        <Button type="button" variant="primary" onClick={() => setCreateOpen(true)}>역할 추가</Button>
+        <Button type="button" variant="primary" onClick={() => setCreateOpen(true)}>
+          <CREATE_ICON size={18} aria-hidden />
+          {createLabel("역할")}
+        </Button>
       </div>
       <div className="mt-base">
         <DataTable
@@ -72,12 +76,20 @@ export function RoleManager() {
             // me 미로딩(maxPriority undefined)이면 우선순위 판정을 보류하고 시스템 역할만 비활성 — 서버가 최종 방어(403).
             const editable = maxPriority === undefined ? !r.isSystem : canManageRole(r, maxPriority);
             const reason = r.isSystem ? "시스템 역할은 변경할 수 없습니다" : "내 등급보다 높은 역할입니다";
-            const actionCls = "px-2 py-1 hover:bg-surface-soft"; // 호버 시 배경 틴트로 인터랙션 명시(비활성은 pointer-events-none)
             return (
               <div className="flex justify-end gap-xs">
-                <Button type="button" variant="tertiary" className={actionCls} disabled={!editable} title={editable ? undefined : reason} aria-label={`${r.name} 수정`} onClick={() => setEditTarget(r)}>수정</Button>
-                <Button type="button" variant="tertiary" className={actionCls} disabled={!editable} title={editable ? undefined : reason} aria-label={`${r.name} 권한`} onClick={() => setPermTarget(r)}>권한</Button>
-                <Button type="button" variant="tertiary" className={actionCls} disabled={!editable} title={editable ? undefined : reason} aria-label={`${r.name} 삭제`} onClick={() => setDeleteTarget(r)}>삭제</Button>
+                <Button type="button" variant="tertiary" disabled={!editable} title={editable ? undefined : reason} aria-label={`${r.name} 수정`} onClick={() => setEditTarget(r)}>
+                  <ACTION.edit.Icon size={18} aria-hidden />
+                  <span className="hidden lg:inline">{ACTION.edit.label}</span>
+                </Button>
+                <Button type="button" variant="tertiary" disabled={!editable} title={editable ? undefined : reason} aria-label={`${r.name} 권한`} onClick={() => setPermTarget(r)}>
+                  <KeyRound size={18} aria-hidden />
+                  <span className="hidden lg:inline">권한</span>
+                </Button>
+                <Button type="button" variant="tertiary" disabled={!editable} title={editable ? undefined : reason} aria-label={`${r.name} 삭제`} onClick={() => setDeleteTarget(r)}>
+                  <ACTION.delete.Icon size={18} aria-hidden />
+                  <span className="hidden lg:inline">{ACTION.delete.label}</span>
+                </Button>
               </div>
             );
           }}

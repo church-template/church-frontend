@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { cn } from "@/lib/utils";
 import { typo } from "@/constants/typography";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { adminOnError } from "@/lib/admin/mutationHandlers";
@@ -14,6 +14,7 @@ import { notify } from "@/lib/notify";
 import { useMe } from "@/lib/auth/useMe";
 import { createRole, patchRole, type RoleCreateRequest, type RoleResponse } from "@/lib/api/roles.admin";
 import { createRoleSchema, type RoleFormValues } from "./schema";
+import { ACTION } from "@/constants/actionButton";
 
 export interface RoleFormDialogProps {
   open: boolean;
@@ -95,7 +96,10 @@ export function RoleFormDialog({ open, onOpenChange, mode, initial }: RoleFormDi
             <Input id="role-description" error={errors.description?.message} {...register("description")} />
           </div>
           <DialogFooter>
-            <Button type="submit" variant="primary" loading={mutation.isPending}>저장</Button>
+            <DialogClose asChild>
+              <Button type="button" variant="tertiary">{ACTION.cancel.label}</Button>
+            </DialogClose>
+            <Button type="submit" variant="primary" loading={mutation.isPending}>{ACTION.save.label}</Button>
           </DialogFooter>
         </form>
       </DialogContent>

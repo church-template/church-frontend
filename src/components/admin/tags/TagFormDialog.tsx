@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { cn } from "@/lib/utils";
 import { typo } from "@/constants/typography";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { adminOnError } from "@/lib/admin/mutationHandlers";
@@ -14,6 +14,7 @@ import { createTag, patchTag } from "@/lib/api/tags.admin";
 import { revalidateTags } from "@/lib/admin/revalidate";
 import type { TagResponse } from "@/lib/api/types";
 import { tagSchema, type TagFormValues } from "./schema";
+import { ACTION } from "@/constants/actionButton";
 
 export interface TagFormDialogProps {
   open: boolean;
@@ -62,7 +63,10 @@ export function TagFormDialog({ open, onOpenChange, mode, initial }: TagFormDial
             <Input id="tag-name" error={errors.name?.message} {...register("name")} />
           </div>
           <DialogFooter>
-            <Button type="submit" variant="primary" loading={mutation.isPending}>저장</Button>
+            <DialogClose asChild>
+              <Button type="button" variant="tertiary">{ACTION.cancel.label}</Button>
+            </DialogClose>
+            <Button type="submit" variant="primary" loading={mutation.isPending}>{ACTION.save.label}</Button>
           </DialogFooter>
         </form>
       </DialogContent>
