@@ -12,6 +12,7 @@ import { formatDate } from "@/lib/date";
 import { getMember } from "@/lib/api/members.admin";
 import { MemberProfileForm } from "./MemberProfileForm";
 import { MemberRolesSection } from "./MemberRolesSection";
+import { MemberPositionSection } from "./MemberPositionSection";
 import { ResetPasswordSection } from "./ResetPasswordSection";
 
 interface Props { uuid: string | null; open: boolean; onOpenChange: (v: boolean) => void }
@@ -53,6 +54,8 @@ export function MemberDetailDialog({ uuid, open, onOpenChange }: Props) {
             <MemberProfileForm member={m} />
             <hr className="border-0 border-t border-hairline" aria-hidden />
             <MemberRolesSection member={m} />
+            <hr className="border-0 border-t border-hairline" aria-hidden />
+            <MemberPositionSection member={m} />
             <hr className="border-0 border-t border-hairline" aria-hidden />
             <section className="flex flex-col gap-xs">
               <h3 className={cn(typo.titleSm, "text-ink")}>약관 동의</h3>
