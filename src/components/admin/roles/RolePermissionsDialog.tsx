@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose } from "@/components/ui/dialog";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { Button } from "@/components/ui/Button";
 import { adminOnError } from "@/lib/admin/mutationHandlers";
@@ -10,6 +10,7 @@ import { notify } from "@/lib/notify";
 import { permissionLabel } from "@/constants/permissions";
 import { getPermissions } from "@/lib/api/permissions.admin";
 import { setRolePermissions, type RoleResponse } from "@/lib/api/roles.admin";
+import { ACTION } from "@/constants/actionButton";
 
 export interface RolePermissionsDialogProps {
   open: boolean;
@@ -64,7 +65,10 @@ export function RolePermissionsDialog({ open, onOpenChange, role }: RolePermissi
           ))}
         </div>
         <DialogFooter>
-          <Button type="button" variant="primary" loading={mutation.isPending} onClick={() => mutation.mutate()}>저장</Button>
+          <DialogClose asChild>
+            <Button type="button" variant="tertiary">{ACTION.cancel.label}</Button>
+          </DialogClose>
+          <Button type="button" variant="primary" loading={mutation.isPending} onClick={() => mutation.mutate()}>{ACTION.save.label}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -27,13 +27,13 @@ describe("MemberProfileForm", () => {
   it("read view에서 정보를 표시하고 수정 버튼으로 폼 전환", () => {
     renderForm();
     expect(screen.getByText("a@b.com")).toBeDefined();
-    fireEvent.click(screen.getByRole("button", { name: "수정" }));
+    fireEvent.click(screen.getByRole("button", { name: "내 정보 수정" }));
     expect(screen.getByLabelText("이름")).toBeDefined();
   });
   it("저장 시 updateMember 호출 + 성공 토스트", async () => {
     updateMock.mockResolvedValue({ ...member, name: "임꺽정" });
     renderForm();
-    fireEvent.click(screen.getByRole("button", { name: "수정" }));
+    fireEvent.click(screen.getByRole("button", { name: "내 정보 수정" }));
     fireEvent.change(screen.getByLabelText("이름"), { target: { value: "임꺽정" } });
     fireEvent.click(screen.getByRole("button", { name: "저장" }));
     await waitFor(() => expect(updateMock).toHaveBeenCalledWith("u1", expect.objectContaining({ name: "임꺽정" })));

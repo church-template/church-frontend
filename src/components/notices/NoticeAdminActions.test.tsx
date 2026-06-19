@@ -47,8 +47,8 @@ describe("NoticeDetailActions", () => {
   it("삭제 확인 후 캐시 무효화·토스트·목록으로 이동한다", async () => {
     deleteNoticeMock.mockResolvedValue(undefined);
     renderWithQc(<NoticeDetailActions id={5} version={2} isPinned={false} />);
-    fireEvent.click(screen.getByRole("button", { name: "삭제" }));
-    // Radix Dialog는 DOM에 바로 렌더 — confirmLabel 기본 "삭제" 버튼이 두 번째로 등장.
+    // 행 트리거는 aria-label="공지 삭제"로 찾고, 확정 다이얼로그 버튼은 라벨 "삭제"로 찾는다.
+    fireEvent.click(screen.getByRole("button", { name: "공지 삭제" }));
     const confirmButtons = screen.getAllByRole("button", { name: "삭제" });
     fireEvent.click(confirmButtons[confirmButtons.length - 1]);
     await waitFor(() => expect(deleteNoticeMock).toHaveBeenCalledWith(5));

@@ -32,7 +32,7 @@ describe("PasswordChangeSection", () => {
     open();
     fireEvent.change(screen.getByLabelText("새 비밀번호"), { target: { value: "abcd1234" } });
     fireEvent.change(screen.getByLabelText("새 비밀번호 확인"), { target: { value: "different" } });
-    fireEvent.click(screen.getByRole("button", { name: "변경" }));
+    fireEvent.click(screen.getByRole("button", { name: "저장" }));
     await waitFor(() => expect(screen.getByText("비밀번호가 일치하지 않습니다.")).toBeDefined());
     expect(updateMeMock).not.toHaveBeenCalled();
   });
@@ -43,7 +43,7 @@ describe("PasswordChangeSection", () => {
     open();
     fireEvent.change(screen.getByLabelText("새 비밀번호"), { target: { value: "abcd1234" } });
     fireEvent.change(screen.getByLabelText("새 비밀번호 확인"), { target: { value: "abcd1234" } });
-    fireEvent.click(screen.getByRole("button", { name: "변경" }));
+    fireEvent.click(screen.getByRole("button", { name: "저장" }));
     await waitFor(() => expect(updateMeMock).toHaveBeenCalledWith({ password: "abcd1234" }));
   });
 });

@@ -42,7 +42,7 @@ export function ResetPasswordSection({ uuid }: { uuid: string }) {
           <span className={cn(typo.bodySm, "text-body")}>비밀번호를 임시값으로 초기화할까요?</span>
           <div className="flex gap-xs">
             <Button type="button" variant="destructive" loading={reset.isPending} className="shrink-0 whitespace-nowrap" onClick={() => reset.mutate()}>초기화</Button>
-            <Button type="button" variant="secondary" className="shrink-0 whitespace-nowrap" onClick={() => setConfirming(false)}>취소</Button>
+            <Button type="button" variant="tertiary" className="shrink-0 whitespace-nowrap" onClick={() => setConfirming(false)}>취소</Button>
           </div>
         </div>
       ) : (

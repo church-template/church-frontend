@@ -6,6 +6,7 @@ import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { typo } from "@/constants/typography";
 import { Button, buttonVariants } from "@/components/ui/Button";
+import { ACTION } from "@/constants/actionButton";
 import { apiUrl } from "@/lib/auth/apiBase";
 import { DataTable, type Column } from "@/components/admin/DataTable";
 import { MediaUploader } from "@/components/admin/MediaUploader";
@@ -136,12 +137,14 @@ export function MediaLibrary() {
                 href={apiUrl(`/api/media/${m.id}`)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={buttonVariants("secondary")}
+                aria-label={`${m.filename} 열기`}
+                className={buttonVariants("tertiary")}
               >
                 열기
               </a>
-              <Button type="button" variant="secondary" onClick={() => check.mutate(m)}>
-                삭제
+              <Button type="button" variant="tertiary" aria-label={`${m.filename} 삭제`} onClick={() => check.mutate(m)}>
+                <ACTION.delete.Icon size={18} aria-hidden />
+                <span className="hidden lg:inline">{ACTION.delete.label}</span>
               </Button>
             </div>
           )}

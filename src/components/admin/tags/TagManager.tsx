@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { cn } from "@/lib/utils";
 import { typo } from "@/constants/typography";
+import { ACTION, CREATE_ICON } from "@/constants/actionButton";
 import { Button } from "@/components/ui/Button";
 import { DataTable, type Column } from "@/components/admin/DataTable";
 import { DeleteConfirmDialog } from "@/components/admin/DeleteConfirmDialog";
@@ -44,7 +45,10 @@ export function TagManager() {
   return (
     <>
       <div className="flex justify-end">
-        <Button type="button" variant="primary" onClick={() => setCreateOpen(true)}>새 태그</Button>
+        <Button type="button" variant="primary" onClick={() => setCreateOpen(true)}>
+          <CREATE_ICON size={18} aria-hidden />
+          새 태그
+        </Button>
       </div>
       <div className="mt-base">
         <DataTable
@@ -55,8 +59,14 @@ export function TagManager() {
           empty={<p className={cn(typo.bodyMd, "text-muted")}>등록된 태그가 없습니다.</p>}
           actions={(t) => (
             <div className="flex justify-end gap-xs">
-              <Button type="button" variant="tertiary" aria-label={`${t.name} 수정`} onClick={() => setEditTarget(t)}>수정</Button>
-              <Button type="button" variant="tertiary" aria-label={`${t.name} 삭제`} onClick={() => setDeleteTarget(t)}>삭제</Button>
+              <Button type="button" variant="tertiary" aria-label={`${t.name} 수정`} onClick={() => setEditTarget(t)}>
+                <ACTION.edit.Icon size={18} aria-hidden />
+                <span className="hidden lg:inline">{ACTION.edit.label}</span>
+              </Button>
+              <Button type="button" variant="tertiary" aria-label={`${t.name} 삭제`} onClick={() => setDeleteTarget(t)}>
+                <ACTION.delete.Icon size={18} aria-hidden />
+                <span className="hidden lg:inline">{ACTION.delete.label}</span>
+              </Button>
             </div>
           )}
         />

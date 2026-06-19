@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { X } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import { RequirePermission } from "@/components/admin/RequirePermission";
 import { MediaPicker } from "@/components/admin/MediaPicker";
@@ -57,17 +56,17 @@ export function RemovePhotoButton({ albumId, photoId }: { albumId: number; photo
   });
   return (
     <RequirePermission permission="GALLERY_WRITE">
-      <button
+      {/* iconOnly 흡수: 오버레이 위치·크기 className이 마지막이라 iconOnly 기본값(size-9)을 덮는다 */}
+      <Button
         type="button"
+        variant="tertiary"
+        iconOnly
         aria-label="사진 제거"
         onClick={() => setOpen(true)}
-        className={cn(
-          "absolute right-xs top-xs inline-flex size-8 items-center justify-center rounded-full bg-surface-dark/60 text-on-dark",
-          "hover:bg-surface-dark/80",
-        )}
+        className="absolute right-xs top-xs size-8 rounded-full bg-surface-dark/60 text-on-dark hover:bg-surface-dark/80"
       >
         <X size={16} aria-hidden />
-      </button>
+      </Button>
       <DeleteConfirmDialog
         open={open}
         onOpenChange={setOpen}

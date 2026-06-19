@@ -8,6 +8,7 @@ import { useMutation } from "@tanstack/react-query";
 import { RequirePermission } from "@/components/admin/RequirePermission";
 import { DeleteConfirmDialog } from "@/components/admin/DeleteConfirmDialog";
 import { Button, buttonVariants } from "@/components/ui/Button";
+import { ACTION, CREATE_ICON } from "@/constants/actionButton";
 import { deleteSermon } from "@/lib/api/sermons.admin";
 import { revalidateSermons } from "@/lib/admin/revalidate";
 import { adminOnError } from "@/lib/admin/mutationHandlers";
@@ -18,7 +19,10 @@ import { notify } from "@/lib/notify";
 export function SermonListAction() {
   return (
     <RequirePermission permission="SERMON_WRITE">
-      <Link href="/sermons/new" className={buttonVariants("primary")}>새 설교</Link>
+      <Link href="/sermons/new" className={buttonVariants("primary")}>
+        <CREATE_ICON size={18} aria-hidden />
+        새 설교
+      </Link>
     </RequirePermission>
   );
 }
@@ -42,8 +46,14 @@ export function SermonDetailActions({ id }: { id: number }) {
   return (
     <RequirePermission permission="SERMON_WRITE">
       <div className="flex gap-sm">
-        <Link href={`/sermons/${id}/edit`} className={buttonVariants("secondary")}>수정</Link>
-        <Button type="button" variant="secondary" onClick={() => setOpen(true)}>삭제</Button>
+        <Link href={`/sermons/${id}/edit`} className={buttonVariants("tertiary")} aria-label="설교 수정">
+          <ACTION.edit.Icon size={18} aria-hidden />
+          <span className="hidden lg:inline">{ACTION.edit.label}</span>
+        </Link>
+        <Button type="button" variant="tertiary" aria-label="설교 삭제" onClick={() => setOpen(true)}>
+          <ACTION.delete.Icon size={18} aria-hidden />
+          <span className="hidden lg:inline">{ACTION.delete.label}</span>
+        </Button>
       </div>
       <DeleteConfirmDialog
         open={open}

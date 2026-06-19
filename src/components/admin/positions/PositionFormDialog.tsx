@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { cn } from "@/lib/utils";
 import { typo } from "@/constants/typography";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { adminOnError } from "@/lib/admin/mutationHandlers";
@@ -13,6 +13,7 @@ import { notify } from "@/lib/notify";
 import { createPosition, patchPosition, type PositionCreateRequest } from "@/lib/api/positions.admin";
 import type { PositionResponse } from "@/lib/api/types";
 import { positionSchema, type PositionFormValues } from "./schema";
+import { ACTION } from "@/constants/actionButton";
 
 export interface PositionFormDialogProps {
   open: boolean;
@@ -85,7 +86,10 @@ export function PositionFormDialog({ open, onOpenChange, mode, initial }: Positi
             />
           </div>
           <DialogFooter>
-            <Button type="submit" variant="primary" loading={mutation.isPending}>저장</Button>
+            <DialogClose asChild>
+              <Button type="button" variant="tertiary">{ACTION.cancel.label}</Button>
+            </DialogClose>
+            <Button type="submit" variant="primary" loading={mutation.isPending}>{ACTION.save.label}</Button>
           </DialogFooter>
         </form>
       </DialogContent>

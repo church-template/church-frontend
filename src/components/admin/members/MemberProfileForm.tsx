@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { typo } from "@/constants/typography";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
+import { ACTION } from "@/constants/actionButton";
 import { adminOnError } from "@/lib/admin/mutationHandlers";
 import { adminKeys } from "@/lib/admin/queryKeys";
 import { notify } from "@/lib/notify";
@@ -47,7 +48,10 @@ export function MemberProfileForm({ member }: { member: MemberDetailResponse }) 
       <section className="flex flex-col gap-xs">
         <div className="flex items-center justify-between">
           <h3 className={cn(typo.titleSm, "text-ink")}>기본 정보</h3>
-          <Button type="button" variant="tertiary" onClick={() => { reset(seed); setEditing(true); }}>수정</Button>
+          <Button type="button" variant="tertiary" aria-label="내 정보 수정" onClick={() => { reset(seed); setEditing(true); }}>
+            <ACTION.edit.Icon size={18} aria-hidden />
+            <span className="hidden lg:inline">{ACTION.edit.label}</span>
+          </Button>
         </div>
         <dl className="grid grid-cols-[auto_1fr] gap-x-base gap-y-xxs">
           <dt className={cn(typo.bodySm, "text-muted")}>이름</dt><dd className={typo.bodyMd}>{member.name}</dd>
@@ -77,8 +81,8 @@ export function MemberProfileForm({ member }: { member: MemberDetailResponse }) 
         <Input id="member-email" type="email" error={errors.email?.message} {...register("email")} />
       </div>
       <div className="flex justify-end gap-sm">
-        <Button type="button" variant="secondary" onClick={() => setEditing(false)}>취소</Button>
-        <Button type="submit" variant="primary" loading={mutation.isPending}>저장</Button>
+        <Button type="button" variant="tertiary" onClick={() => setEditing(false)}>{ACTION.cancel.label}</Button>
+        <Button type="submit" variant="primary" loading={mutation.isPending}>{ACTION.save.label}</Button>
       </div>
     </form>
   );

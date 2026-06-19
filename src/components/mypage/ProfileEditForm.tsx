@@ -11,6 +11,7 @@ import { ApiError } from "@/lib/auth/apiError";
 import { handleApiError } from "@/lib/auth/handleApiError";
 import type { MeResponse, MeUpdateRequest } from "@/lib/auth/types";
 import { Button } from "@/components/ui/Button";
+import { ACTION } from "@/constants/actionButton";
 import { Input } from "@/components/ui/Input";
 import { formatPhone } from "@/components/auth/formatPhone";
 import { profileSchema, type ProfileFormValues } from "./schemas";
@@ -102,9 +103,10 @@ export function ProfileEditForm({ me, onDone }: { me: MeResponse; onDone: () => 
         <label htmlFor="me-email" className={cn(typo.bodySm, "text-ink")}>이메일</label>
         <Input id="me-email" type="email" autoComplete="email" error={errors.email?.message} {...register("email")} />
       </div>
+      {/* 취소→저장 순서: 파괴적 액션 방어(실수 제출 최소화) */}
       <div className="flex gap-sm">
-        <Button type="submit" loading={mutation.isPending}>저장</Button>
-        <Button type="button" variant="tertiary" onClick={onDone}>취소</Button>
+        <Button type="button" variant="tertiary" onClick={onDone}>{ACTION.cancel.label}</Button>
+        <Button type="submit" loading={mutation.isPending}>{ACTION.save.label}</Button>
       </div>
     </form>
   );

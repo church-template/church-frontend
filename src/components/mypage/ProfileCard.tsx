@@ -7,6 +7,7 @@ import type { MeResponse } from "@/lib/auth/types";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { permissionLabel } from "@/constants/permissions";
+import { ACTION } from "@/constants/actionButton";
 import { ProfileEditForm } from "./ProfileEditForm";
 
 export function ProfileCard({ me }: { me: MeResponse }) {
@@ -38,8 +39,9 @@ export function ProfileCard({ me }: { me: MeResponse }) {
           </div>
         </div>
         {editing ? null : (
-          <Button variant="tertiary" className="shrink-0" onClick={() => setEditing(true)}>
-            수정
+          <Button type="button" variant="tertiary" className="shrink-0" aria-label="내 정보 수정" onClick={() => setEditing(true)}>
+            <ACTION.edit.Icon size={18} aria-hidden />
+            <span className="hidden lg:inline">{ACTION.edit.label}</span>
           </Button>
         )}
       </div>

@@ -11,6 +11,7 @@ import { notify } from "@/lib/notify";
 import { revalidateBulletins } from "@/lib/admin/revalidate";
 import { deleteBulletin } from "@/lib/api/bulletins.admin";
 import type { BulletinCardResponse } from "@/lib/api/types";
+import { ACTION, CREATE_ICON } from "@/constants/actionButton";
 import { BulletinFormDialog } from "./BulletinFormDialog";
 
 // 목록 toolbar 등록 버튼.
@@ -18,7 +19,10 @@ export function BulletinListAction() {
   const [open, setOpen] = useState(false);
   return (
     <RequirePermission permission="BULLETIN_WRITE">
-      <Button type="button" variant="primary" onClick={() => setOpen(true)}>새 주보</Button>
+      <Button type="button" variant="primary" onClick={() => setOpen(true)}>
+        <CREATE_ICON size={18} aria-hidden />
+        새 주보
+      </Button>
       <BulletinFormDialog open={open} onOpenChange={setOpen} mode="create" />
     </RequirePermission>
   );
@@ -42,8 +46,14 @@ export function BulletinRowActions({ b }: { b: BulletinCardResponse }) {
   return (
     <RequirePermission permission="BULLETIN_WRITE">
       <div className="flex shrink-0 gap-xs">
-        <Button type="button" variant="secondary" onClick={() => setEditOpen(true)}>수정</Button>
-        <Button type="button" variant="secondary" aria-label="주보 삭제" onClick={() => setDelOpen(true)}>삭제</Button>
+        <Button type="button" variant="tertiary" aria-label="주보 수정" onClick={() => setEditOpen(true)}>
+          <ACTION.edit.Icon size={18} aria-hidden />
+          <span className="hidden lg:inline">{ACTION.edit.label}</span>
+        </Button>
+        <Button type="button" variant="tertiary" aria-label="주보 삭제" onClick={() => setDelOpen(true)}>
+          <ACTION.delete.Icon size={18} aria-hidden />
+          <span className="hidden lg:inline">{ACTION.delete.label}</span>
+        </Button>
       </div>
       <BulletinFormDialog open={editOpen} onOpenChange={setEditOpen} mode="edit" bulletinId={b.id} />
       <DeleteConfirmDialog
