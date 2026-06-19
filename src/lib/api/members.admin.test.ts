@@ -7,7 +7,7 @@ vi.mock("@/lib/auth/authFetch", () => ({ authFetch: authFetchMock }));
 vi.mock("@/lib/auth/apiError", () => ({ parseJson: parseJsonMock }));
 vi.mock("@/lib/admin/apiMutate", () => ({ apiMutate: apiMutateMock }));
 
-import { listMembers, getMember, updateMember, grantRole, revokeRole, resetPassword } from "./members.admin";
+import { listMembers, getMember, updateMember, grantRole, revokeRole, resetPassword, changePosition } from "./members.admin";
 
 afterEach(() => vi.clearAllMocks());
 
@@ -52,5 +52,15 @@ describe("회원 어드민 API", () => {
     const out = await resetPassword("u1");
     expect(apiMutateMock).toHaveBeenCalledWith("/api/admin/members/u1/reset-password", { method: "POST" });
     expect(out.temporaryPassword).toBe("Temp!234");
+  });
+  it("changePosition는 PUT .../position {positionId} 로 부여한다", async () => {
+    apiMutateMock.mockResolvedValue({ uuid: "u1", position: "목사" });
+    await changePosition("u1", 3);
+    expect(apiMutateMock).toHaveBeenCalledWith("/api/admin/members/u1/position", { method: "PUT", body: { positionId: 3 } });
+  });
+  it("changePosition는 positionId=null 로 해제한다", async () => {
+    apiMutateMock.mockResolvedValue({ uuid: "u1", position: "" });
+    await changePosition("u1", null);
+    expect(apiMutateMock).toHaveBeenCalledWith("/api/admin/members/u1/position", { method: "PUT", body: { positionId: null } });
   });
 });
