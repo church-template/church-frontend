@@ -1,7 +1,7 @@
 // src/components/admin/media/MediaLibrary.tsx
 "use client";
 import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient, keepPreviousData } from "@tanstack/react-query";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { typo } from "@/constants/typography";
@@ -44,6 +44,7 @@ export function MediaLibrary() {
   const media = useQuery({
     queryKey: adminKeys.list("media", params),
     queryFn: () => listMedia(params),
+    placeholderData: keepPreviousData,
     retry: false,
   });
 
@@ -118,31 +119,36 @@ export function MediaLibrary() {
         <MediaUploader accept="all" multiple onUploaded={() => { notify.success("업로드했습니다."); invalidate(); }} />
       </div>
 
-      <DataTable
-        columns={columns}
-        rows={media.data?.content ?? []}
-        rowKey={(m) => m.id}
-        loading={media.isPending}
-        empty={<EmptyState message="등록된 미디어가 없습니다." />}
-        actions={(m) => (
-          <div className="flex justify-end gap-xs">
-            {/* 열기: 공개 서빙 URL 새 탭 — 이미지 미리보기·PDF 다운로드 */}
-            <a
-              href={apiUrl(`/api/media/${m.id}`)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={buttonVariants("secondary")}
-            >
-              열기
-            </a>
-            <Button type="button" variant="secondary" onClick={() => check.mutate(m)}>
-              삭제
-            </Button>
-          </div>
-        )}
-      />
+      <div
+        aria-busy={media.isPlaceholderData}
+        className={cn(media.isPlaceholderData && "opacity-60 transition-opacity")}
+      >
+        <DataTable
+          columns={columns}
+          rows={media.data?.content ?? []}
+          rowKey={(m) => m.id}
+          loading={media.isPending}
+          empty={<EmptyState message="등록된 미디어가 없습니다." />}
+          actions={(m) => (
+            <div className="flex justify-end gap-xs">
+              {/* 열기: 공개 서빙 URL 새 탭 — 이미지 미리보기·PDF 다운로드 */}
+              <a
+                href={apiUrl(`/api/media/${m.id}`)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={buttonVariants("secondary")}
+              >
+                열기
+              </a>
+              <Button type="button" variant="secondary" onClick={() => check.mutate(m)}>
+                삭제
+              </Button>
+            </div>
+          )}
+        />
+      </div>
 
-      {media.data && media.data.page.totalPages > 1 ? <Pagination page={media.data.page} /> : null}
+      {media.data && media.data.page.totalPages > 1 ? <Pagination page={media.data.page} scroll={false} /> : null}
 
       <MediaReferencesDialog open={refs !== null} onOpenChange={(v) => (!v ? setRefs(null) : undefined)} references={refs ?? []} />
       <DeleteConfirmDialog

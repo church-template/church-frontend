@@ -1,5 +1,5 @@
 "use client";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { getTags } from "@/lib/api/tags";
 import { fetchAlbums, fetchAlbum, type AlbumListParams } from "@/lib/api/gallery";
 
@@ -9,6 +9,7 @@ export function useAlbums(params: AlbumListParams) {
   return useQuery({
     queryKey: ["albums", params],
     queryFn: () => fetchAlbums(params),
+    placeholderData: keepPreviousData,
     retry: false,
   });
 }

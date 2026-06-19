@@ -51,14 +51,20 @@ export function AlbumList() {
         <EmptyState message="등록된 앨범이 없습니다." className="mt-xl" />
       ) : (
         <>
-          <div className="grid gap-base sm:grid-cols-2 lg:grid-cols-3">
+          <div
+            aria-busy={albums.isPlaceholderData}
+            className={cn(
+              "grid gap-base sm:grid-cols-2 lg:grid-cols-3",
+              albums.isPlaceholderData && "opacity-60 transition-opacity",
+            )}
+          >
             {albums.data.content.map((a) => (
               <AlbumCard key={a.id} album={a} />
             ))}
           </div>
           {albums.data.page.totalPages > 1 ? (
             <div className="mt-xl">
-              <Pagination page={albums.data.page} />
+              <Pagination page={albums.data.page} scroll={false} />
             </div>
           ) : null}
         </>

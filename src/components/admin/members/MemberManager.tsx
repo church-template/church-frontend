@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { typo } from "@/constants/typography";
@@ -34,6 +34,7 @@ export function MemberManager() {
   const members = useQuery({
     queryKey: adminKeys.list("members", params),
     queryFn: () => listMembers(params),
+    placeholderData: keepPreviousData,
     retry: false,
   });
 
@@ -87,24 +88,29 @@ export function MemberManager() {
           />
           <Button type="submit" variant="secondary">검색</Button>
         </form>
-        <DataTable
-          columns={columns}
-          rows={members.data?.content ?? []}
-          rowKey={(m) => m.uuid}
-          loading={members.isPending}
-          empty={<EmptyState message="조회된 회원이 없습니다." />}
-          actions={(m) => (
-            <Button
-              type="button"
-              variant="tertiary"
-              aria-label={`${m.name} 상세`}
-              onClick={() => setSelected(m.uuid)}
-            >
-              상세
-            </Button>
-          )}
-        />
-        {members.data && members.data.page.totalPages > 1 ? <Pagination page={members.data.page} /> : null}
+        <div
+          aria-busy={members.isPlaceholderData}
+          className={cn(members.isPlaceholderData && "opacity-60 transition-opacity")}
+        >
+          <DataTable
+            columns={columns}
+            rows={members.data?.content ?? []}
+            rowKey={(m) => m.uuid}
+            loading={members.isPending}
+            empty={<EmptyState message="조회된 회원이 없습니다." />}
+            actions={(m) => (
+              <Button
+                type="button"
+                variant="tertiary"
+                aria-label={`${m.name} 상세`}
+                onClick={() => setSelected(m.uuid)}
+              >
+                상세
+              </Button>
+            )}
+          />
+        </div>
+        {members.data && members.data.page.totalPages > 1 ? <Pagination page={members.data.page} scroll={false} /> : null}
       </div>
       <MemberDetailDialog
         uuid={selected}
