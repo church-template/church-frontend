@@ -12,6 +12,7 @@ import { ApiError } from "@/lib/auth/apiError";
 import { handleApiError } from "@/lib/auth/handleApiError";
 import { Button } from "@/components/ui/Button";
 import { PasswordInput } from "@/components/ui/PasswordInput";
+import { ACTION } from "@/constants/actionButton";
 import { passwordChangeSchema, type PasswordChangeValues } from "./schemas";
 
 export function PasswordChangeSection() {
@@ -84,9 +85,10 @@ export function PasswordChangeSection() {
           {...register("passwordConfirm")}
         />
       </div>
+      {/* 취소→저장 순서: 파괴적 액션 방어(실수 제출 최소화) */}
       <div className="flex gap-sm">
-        <Button type="submit" loading={mutation.isPending}>변경</Button>
-        <Button type="button" variant="tertiary" onClick={() => { reset(); setOpen(false); }}>취소</Button>
+        <Button type="button" variant="tertiary" onClick={() => { reset(); setOpen(false); }}>{ACTION.cancel.label}</Button>
+        <Button type="submit" loading={mutation.isPending}>{ACTION.save.label}</Button>
       </div>
     </form>
   );

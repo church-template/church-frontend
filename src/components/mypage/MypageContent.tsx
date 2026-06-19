@@ -73,7 +73,8 @@ export function MypageContent() {
             <div className="flex items-center gap-sm">
               <Button variant="secondary" onClick={() => refetch()}>다시 시도</Button>
               {/* 세션이 죽었거나 복구 안 돼도 빠져나갈 수 있는 탈출구 — 에러 화면에 갇히지 않게 */}
-              <Button variant="tertiary" loading={loggingOut} onClick={onLogout}>로그아웃</Button>
+              {/* 로그아웃은 파괴적 액션이 아니므로 secondary 사용 */}
+              <Button variant="secondary" loading={loggingOut} onClick={onLogout}>로그아웃</Button>
             </div>
           </div>
         ) : (
@@ -90,7 +91,8 @@ export function MypageContent() {
             <Reveal delay={240}>
               <div className="flex items-center justify-between gap-md pt-sm">
                 <WithdrawDialog />
-                <Button variant="destructive" loading={loggingOut} onClick={onLogout}>로그아웃</Button>
+                {/* 로그아웃은 파괴적 액션이 아니므로 secondary 사용 */}
+                <Button variant="secondary" loading={loggingOut} onClick={onLogout}>로그아웃</Button>
               </div>
             </Reveal>
           </div>

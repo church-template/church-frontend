@@ -47,7 +47,7 @@ describe("ProfileCard", () => {
 
   it("수정 클릭 시 편집 폼으로 전환한다", () => {
     renderCard();
-    fireEvent.click(screen.getByRole("button", { name: "수정" }));
+    fireEvent.click(screen.getByRole("button", { name: "내 정보 수정" }));
     expect(screen.getByLabelText("이름")).toBeDefined();
   });
 });
