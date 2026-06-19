@@ -66,3 +66,7 @@ export function resetPassword(uuid: string): Promise<ResetPasswordResponse> {
   // 본문 없는 POST. apiMutate는 body undefined면 JSON.stringify 생략(Content-Type만 부착).
   return apiMutate<ResetPasswordResponse>(`/api/admin/members/${uuid}/reset-password`, { method: "POST" });
 }
+export function changePosition(uuid: string, positionId: number | null): Promise<MemberDetailResponse> {
+  // 직분 부여/변경/해제 — PUT .../position. positionId=null이면 해제(스펙: 위계 검증 없음).
+  return apiMutate<MemberDetailResponse>(`/api/admin/members/${uuid}/position`, { method: "PUT", body: { positionId } });
+}
