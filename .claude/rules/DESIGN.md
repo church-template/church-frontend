@@ -537,6 +537,9 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 - **`tag-form-modal`**: 태그 생성·수정 Dialog(트랙 06). `Input`(이름) 단일 필드. version 없음 — 행 값 시드(상세 GET 불요). 중복 시 name 인라인 에러(`onDuplicate`).
 - **`position-manager`**: 직분 목록·CRUD 화면(트랙 06). `DataTable`(이름·정렬순서) + 상단 "권한 무관 표시용" 안내 배너(lucide `Info`). 공개 소비자 없음 — `["positions"]` 클라 쿼리만 무효화.
 - **`position-form-modal`**: 직분 생성·수정 Dialog(트랙 06). `Input`(이름) + number `Input`(정렬 순서, `Controller`로 null↔"" 매핑). 생성 시 정렬순서 생략→백엔드 자동부여, 수정 시 비움→미변경(body 생략).
+- **`role-manager`**: 역할 목록·CRUD 화면(트랙 07A). `DataTable`(역할명·우선순위·권한수·시스템) + 행 `수정`·`권한`·`삭제`. 위계 가드(`canManageRole`=`!isSystem && priority ≤ 내 maxPriority`)로 시스템·상위 역할 행은 액션 비활성. 상단 안내 배너(lucide `Info`). 공개 소비자 없음 — `["admin","roles","list"]` 클라 쿼리만 무효화.
+- **`role-form-modal`**: 역할 생성·수정 Dialog(트랙 07A). `Input`(이름)+number(우선순위, `≤ maxPriority` zod 검증·헬퍼 텍스트)+`Input`(설명). 중복 시 name 인라인 에러. 수정 onSuccess는 `["roles"]`·`["me"]` 동시 무효화(자기 보유 역할 변경 대비).
+- **`role-permissions-modal`**: 역할별 권한 매트릭스 Dialog(트랙 07A). `getPermissions` 카탈로그 기반 `Checkbox` 2열, 역할 보유 권한으로 시드(keyed 마운트 초기화), 저장 시 선택 권한 **이름 배열**로 전체 교체 PUT. onSuccess `["roles"]`·`["me"]` 무효화.
 <!-- admin:07 거버넌스 — role-permission-matrix · reset-password-reveal · agreement-reset-dialog -->
 
 ## Do / Don't
