@@ -24,6 +24,7 @@ vi.mock("@/components/main/Reveal", () => ({
 
 import { MypageContent } from "./MypageContent";
 import { useAuthStore } from "@/lib/auth/authStore";
+import { ApiError } from "@/lib/auth/apiError";
 
 const me = {
   uuid: "u1", name: "홍길동", phone: "01012345678", email: "", position: "집사",
@@ -68,6 +69,40 @@ describe("MypageContent", () => {
     renderContent();
     fireEvent.click(screen.getByRole("button", { name: "다시 시도" }));
     expect(refetch).toHaveBeenCalled();
+  });
+
+  // DB 초기화·서버측 토큰 회수 등으로 라이브 세션이 죽으면 /me가 401/403으로 떨어진다.
+  // persist된 member 스냅샷 탓에 마이페이지에 갇히지 않도록 세션을 비우고 로그인으로 보낸다(self-heal).
+  it("/me가 401(세션 만료)이면 세션을 비우고 로그인으로 보낸다", async () => {
+    useMeMock.mockReturnValue({
+      data: undefined,
+      isPending: false,
+      isError: true,
+      error: new ApiError(401, "INVALID_TOKEN", "유효하지 않은 토큰입니다"),
+      refetch,
+    });
+    const removeSpy = vi.spyOn(qc, "removeQueries");
+    renderContent();
+    await waitFor(() => expect(replace).toHaveBeenCalledWith("/login?next=/mypage"));
+    expect(useAuthStore.getState().member).toBeNull();
+    expect(useAuthStore.getState().accessToken).toBeNull();
+    expect(removeSpy).toHaveBeenCalledWith({ queryKey: ["me"] });
+  });
+
+  // 인증 외 에러(5xx·네트워크)는 세션이 살아있을 수 있어 자동 로그아웃하지 않되,
+  // 사용자가 직접 빠져나갈 수 있도록 로그아웃 탈출구를 함께 제공한다(에러 화면에 갇히지 않게).
+  it("인증 외 에러면 자동 이동 없이 다시 시도와 로그아웃을 함께 제공한다", () => {
+    useMeMock.mockReturnValue({
+      data: undefined,
+      isPending: false,
+      isError: true,
+      error: new ApiError(500, "INTERNAL_ERROR", "서버 오류"),
+      refetch,
+    });
+    renderContent();
+    expect(screen.getByRole("button", { name: "다시 시도" })).toBeDefined();
+    expect(screen.getByRole("button", { name: "로그아웃" })).toBeDefined();
+    expect(replace).not.toHaveBeenCalled();
   });
 
   it("로그아웃 클릭 시 signOut 후 me 캐시를 제거하고 홈으로 이동한다", async () => {

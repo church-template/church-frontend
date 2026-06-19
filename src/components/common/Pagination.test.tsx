@@ -8,8 +8,18 @@ vi.mock("next/navigation", () => ({
   useSearchParams: () => new URLSearchParams("tagId=3"),
 }));
 vi.mock("next/link", () => ({
-  default: ({ href, children, ...rest }: { href: string; children: ReactNode }) => (
-    <a href={href} {...rest}>
+  // scroll은 유효한 DOM 속성이 아니므로 data-scroll로 노출해 전달 여부를 검증한다.
+  default: ({
+    href,
+    children,
+    scroll,
+    ...rest
+  }: {
+    href: string;
+    children: ReactNode;
+    scroll?: boolean;
+  }) => (
+    <a href={href} data-scroll={scroll === undefined ? undefined : String(scroll)} {...rest}>
       {children}
     </a>
   ),
@@ -46,5 +56,27 @@ describe("PaginationControls", () => {
     render(<PaginationControls page={{ ...page, number: 0 }} />);
     const prev = screen.getByTestId("pagination-prev");
     expect(prev.getAttribute("aria-disabled")).toBe("true");
+  });
+});
+
+describe("PaginationControls scroll prop", () => {
+  const page = { size: 10, number: 1, totalElements: 95, totalPages: 10 };
+
+  it("scroll={false}면 숫자 링크에 scroll 전달(목록 스크롤 점프 방지)", () => {
+    render(<PaginationControls page={page} scroll={false} />);
+    const link = screen.getByRole("link", { name: "3" });
+    expect(link.getAttribute("data-scroll")).toBe("false");
+  });
+
+  it("scroll={false}면 다음 화살표 링크에도 전달", () => {
+    render(<PaginationControls page={page} scroll={false} />);
+    const next = screen.getByTestId("pagination-next");
+    expect(next.getAttribute("data-scroll")).toBe("false");
+  });
+
+  it("기본값은 scroll 유지(true) — 공개 ISR 페이지 동작 보존", () => {
+    render(<PaginationControls page={page} />);
+    const link = screen.getByRole("link", { name: "3" });
+    expect(link.getAttribute("data-scroll")).toBe("true");
   });
 });

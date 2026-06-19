@@ -21,7 +21,7 @@ export function pageItems(current: number, total: number): (number | "ellipsis")
   return items;
 }
 
-function PaginationControls({ page }: { page: PageMeta }) {
+function PaginationControls({ page, scroll = true }: { page: PageMeta; scroll?: boolean }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -38,7 +38,7 @@ function PaginationControls({ page }: { page: PageMeta }) {
 
   return (
     <nav className={cn("flex items-center justify-center gap-xs", typo.datetime)} aria-label="페이지네이션">
-      <Arrow href={hrefFor(number - 1)} disabled={isFirst} dir="prev" />
+      <Arrow href={hrefFor(number - 1)} disabled={isFirst} dir="prev" scroll={scroll} />
       {pageItems(number, totalPages).map((it, i) =>
         it === "ellipsis" ? (
           <span key={`e${i}`} className="px-2 text-muted" aria-hidden>
@@ -56,18 +56,19 @@ function PaginationControls({ page }: { page: PageMeta }) {
           <Link
             key={it}
             href={hrefFor(it)}
+            scroll={scroll}
             className="inline-flex size-9 items-center justify-center rounded-md text-ink hover:bg-surface-strong"
           >
             {it + 1}
           </Link>
         ),
       )}
-      <Arrow href={hrefFor(number + 1)} disabled={isLast} dir="next" />
+      <Arrow href={hrefFor(number + 1)} disabled={isLast} dir="next" scroll={scroll} />
     </nav>
   );
 }
 
-function Arrow({ href, disabled, dir }: { href: string; disabled: boolean; dir: "prev" | "next" }) {
+function Arrow({ href, disabled, dir, scroll }: { href: string; disabled: boolean; dir: "prev" | "next"; scroll?: boolean }) {
   const Icon = dir === "prev" ? ChevronLeft : ChevronRight;
   const cls = "inline-flex size-9 items-center justify-center rounded-md";
   if (disabled) {
@@ -85,6 +86,7 @@ function Arrow({ href, disabled, dir }: { href: string; disabled: boolean; dir: 
     <Link
       data-testid={`pagination-${dir}`}
       href={href}
+      scroll={scroll}
       aria-label={dir === "prev" ? "이전 페이지" : "다음 페이지"}
       className={cn(cls, "text-ink hover:bg-surface-strong")}
     >
@@ -94,10 +96,10 @@ function Arrow({ href, disabled, dir }: { href: string; disabled: boolean; dir: 
 }
 
 // 공개 export — useSearchParams가 공개 ISR prerender에서 빌드 실패하지 않도록 Suspense 경계 포함.
-export function Pagination({ page }: { page: PageMeta }) {
+export function Pagination({ page, scroll = true }: { page: PageMeta; scroll?: boolean }) {
   return (
     <Suspense fallback={<div className="h-9" aria-hidden />}>
-      <PaginationControls page={page} />
+      <PaginationControls page={page} scroll={scroll} />
     </Suspense>
   );
 }
