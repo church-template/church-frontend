@@ -2,10 +2,12 @@
 import { useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { typo } from "@/constants/typography";
+import { ACTION } from "@/constants/actionButton";
 import { Button } from "@/components/ui/Button";
 import { PasswordInput } from "@/components/ui/PasswordInput";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -66,6 +68,11 @@ export function DeleteConfirmDialog({
           </div>
         ) : null}
         <DialogFooter>
+          <DialogClose asChild>
+            <Button type="button" variant="tertiary">
+              {ACTION.cancel.label}
+            </Button>
+          </DialogClose>
           <Button
             type="button"
             variant="destructive"

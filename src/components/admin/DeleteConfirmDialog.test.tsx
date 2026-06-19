@@ -38,4 +38,10 @@ describe("DeleteConfirmDialog", () => {
     fireEvent.click(confirm);
     expect(onConfirm).toHaveBeenCalledWith({ password: "pw123456" });
   });
+
+  it("취소와 확정 버튼을 함께 노출한다", () => {
+    setup({ confirmLabel: "삭제" });
+    expect(screen.getByRole("button", { name: "취소" })).toBeDefined();
+    expect(screen.getByRole("button", { name: "삭제" })).toBeDefined();
+  });
 });
