@@ -7,6 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import { RequirePermission } from "@/components/admin/RequirePermission";
 import { DeleteConfirmDialog } from "@/components/admin/DeleteConfirmDialog";
 import { Button } from "@/components/ui/Button";
+import { ACTION, CREATE_ICON } from "@/constants/actionButton";
 import { EventFormDialog } from "./EventFormDialog";
 import { deleteEvent } from "@/lib/api/events.admin";
 import { adminOnError } from "@/lib/admin/mutationHandlers";
@@ -21,6 +22,7 @@ export function EventListAction() {
   return (
     <RequirePermission permission="EVENT_WRITE">
       <Button type="button" variant="primary" onClick={() => setOpen(true)}>
+        <CREATE_ICON size={18} aria-hidden />
         새 일정
       </Button>
       <EventFormDialog open={open} onOpenChange={setOpen} mode="create" />
@@ -52,11 +54,13 @@ export function EventDetailActions({ event, onClose }: { event: EventDetailRespo
   return (
     <RequirePermission permission="EVENT_WRITE">
       <div className="flex gap-sm">
-        <Button type="button" variant="secondary" onClick={() => setEditOpen(true)}>
-          수정
+        <Button type="button" variant="tertiary" aria-label="일정 수정" onClick={() => setEditOpen(true)}>
+          <ACTION.edit.Icon size={18} aria-hidden />
+          <span className="hidden lg:inline">{ACTION.edit.label}</span>
         </Button>
-        <Button type="button" variant="secondary" onClick={() => setDelOpen(true)}>
-          삭제
+        <Button type="button" variant="tertiary" aria-label="일정 삭제" onClick={() => setDelOpen(true)}>
+          <ACTION.delete.Icon size={18} aria-hidden />
+          <span className="hidden lg:inline">{ACTION.delete.label}</span>
         </Button>
       </div>
       <EventFormDialog open={editOpen} onOpenChange={setEditOpen} mode="edit" initial={event} onSaved={onClose} />

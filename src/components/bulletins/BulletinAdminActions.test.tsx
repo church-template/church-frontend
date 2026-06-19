@@ -29,4 +29,10 @@ describe("BulletinRowActions", () => {
     await waitFor(() => expect(deleteMock).toHaveBeenCalledWith(7));
     await waitFor(() => expect(revalidateMock).toHaveBeenCalled());
   });
+
+  it("수정 트리거는 aria-label='주보 수정'으로 접근 가능하다", () => {
+    // FormDialog가 mock(null)이라 열림 상태는 검증 불가; 트리거 존재·접근성만 확인
+    renderQc(<BulletinRowActions b={{ id: 7, title: "주보", serviceDate: "2026-06-07", mediaId: 1, createdAt: "2026-06-07T00:00:00" }} />);
+    expect(screen.getByRole("button", { name: "주보 수정" })).toBeDefined();
+  });
 });

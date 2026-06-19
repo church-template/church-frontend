@@ -7,9 +7,10 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { typo } from "@/constants/typography";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
+import { ACTION } from "@/constants/actionButton";
 import { DateTimePicker } from "@/components/admin/DateTimePicker";
 import { MediaPicker } from "@/components/admin/MediaPicker";
 import { adminOnError } from "@/lib/admin/mutationHandlers";
@@ -111,7 +112,10 @@ export function BulletinFormDialog({ open, onOpenChange, mode, bulletinId, onSav
             {errors.mediaId ? <span className={cn(typo.caption, "text-error")}>{errors.mediaId.message}</span> : null}
           </div>
           <DialogFooter>
-            <Button type="submit" variant="primary" loading={mutation.isPending} disabled={seeding}>저장</Button>
+            <DialogClose asChild>
+              <Button type="button" variant="tertiary">{ACTION.cancel.label}</Button>
+            </DialogClose>
+            <Button type="submit" variant="primary" loading={mutation.isPending} disabled={seeding}>{ACTION.save.label}</Button>
           </DialogFooter>
         </form>
         <MediaPicker

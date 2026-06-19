@@ -53,8 +53,8 @@ describe("EventDetailActions", () => {
   it("삭제 확정 시 deleteEvent를 호출하고 revalidate 및 onClose 콜백을 실행한다", async () => {
     deleteEventMock.mockResolvedValue(undefined);
     renderWithQc(<EventDetailActions event={event} onClose={onCloseMock} />);
-    fireEvent.click(screen.getByRole("button", { name: "삭제" }));
-    // 트리거·확정 둘 다 '삭제'라 다이얼로그 스코프에서 확정 버튼을 집는다(Radix Dialog role="dialog")
+    // 행 트리거는 aria-label="일정 삭제"로 찾고, 확정 버튼은 다이얼로그 스코프 내 "삭제"로 찾는다.
+    fireEvent.click(screen.getByRole("button", { name: "일정 삭제" }));
     fireEvent.click(within(screen.getByRole("dialog")).getByRole("button", { name: "삭제" }));
     await waitFor(() => expect(deleteEventMock).toHaveBeenCalledWith(7));
     await waitFor(() => expect(revalidateEventsMock).toHaveBeenCalled());
@@ -64,7 +64,8 @@ describe("EventDetailActions", () => {
   it("수정 성공 시 onClose로 부모 모달을 닫는다(옛 데이터 잔존 방지)", async () => {
     updateEventMock.mockResolvedValue({ id: 7 });
     renderWithQc(<EventDetailActions event={event} onClose={onCloseMock} />);
-    fireEvent.click(screen.getByRole("button", { name: "수정" }));
+    // 행 수정 트리거는 aria-label="일정 수정"으로 찾는다.
+    fireEvent.click(screen.getByRole("button", { name: "일정 수정" }));
     // 수정 Dialog가 열리면 그 안의 저장 버튼을 눌러 제출(폼은 event로 프리필되어 유효)
     fireEvent.click(within(screen.getByRole("dialog")).getByRole("button", { name: "저장" }));
     await waitFor(() => expect(updateEventMock).toHaveBeenCalled());

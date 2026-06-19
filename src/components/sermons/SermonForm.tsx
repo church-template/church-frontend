@@ -6,6 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
+import { ACTION } from "@/constants/actionButton";
 import { MarkdownEditor } from "@/components/admin/MarkdownEditor";
 import { TagMultiSelect } from "@/components/admin/TagMultiSelect";
 import { adminOnError } from "@/lib/admin/mutationHandlers";
@@ -140,8 +141,8 @@ export function SermonForm({ mode, initial }: SermonFormProps) {
         />
       </div>
       <div className="flex gap-sm">
-        <Button type="submit" variant="primary" loading={mutation.isPending}>저장</Button>
-        <Button type="button" variant="secondary" onClick={() => router.back()}>취소</Button>
+        <Button type="button" variant="tertiary" onClick={() => router.back()}>{ACTION.cancel.label}</Button>
+        <Button type="submit" variant="primary" loading={mutation.isPending}>{ACTION.save.label}</Button>
       </div>
     </form>
   );

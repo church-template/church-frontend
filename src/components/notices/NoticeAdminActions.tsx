@@ -9,6 +9,7 @@ import { RequirePermission } from "@/components/admin/RequirePermission";
 import { DeleteConfirmDialog } from "@/components/admin/DeleteConfirmDialog";
 import { Button, buttonVariants } from "@/components/ui/Button";
 import { Checkbox } from "@/components/ui/Checkbox";
+import { ACTION, CREATE_ICON } from "@/constants/actionButton";
 import { patchNotice, deleteNotice } from "@/lib/api/notices.admin";
 import { adminOnError } from "@/lib/admin/mutationHandlers";
 import { notify } from "@/lib/notify";
@@ -18,7 +19,10 @@ import { revalidateNotices } from "@/lib/admin/revalidate";
 export function NoticeListAction() {
   return (
     <RequirePermission permission="NOTICE_WRITE">
-      <Link href="/notices/new" className={buttonVariants("primary")}>새 공지</Link>
+      <Link href="/notices/new" className={buttonVariants("primary")}>
+        <CREATE_ICON size={18} aria-hidden />
+        새 공지
+      </Link>
     </RequirePermission>
   );
 }
@@ -60,8 +64,14 @@ export function NoticeDetailActions({
           disabled={pin.isPending}
           onChange={() => pin.mutate()}
         />
-        <Link href={`/notices/${id}/edit`} className={buttonVariants("secondary")}>수정</Link>
-        <Button type="button" variant="secondary" onClick={() => setOpen(true)}>삭제</Button>
+        <Link href={`/notices/${id}/edit`} className={buttonVariants("tertiary")} aria-label="공지 수정">
+          <ACTION.edit.Icon size={18} aria-hidden />
+          <span className="hidden lg:inline">{ACTION.edit.label}</span>
+        </Link>
+        <Button type="button" variant="tertiary" aria-label="공지 삭제" onClick={() => setOpen(true)}>
+          <ACTION.delete.Icon size={18} aria-hidden />
+          <span className="hidden lg:inline">{ACTION.delete.label}</span>
+        </Button>
       </div>
       <DeleteConfirmDialog
         open={open}

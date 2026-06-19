@@ -7,6 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -14,6 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
+import { ACTION } from "@/constants/actionButton";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { DateTimePicker } from "@/components/admin/DateTimePicker";
 import { MarkdownEditor } from "@/components/admin/MarkdownEditor";
@@ -191,11 +193,11 @@ export function EventFormDialog({ open, onOpenChange, mode, initial, onSaved }: 
             />
           </div>
           <DialogFooter>
-            <Button type="button" variant="secondary" onClick={() => onOpenChange(false)}>
-              취소
-            </Button>
+            <DialogClose asChild>
+              <Button type="button" variant="tertiary">{ACTION.cancel.label}</Button>
+            </DialogClose>
             <Button type="submit" variant="primary" loading={mutation.isPending}>
-              저장
+              {ACTION.save.label}
             </Button>
           </DialogFooter>
         </form>

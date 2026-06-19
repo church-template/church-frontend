@@ -46,8 +46,8 @@ describe("SermonDetailActions", () => {
     deleteSermonMock.mockResolvedValue(undefined);
     revalidateSermonsMock.mockResolvedValue(undefined);
     renderWithQc(<SermonDetailActions id={9} />);
-    fireEvent.click(screen.getByRole("button", { name: "삭제" }));
-    // 다이얼로그 확정 버튼(라벨 동일 '삭제')
+    // 행 트리거는 aria-label="설교 삭제"로 찾고, 확정 다이얼로그 버튼은 라벨 "삭제"로 찾는다.
+    fireEvent.click(screen.getByRole("button", { name: "설교 삭제" }));
     const confirmButtons = screen.getAllByRole("button", { name: "삭제" });
     fireEvent.click(confirmButtons[confirmButtons.length - 1]);
     await waitFor(() => expect(deleteSermonMock).toHaveBeenCalledWith(9));
