@@ -73,16 +73,18 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   /** 진행 중 표시 — 스피너를 띄우고 비활성화한다(이중 제출 방지). */
   loading?: boolean;
+  /** 아이콘 단독 버튼 — 정사각 형태. aria-label 필수(스크린리더). */
+  iconOnly?: boolean;
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
-    { variant = "primary", loading = false, disabled, className, children, ...props },
+    { variant = "primary", loading = false, iconOnly = false, disabled, className, children, ...props },
     ref,
   ) => (
     <button
       ref={ref}
-      className={cn(buttonVariants(variant), className)}
+      className={cn(buttonVariants(variant), iconOnly ? "size-9 p-0" : null, className)}
       disabled={disabled || loading}
       aria-busy={loading || undefined}
       {...props}
