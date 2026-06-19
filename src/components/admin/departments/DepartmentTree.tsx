@@ -66,15 +66,17 @@ export function DepartmentTree({ roots, collapsed, onToggle, onCreateChild, onEd
             <span className={cn("flex min-w-0 flex-1 items-center", indentClass(depth))}>
               <span className="mr-xxs flex w-6 shrink-0 items-center justify-center">
                 {hasChildren ? (
-                  <button
+                  <Button
                     type="button"
+                    variant="tertiary"
+                    iconOnly
                     onClick={() => onToggle(node.id)}
                     aria-label={isCollapsed ? `${node.name} 펼치기` : `${node.name} 접기`}
                     aria-expanded={!isCollapsed}
                     className="text-muted hover:text-ink"
                   >
                     {isCollapsed ? <ChevronRight size={18} aria-hidden /> : <ChevronDown size={18} aria-hidden />}
-                  </button>
+                  </Button>
                 ) : null}
               </span>
               <span className={cn(typo.bodyMd, "truncate text-ink")}>{node.name}</span>

@@ -76,16 +76,18 @@ export function MemberRolesSection({ member }: { member: MemberDetailResponse })
             <span key={name} className="inline-flex items-center gap-xxs rounded-sm bg-surface-strong py-1 pl-3 pr-1">
               <span className={typo.captionStrong}>{name}</span>
               {canManageRoles ? (
-                <button
+                <Button
                   type="button"
+                  variant="tertiary"
+                  iconOnly
                   aria-label={`${name} 회수`}
                   disabled={!removable}
                   title={removable ? undefined : "회수할 수 없는 역할입니다"}
                   onClick={() => { if (role) revoke.mutate(role.id); }}
-                  className="rounded-sm p-xxs text-muted hover:text-ink disabled:opacity-40 disabled:pointer-events-none"
+                  className="text-muted hover:text-ink disabled:opacity-40"
                 >
                   <X size={14} aria-hidden />
-                </button>
+                </Button>
               ) : null}
             </span>
           );

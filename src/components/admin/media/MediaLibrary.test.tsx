@@ -43,7 +43,7 @@ describe("MediaLibrary", () => {
   it("이미지 행에 썸네일과 열기 링크를 보여준다", async () => {
     listMediaMock.mockResolvedValue(oneItem);
     const { container } = renderQc(<MediaLibrary />);
-    const link = await screen.findByRole("link", { name: "열기" });
+    const link = await screen.findByRole("link", { name: "a.png 열기" });
     expect(link.getAttribute("href")).toContain("/api/media/5");
     expect(container.querySelector("img")).not.toBeNull();
   });
@@ -53,7 +53,7 @@ describe("MediaLibrary", () => {
     getRefsMock.mockResolvedValue({ mediaId: 5, inUse: true, references: [{ type: "sermon", id: 1, title: "설교" }] });
     renderQc(<MediaLibrary />);
     await waitFor(() => expect(screen.getByText("a.png")).toBeDefined());
-    fireEvent.click(screen.getByRole("button", { name: "삭제" }));
+    fireEvent.click(screen.getByRole("button", { name: "a.png 삭제" }));
     await waitFor(() => expect(screen.getByText("삭제할 수 없습니다")).toBeDefined());
     expect(deleteMediaMock).not.toHaveBeenCalled();
   });
