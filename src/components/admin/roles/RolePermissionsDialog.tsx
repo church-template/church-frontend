@@ -50,7 +50,7 @@ export function RolePermissionsDialog({ open, onOpenChange, role }: RolePermissi
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>권한 편집: {role.name}</DialogTitle>
         </DialogHeader>

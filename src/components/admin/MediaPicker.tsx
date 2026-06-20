@@ -50,7 +50,7 @@ export function MediaPicker({ open, onOpenChange, accept, multiple = false, onCo
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) setSelected([]); onOpenChange(v); }}>
-      <DialogContent>
+      <DialogContent aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>미디어 선택</DialogTitle>
         </DialogHeader>

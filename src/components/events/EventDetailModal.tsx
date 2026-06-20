@@ -50,7 +50,7 @@ export function EventDetailModal({
       }}
     >
       {event ? (
-        <DialogContent>
+        <DialogContent aria-describedby={undefined}>
           <DialogTitle>{event.title}</DialogTitle>
           {shown ? (
             <>

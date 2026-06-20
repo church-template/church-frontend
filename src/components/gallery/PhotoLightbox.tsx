@@ -37,6 +37,7 @@ export function PhotoLightbox({ photos, albumTitle, index, onIndexChange }: Phot
     >
       <DialogContent
         className="max-w-[var(--container-lightbox)]"
+        aria-describedby={undefined}
         onKeyDown={(e) => {
           if (e.key === "ArrowLeft") go(-1);
           if (e.key === "ArrowRight") go(1);

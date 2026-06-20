@@ -57,7 +57,7 @@ export function PositionFormDialog({ open, onOpenChange, mode, initial }: Positi
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>{mode === "edit" ? "직분 수정" : "직분 등록"}</DialogTitle>
         </DialogHeader>

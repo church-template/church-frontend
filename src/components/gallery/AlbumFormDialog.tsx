@@ -67,7 +67,7 @@ export function AlbumFormDialog({ open, onOpenChange, mode, initial }: AlbumForm
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>{mode === "edit" ? "앨범 수정" : "앨범 등록"}</DialogTitle>
         </DialogHeader>
