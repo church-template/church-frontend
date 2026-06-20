@@ -25,10 +25,10 @@ describe("SiteFooter", () => {
 
   it("교회 정보·링크열·저작권을 렌더한다", () => {
     render(<SiteFooter />);
-    // 브랜드 + 저작권에 교회명이 2회 이상 등장
+    // 브랜드 영역에 교회명(약칭)이 표시된다(저작권은 정식 명칭이라 별도)
     expect(screen.getAllByText(CHURCH_NAME).length).toBeGreaterThan(0);
     expect(screen.getByText((t) => t.includes(CHURCH_ADDRESS))).toBeDefined();
-    const location = screen.getByRole("link", { name: "오시는 길" }) as HTMLAnchorElement;
+    const location = screen.getByRole("link", { name: "연락처 및 위치" }) as HTMLAnchorElement;
     expect(location.getAttribute("href")).toBe("/about/location");
     expect(screen.getByText(/©/)).toBeDefined();
   });
