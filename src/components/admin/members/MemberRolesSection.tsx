@@ -27,7 +27,7 @@ export function MemberRolesSection({ member }: { member: MemberDetailResponse })
   const [selectedRoleId, setSelectedRoleId] = useState<number | "">("");
 
   // 목록 쿼리 무효화(공통)
-  const invalidateList = () => qc.invalidateQueries({ queryKey: ["admin", "members", "list"] });
+  const invalidateList = () => qc.invalidateQueries({ queryKey: adminKeys.listAll("members") });
 
   // 역할 부여: 성공 시 상세를 setQueryData로 즉시 갱신 + 목록 무효화
   const grant = useMutation({

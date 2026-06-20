@@ -46,7 +46,7 @@ function PositionEditor({ uuid, currentId, positions }: { uuid: string; currentI
     onError: adminOnError(),
     onSuccess: (updated) => {
       qc.setQueryData(adminKeys.detail("members", uuid), updated);
-      qc.invalidateQueries({ queryKey: ["admin", "members", "list"] });
+      qc.invalidateQueries({ queryKey: adminKeys.listAll("members") });
       notify.success("직분을 변경했습니다.");
     },
   });

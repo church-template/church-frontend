@@ -57,7 +57,7 @@ export function MediaLibrary() {
     sp.delete("page");
     router.push(`${pathname}?${sp.toString()}`);
   }
-  const invalidate = () => qc.invalidateQueries({ queryKey: ["admin", "media", "list"] });
+  const invalidate = () => qc.invalidateQueries({ queryKey: adminKeys.listAll("media") });
 
   const [refs, setRefs] = useState<MediaReference[] | null>(null);
   const [target, setTarget] = useState<MediaResponse | null>(null);
