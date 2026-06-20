@@ -81,6 +81,12 @@ describe("handleApiError", () => {
     expect(onMediaReferences).toHaveBeenCalledWith(references);
   });
 
+  it("MEDIA_IN_USE: references 누락 시 빈 배열로 콜백", () => {
+    const onMediaReferences = vi.fn();
+    handleApiError(err("MEDIA_IN_USE", { status: 409 }), { onMediaReferences });
+    expect(onMediaReferences).toHaveBeenCalledWith([]);
+  });
+
   it("OPTIMISTIC_LOCK_CONFLICT: 토스트 + onReedit", () => {
     const onReedit = vi.fn();
     handleApiError(err("OPTIMISTIC_LOCK_CONFLICT", { status: 409 }), { onReedit });
@@ -129,6 +135,41 @@ describe("handleApiError", () => {
   it("DUPLICATE_RESOURCE: onDuplicate 없으면 토스트 폴백", () => {
     handleApiError(err("DUPLICATE_RESOURCE", { status: 409, detail: "전화번호 중복" }));
     expect(notify.error).toHaveBeenCalledWith("전화번호 중복");
+  });
+
+  it("DUPLICATE_RESOURCE: 핸들러·detail 없으면 title 폴백", () => {
+    handleApiError(err("DUPLICATE_RESOURCE", { status: 409, title: "중복" }));
+    expect(notify.error).toHaveBeenCalledWith("중복");
+  });
+
+  it("DUPLICATE_RESOURCE: 핸들러·detail·title 모두 없으면 기본 메시지", () => {
+    handleApiError(err("DUPLICATE_RESOURCE", { status: 409 }));
+    expect(notify.error).toHaveBeenCalledWith("이미 존재하는 값입니다.");
+  });
+
+  it("INVALID_INPUT_VALUE: errors·detail 없고 title 있으면 title 폴백", () => {
+    handleApiError(err("INVALID_INPUT_VALUE", { title: "검증 오류" }), { onFieldErrors: vi.fn() });
+    expect(notify.error).toHaveBeenCalledWith("검증 오류");
+  });
+
+  it("INVALID_INPUT_VALUE: detail·title 모두 없으면 기본 메시지", () => {
+    handleApiError(err("INVALID_INPUT_VALUE"));
+    expect(notify.error).toHaveBeenCalledWith("입력값을 확인해 주세요.");
+  });
+
+  it("MEDIA_IN_USE: 핸들러·detail 없고 title 있으면 title 폴백", () => {
+    handleApiError(err("MEDIA_IN_USE", { status: 409, title: "참조됨" }));
+    expect(notify.error).toHaveBeenCalledWith("참조됨");
+  });
+
+  it("MEDIA_IN_USE: 핸들러·detail·title 모두 없으면 기본 메시지", () => {
+    handleApiError(err("MEDIA_IN_USE", { status: 409 }));
+    expect(notify.error).toHaveBeenCalledWith("참조 중이라 삭제할 수 없습니다.");
+  });
+
+  it("OPTIMISTIC_LOCK_CONFLICT: onReedit 없어도 토스트만(크래시 없음)", () => {
+    handleApiError(err("OPTIMISTIC_LOCK_CONFLICT", { status: 409 }));
+    expect(notify.error).toHaveBeenCalledOnce();
   });
 
   it("default: title 없으면 기본 메시지", () => {

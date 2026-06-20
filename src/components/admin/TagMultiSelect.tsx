@@ -16,7 +16,7 @@ export interface TagMultiSelectProps {
 
 // 기존 태그 선택 전용(신규 생성=06 TAG_MANAGE 소관). 옵션은 공개 getTags.
 export function TagMultiSelect({ value, onChange }: TagMultiSelectProps) {
-  const { data: tags = [] } = useQuery({ queryKey: ["tags"], queryFn: getTags });
+  const { data: tags = [], isPending, isError } = useQuery({ queryKey: ["tags"], queryFn: getTags });
   const selected = tags.filter((t) => value.includes(t.id));
   function toggle(id: number) {
     onChange(value.includes(id) ? value.filter((v) => v !== id) : [...value, id]);
@@ -30,7 +30,11 @@ export function TagMultiSelect({ value, onChange }: TagMultiSelectProps) {
           </Button>
         </PopoverTrigger>
         <PopoverContent align="start">
-          {tags.length > 0 ? (
+          {isError ? (
+            <p className={cn(typo.bodySm, "text-error")}>태그를 불러오지 못했습니다.</p>
+          ) : isPending ? (
+            <p className={cn(typo.bodySm, "text-muted")}>불러오는 중…</p>
+          ) : tags.length > 0 ? (
             <ul className="flex flex-col gap-xs">
               {tags.map((t) => (
                 <li key={t.id}>

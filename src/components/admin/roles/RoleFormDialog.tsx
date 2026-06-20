@@ -63,7 +63,7 @@ export function RoleFormDialog({ open, onOpenChange, mode, initial }: RoleFormDi
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>{mode === "edit" ? "역할 수정" : "역할 등록"}</DialogTitle>
         </DialogHeader>

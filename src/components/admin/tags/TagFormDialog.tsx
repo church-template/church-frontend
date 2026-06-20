@@ -53,7 +53,7 @@ export function TagFormDialog({ open, onOpenChange, mode, initial }: TagFormDial
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>{mode === "edit" ? "태그 수정" : "태그 등록"}</DialogTitle>
         </DialogHeader>

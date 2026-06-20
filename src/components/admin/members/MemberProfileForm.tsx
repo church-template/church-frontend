@@ -35,7 +35,7 @@ export function MemberProfileForm({ member }: { member: MemberDetailResponse }) 
     }),
     onSuccess: (updated) => {
       qc.setQueryData(adminKeys.detail("members", member.uuid), updated);
-      qc.invalidateQueries({ queryKey: ["admin", "members", "list"] });
+      qc.invalidateQueries({ queryKey: adminKeys.listAll("members") });
       // 운영자가 자기 프로필을 고치면 useMe 스냅샷도 갱신.
       if (member.uuid === me?.uuid) qc.invalidateQueries({ queryKey: ["me"] });
       notify.success("저장했습니다.");

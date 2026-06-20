@@ -10,6 +10,10 @@ describe("adminKeys", () => {
     expect(adminKeys.list("tags")).toEqual(["admin", "tags", "list", undefined]);
   });
 
+  it("listAll은 params 없는 3요소 prefix다(파라미터 무관 일괄 무효화용)", () => {
+    expect(adminKeys.listAll("members")).toEqual(["admin", "members", "list"]);
+  });
+
   it("detail 키는 admin·domain·detail·id 순서다", () => {
     expect(adminKeys.detail("sermons", 7)).toEqual(["admin", "sermons", "detail", 7]);
   });

@@ -112,7 +112,7 @@ export function EventFormDialog({ open, onOpenChange, mode, initial, onSaved }: 
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>{mode === "edit" ? "일정 수정" : "새 일정"}</DialogTitle>
         </DialogHeader>

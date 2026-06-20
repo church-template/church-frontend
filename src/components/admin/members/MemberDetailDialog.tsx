@@ -35,7 +35,7 @@ export function MemberDetailDialog({ uuid, open, onOpenChange }: Props) {
   const m = detail.data;
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>{m ? m.name : "회원 상세"}</DialogTitle>
         </DialogHeader>

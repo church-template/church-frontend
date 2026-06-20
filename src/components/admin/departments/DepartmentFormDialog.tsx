@@ -167,7 +167,7 @@ export function DepartmentFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>{mode === "edit" ? "부서 수정" : "새 부서"}</DialogTitle>
         </DialogHeader>
