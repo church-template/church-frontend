@@ -33,7 +33,7 @@ describe("MobileNav", () => {
     expect(screen.getByRole("link", { name: "예배·설교" })).toBeDefined();
     // 하위 자식 링크
     expect(screen.getByText("공지")).toBeDefined(); // 소식 하위
-    expect(screen.getByText("오시는 길")).toBeDefined(); // 교회안내 하위
+    expect(screen.getByText("연락처 및 위치")).toBeDefined(); // 교회안내 하위
     expect(screen.getByText("설교")).toBeDefined(); // 예배·설교 하위
   });
 

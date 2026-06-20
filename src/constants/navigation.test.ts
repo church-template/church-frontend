@@ -20,7 +20,7 @@ describe("navigation IA", () => {
     }
   });
 
-  it("교회안내 하위에 오시는 길(/about/location)이 있다", () => {
+  it("교회안내 하위에 연락처 및 위치(/about/location)가 있다", () => {
     const about = NAV_PRIMARY.find((i) => i.label === "교회안내");
     expect(about?.children?.some((c) => c.href === "/about/location")).toBe(true);
   });
