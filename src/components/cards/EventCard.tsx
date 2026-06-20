@@ -32,16 +32,17 @@ export function EventCard({ date, title, time, location, summary, href }: EventC
   );
 
   // 비인터랙티브: hover/focus 없음. 인터랙티브: Link 루트 + focus 링 + hover soft drop.
+  // h-full: 그리드 행 내 카드 높이 통일(시간줄 유무로 생기는 높낮이 차 제거). 모바일 1열에선 무영향.
   if (!href) {
     return (
-      <Card bordered className="p-xl">
+      <Card bordered className="h-full p-xl">
         {inner}
       </Card>
     );
   }
   return (
-    <Link href={href} className={cn("block", focusRing)}>
-      <Card bordered interactive className="block p-xl">
+    <Link href={href} className={cn("block h-full", focusRing)}>
+      <Card bordered interactive className="block h-full p-xl">
         {inner}
       </Card>
     </Link>
