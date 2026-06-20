@@ -30,10 +30,11 @@ export interface NavItem {
 
 // 링크 그룹은 메가메뉴 컬럼과 푸터 열에서 공유한다(DRY).
 const ABOUT_LINKS: NavLink[] = [
-  { label: "소개", href: "/about", icon: "church" },
+  { label: "소개 및 비전", href: "/about", icon: "church" },
   { label: "연혁", href: "/about/history", icon: "history" },
-  { label: "비전", href: "/about/vision", icon: "sparkles" },
-  { label: "오시는 길", href: "/about/location", icon: "mapPin" },
+  { label: "목회자 인사말", href: "/about/pastor", icon: "users" },
+  { label: "교회 사진", href: "/about/photos", icon: "images" },
+  { label: "연락처 및 위치", href: "/about/location", icon: "mapPin" },
 ];
 const WORSHIP_LINKS: NavLink[] = [
   { label: "예배시간", href: "/worship", icon: "calendarClock" },

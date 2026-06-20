@@ -4,6 +4,7 @@ import { typo } from "@/constants/typography";
 import { cn } from "@/lib/utils";
 import {
   CHURCH_NAME,
+  CHURCH_NAME_FULL,
   CHURCH_ADDRESS,
   CHURCH_PHONE,
   CHURCH_EMAIL,
@@ -16,10 +17,12 @@ export function SiteFooter() {
   const year = new Date().getFullYear();
   return (
     <footer className="border-t border-hairline bg-canvas">
-      <Container className="grid gap-xl py-xxl sm:grid-cols-2 lg:grid-cols-4">
-        <div className="flex flex-col gap-xs">
+      {/* lg는 6열: 브랜드/교회정보가 2열을 차지해 주소가 한 줄로 들어가고, 나머지 4개 링크열이 1열씩 채운다(2+4=6). */}
+      <Container className="grid gap-xl py-xxl sm:grid-cols-2 lg:grid-cols-6">
+        <div className="flex flex-col gap-xs lg:col-span-2">
           <span className={cn(typo.titleMd, "text-primary")}>{CHURCH_NAME}</span>
-          <address className={cn(typo.bodySm, "not-italic text-muted")}>
+          {/* 주소는 한 줄 유지 — 좁은 컬럼에서 "260"만 다음 줄로 떨어지는 것 방지(전화·이메일은 짧아 영향 없음) */}
+          <address className={cn(typo.bodySm, "not-italic text-muted whitespace-nowrap")}>
             {CHURCH_ADDRESS}
             <br />
             {CHURCH_PHONE}
@@ -45,8 +48,8 @@ export function SiteFooter() {
       {/* legal band 구분선: 주 hairline보다 연하게 — 위계 없이 영역만 나눈다 */}
       <div className="border-t border-hairline-soft">
         <Container className="py-base">
-          <p className={cn(typo.caption, "text-muted")}>
-            © {year} {CHURCH_NAME}
+          <p className={cn(typo.caption, "text-center text-muted")}>
+            © {year} {CHURCH_NAME_FULL}. All rights reserved.
           </p>
         </Container>
       </div>

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import type { ReactNode } from "react";
-import { DEPARTMENTS } from "@/constants/departments";
+import { DEPARTMENTS, DEPT_PAGE } from "@/constants/departments";
 
 vi.mock("next/navigation", () => ({
   usePathname: () => "/departments/student",
@@ -32,18 +32,16 @@ afterEach(() => vi.unstubAllGlobals());
 const student = DEPARTMENTS.find((d) => d.slug === "student")!;
 
 describe("DepartmentDetailPage (상세)", () => {
-  it("제목·인도자·본문·하위부서를 합성한다", async () => {
+  it("제목·본문을 합성한다(상수 구동)", async () => {
     stubBrowserApis();
     const { container } = render(
       await DepartmentDetailPage({ params: Promise.resolve({ slug: "student" }) }),
     );
     expect(screen.getByRole("heading", { name: student.name })).toBeDefined(); // 히어로 h1
-    expect(screen.getByText(`인도 · ${student.leader}`)).toBeDefined();
     expect(container.querySelector(".prose-church")?.textContent).toContain("말씀");
-    // 하위부서(중등부/고등부) 카드가 상세로 링크된다 — 카드 이름은 h3(헤더 nav와 충돌 방지)
-    const child = student.children![0];
-    const childHeading = screen.getByRole("heading", { name: child.name, level: 3 });
-    expect(childHeading.closest("a")?.getAttribute("href")).toBe(`/departments/${child.slug}`);
+    // 실제 교회는 담당자·하위부서가 없어 해당 영역(인도 줄·하위부서 섹션)은 노출되지 않는다
+    expect(screen.queryByText(/인도 ·/)).toBeNull();
+    expect(screen.queryByRole("heading", { name: DEPT_PAGE.subHeading })).toBeNull();
   });
 
   it("없는 slug면 notFound()", async () => {
@@ -53,10 +51,10 @@ describe("DepartmentDetailPage (상세)", () => {
     ).rejects.toThrow("NEXT_NOT_FOUND");
   });
 
-  it("generateStaticParams가 모든 부서 slug(하위 포함)를 반환한다", () => {
+  it("generateStaticParams가 모든 부서 slug를 반환한다", () => {
     const params = generateStaticParams();
     expect(params).toContainEqual({ slug: "student" });
-    expect(params).toContainEqual({ slug: "middle" });
     expect(params).toContainEqual({ slug: "youth" });
+    expect(params).toContainEqual({ slug: "women" });
   });
 });

@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 
 // MAP_EMBED_SRC가 설정된 배포 환경의 iframe 분기 검증 — 본 테스트 파일에서만 모듈 모킹.
 vi.mock("@/constants/church", () => ({
-  CHURCH_ADDRESS: "서울특별시 ○○구 ○○로 00",
+  CHURCH_ADDRESS: "충청남도 예산군 삽교읍 수암산로 260",
   MAP_EMBED_SRC: "https://map.example.com/embed/1",
   mapSearchUrl: (address: string) => `https://map.kakao.com/?q=${encodeURIComponent(address)}`,
 }));
