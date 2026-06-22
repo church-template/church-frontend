@@ -15,11 +15,14 @@ export const CHURCH_DOMAIN = "eunsaem.com";
 export const HERO: HeroMedia = {
   type: "video",
   src: "/hero.mp4",
-  poster: "/hero-poster.jpg",
+  poster: "/hero-poster.jpeg",
 };
 
 // 풀스크린 후 등장 카피 — 줄 단위 배열이라 "\n" 이스케이프가 필요 없다.
-export const HERO_CAPTION = ["함께함이 축복이 되는 교회", "은샘교회에 오신 것을 환영합니다"];
+export const HERO_CAPTION = [
+  "함께함이 축복이 되는 교회",
+  "은샘교회에 오신 것을 환영합니다",
+];
 
 // 콜라주 타일(MediaCollage 스펙 C2·C4) — 데스크톱 4장, 모바일은 앞 2장만 노출(컴포넌트가 처리).
 // 장식 미디어라 alt 기본 "". 의미 있는 사진으로 교체 시 alt도 채운다.
