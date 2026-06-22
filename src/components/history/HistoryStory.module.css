@@ -1,0 +1,39 @@
+/* 연혁 — 차분한 에디토리얼 스크롤(당근 컬처 참고): 제목·시대 균일 등장 + 2단(좌 sticky 현재 시대 사진 / 우 카드 스크롤).
+ * 풀스크린 히어로 없음. 스크롤 진입 Reveal·sticky·IntersectionObserver만 → reduced-motion/무JS에서도 자연 동작. */
+
+/* 히어로 — 중앙 정렬. word-break: keep-all로 한글 단어 중간 줄바꿈 방지. */
+.hero { padding-block: var(--spacing-section); text-align: center; word-break: keep-all; }
+.heroHead { margin-top: var(--spacing-sm); margin-inline: auto; max-width: var(--container-narrow); }
+
+/* 타임라인 — 모바일 단일 스택, 데스크톱 2단 */
+.timeline { display: block; padding-block: var(--spacing-section); }
+
+/* 좌측 aside — 데스크톱 전용 sticky(현재 시대 연도+사진). 시각 강조용이라 aria-hidden(의미는 우측 카드가 담당). */
+.aside { display: none; }
+.asideInner { display: flex; flex-direction: column; gap: var(--spacing-base); }
+.asideYear { margin-top: var(--spacing-xs); }
+.asideMedia { aspect-ratio: 4 / 3; border-radius: var(--radius-xl); overflow: hidden; background: var(--color-surface-soft); }
+.asideMedia :global(img),
+.asideMedia :global(video) { width: 100%; height: 100%; object-fit: cover; display: block; }
+.asideTitle { margin-top: var(--spacing-xs); }
+
+/* 우측 카드 스택 */
+.cards { display: flex; flex-direction: column; gap: var(--spacing-xxl); list-style: none; word-break: keep-all; }
+.card { scroll-margin-top: calc(var(--spacing-nav) + var(--spacing-lg)); }
+.cardInner { display: flex; flex-direction: column; gap: var(--spacing-sm); }
+.cardMedia { aspect-ratio: 16 / 9; border-radius: var(--radius-xl); overflow: hidden; background: var(--color-surface-soft); margin-bottom: var(--spacing-base); }
+.cardMedia :global(img),
+.cardMedia :global(video) { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cardDetails { display: flex; flex-direction: column; gap: var(--spacing-xs); padding-left: var(--spacing-lg); list-style: disc; }
+.cardSig { margin-top: var(--spacing-sm); border-left: 3px solid var(--color-primary); padding-left: var(--spacing-base); }
+
+@media (min-width: 1024px) {
+  .timeline {
+    display: grid; grid-template-columns: 5fr 7fr; gap: var(--spacing-section);
+    align-items: start;
+  }
+  .aside { display: block; position: sticky; top: calc(var(--spacing-nav) + var(--spacing-xl)); align-self: start; }
+  .cards { gap: calc(var(--spacing-section) * 1.4); }
+  /* 데스크톱: 카드 내 사진은 좌측 aside가 담당하므로 숨김(연도 라벨은 의미상 유지) */
+  .cardMedia { display: none; }
+}

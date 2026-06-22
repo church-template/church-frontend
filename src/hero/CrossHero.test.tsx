@@ -4,7 +4,10 @@ import CrossHero from "./CrossHero";
 
 // jsdom에는 matchMedia가 없다 — reduced-motion 분기 제어용 스텁.
 function stubMatchMedia(reduced: boolean) {
-  vi.stubGlobal("matchMedia", vi.fn(() => ({ matches: reduced })));
+  vi.stubGlobal(
+    "matchMedia",
+    vi.fn(() => ({ matches: reduced })),
+  );
 }
 
 afterEach(() => {
@@ -15,10 +18,15 @@ describe("CrossHero", () => {
   it("카피가 DOM에 존재하고(SEO) 십자가 svg는 aria-hidden이다", () => {
     stubMatchMedia(true);
     const { container, getByText } = render(
-      <CrossHero caption="말씀과 삶" media={{ type: "image", src: "/bg.jpg" }} />,
+      <CrossHero
+        caption="말씀과 삶"
+        media={{ type: "image", src: "/bg.jpg" }}
+      />,
     );
     expect(getByText("말씀과 삶")).toBeDefined();
-    expect(container.querySelector("svg")?.getAttribute("aria-hidden")).toBe("true");
+    expect(container.querySelector("svg")?.getAttribute("aria-hidden")).toBe(
+      "true",
+    );
   });
 
   it("video 에러 시 poster 이미지로 폴백한다(14A.5)", () => {
@@ -26,14 +34,16 @@ describe("CrossHero", () => {
     const { container } = render(
       <CrossHero
         caption="c"
-        media={{ type: "video", src: "/hero.mp4", poster: "/hero-poster.jpg" }}
+        media={{ type: "video", src: "/hero.mp4", poster: "/hero-poster.jpeg" }}
       />,
     );
     const video = container.querySelector("video")!;
-    expect(video.getAttribute("poster")).toBe("/hero-poster.jpg");
+    expect(video.getAttribute("poster")).toBe("/hero-poster.jpeg");
     fireEvent.error(video);
     expect(container.querySelector("video")).toBeNull();
-    expect(container.querySelector("img")?.getAttribute("src")).toBe("/hero-poster.jpg");
+    expect(container.querySelector("img")?.getAttribute("src")).toBe(
+      "/hero-poster.jpeg",
+    );
   });
 
   it("prefers-reduced-motion이면 스크롤 리스너를 등록하지 않는다", () => {

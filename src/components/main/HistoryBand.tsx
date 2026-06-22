@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Container } from "@/components/shell/Container";
 import { Badge } from "@/components/ui/Badge";
 import { Reveal } from "./Reveal";
@@ -20,7 +21,7 @@ export function HistoryBand() {
         {HISTORY.items.map((item, i) => {
           const tone = BAND_TONES[i % BAND_TONES.length];
           return (
-            <Reveal key={item.year} delay={i * 120}>
+            <Reveal key={item.id} delay={i * 120}>
               <div className={cn("rounded-xl p-xxl", tone.card)}>
                 <Badge>{item.year}</Badge>
                 <p className={cn(typo.displaySm, "mt-base", tone.head)}>{item.text}</p>
@@ -31,6 +32,9 @@ export function HistoryBand() {
             </Reveal>
           );
         })}
+        <Link href="/about/history" className={cn(typo.button, "mt-base text-primary")}>
+          전체 연혁 보기
+        </Link>
       </Container>
     </section>
   );

@@ -307,3 +307,14 @@ body {
   overflow-x: auto;
 }
 .prose-church pre code { background: transparent; padding: 0; }
+
+/* 연혁 스토리(history) 하단 스크림 — 다크 미디어 위 on-dark 텍스트 대비 확보.
+ * 토큰 변수만 참조(rgba/hex 인라인 금지). 일반 장식이라 CrossHero/DeptHero의 검증용 rgba 예외 대상 아님. */
+@utility scrim-bottom {
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--color-cover-dark) 72%, transparent),
+    color-mix(in srgb, var(--color-cover-dark) 24%, transparent) 38%,
+    transparent 64%
+  );
+}

@@ -1,4 +1,6 @@
 // 정적 페이지 콘텐츠·예배 시간·CTA 카피. 배포 시 이 파일만 교체(스펙 D4). 샘플 문구.
+import type { HeroMedia } from "@/hero/types";
+
 export const ABOUT = {
   title: "소개 및 비전",
   statement: "함께함이 축복이 되는 교회",
@@ -39,11 +41,28 @@ export const ABOUT = {
   },
 };
 
+export interface HistoryItem {
+  id: string; // 앵커(#id)·aria-labelledby·React key 전용 — 표시엔 쓰지 않는다
+  year: string; // 표시 연월 (예: "2011년 4월")
+  text: string; // 헤드라인
+  desc: string; // 한 줄 설명
+  details: string[]; // 세부 항목
+  significance: string; // 의의 풀쿼트
+  media?: HeroMedia; // 배경 미디어(placeholder, /public/history/{id}.jpg). 후일 교체
+}
+
+export interface HistoryContent {
+  title: string;
+  intro: string; // 인트로 한 줄(placeholder 카피 — 후일 수정)
+  items: HistoryItem[];
+}
+
 export const HISTORY = {
   title: "연혁",
-  // year=표시 연월, text=제목, desc=요약. details·significance는 상세 UI(추후)용 데이터(docs/constants.md 출처).
+  intro: "2011년 봄, 사택의 작은 예배에서 시작된 은샘교회의 발자취입니다.",
   items: [
     {
+      id: "2011-04",
       year: "2011년 4월",
       text: "개척예배",
       desc: "개척예배가 사택(태산아파트)에서 진행되었습니다.",
@@ -54,8 +73,10 @@ export const HISTORY = {
         "기독교한국침례회 소속으로 시작",
       ],
       significance: "은샘교회 역사의 출발점이자 하나님의 부르심에 순종한 신앙의 시작",
+      media: { type: "image", src: "/history/2011-04.jpg", alt: "" },
     },
     {
+      id: "2011-05",
       year: "2011년 5월",
       text: "창립예배",
       desc: "태산아파트 옆 상가에서 예배가 진행되었습니다.",
@@ -66,8 +87,10 @@ export const HISTORY = {
         "지역 주민들에게 교회 존재 알림",
       ],
       significance: "공식적인 교회 공동체로서의 첫걸음을 내딛은 중요한 순간",
+      media: { type: "image", src: "/history/2011-05.jpg", alt: "" },
     },
     {
+      id: "2015",
       year: "2015년",
       text: "교회 확장",
       desc: "주방을 허물고 교회를 확장시켰습니다.",
@@ -78,8 +101,10 @@ export const HISTORY = {
         "예배와 교제 공간의 효율적 활용",
       ],
       significance: "교회 성장에 발맞춘 공간 확대로 많은 성도들을 품을 수 있게 됨",
+      media: { type: "image", src: "/history/2015.jpg", alt: "" },
     },
     {
+      id: "2016",
       year: "2016년",
       text: "1층 주방·쉼터 조성",
       desc: "1층 공간을 새로운 주방과 쉼터 공간으로 조성했습니다.",
@@ -90,8 +115,10 @@ export const HISTORY = {
         "다양한 교회 행사를 위한 공간 활용",
       ],
       significance: "교제와 섬김을 위한 공간 마련으로 공동체 활성화",
+      media: { type: "image", src: "/history/2016.jpg", alt: "" },
     },
     {
+      id: "2021",
       year: "2021년",
       text: "현재 위치로 이전",
       desc: "교회를 이전하여 새로운 출발을 하였습니다.",
@@ -102,8 +129,10 @@ export const HISTORY = {
         "지역 접근성 향상으로 더 많은 성도들 섬김",
       ],
       significance: "교회 성장과 발전을 위한 새로운 터전 마련",
+      media: { type: "image", src: "/history/2021.jpg", alt: "" },
     },
     {
+      id: "2023",
       year: "2023년",
       text: "교회 성장",
       desc: "다양한 연령층의 성도들이 함께하는 건강한 교회.",
@@ -113,9 +142,12 @@ export const HISTORY = {
         "건강한 교회, 건강한 성도",
         "지속적인 신앙 성장과 교제 프로그램 운영",
       ],
-      significance: "하나님의 은혜 가운데 성숙한 교회 공동체로 발전, 모든 세대가 함께하는 축복의 공간",
+      significance:
+        "하나님의 은혜 가운데 성숙한 교회 공동체로 발전, 모든 세대가 함께하는 축복의 공간",
+      media: { type: "image", src: "/history/2023.jpg", alt: "" },
     },
     {
+      id: "2025",
       year: "2025년",
       text: "디지털 사역 확장",
       desc: "온라인과 오프라인을 연결하는 새로운 시작.",
@@ -125,10 +157,12 @@ export const HISTORY = {
         "디지털 주보 및 온라인 공지사항 서비스",
         "소셜 미디어를 통한 젊은 세대와의 소통",
       ],
-      significance: "디지털 시대에 맞는 새로운 소통 방식으로 더 많은 사람들에게 복음을 전할 수 있게 됨",
+      significance:
+        "디지털 시대에 맞는 새로운 소통 방식으로 더 많은 사람들에게 복음을 전할 수 있게 됨",
+      media: { type: "image", src: "/history/2025.jpg", alt: "" },
     },
   ],
-};
+} satisfies HistoryContent;
 
 export const VISION = {
   title: "비전",
