@@ -1,20 +1,10 @@
-import { Container } from "@/components/shell/Container";
-import { typo } from "@/constants/typography";
-import { cn } from "@/lib/utils";
+import type { Metadata } from "next";
+import { HistoryStory } from "@/components/history/HistoryStory";
 import { HISTORY } from "@/constants/content";
 
+export const metadata: Metadata = { title: "연혁" };
+
+// 공개 연혁 — 상수 구동(백엔드 무관, 부서 인트로와 동일 격리). 서버 컴포넌트가 client 스토리를 감싼다.
 export default function HistoryPage() {
-  return (
-    <Container as="section" className="py-section">
-      <h1 className={cn(typo.displayMd, "text-ink")}>{HISTORY.title}</h1>
-      <ul className="mt-lg flex flex-col gap-base">
-        {HISTORY.items.map((it) => (
-          <li key={it.year} className="flex gap-base">
-            <span className={cn(typo.datetime, "shrink-0 text-primary")}>{it.year}</span>
-            <span className={cn(typo.bodyMd, "text-body")}>{it.text}</span>
-          </li>
-        ))}
-      </ul>
-    </Container>
-  );
+  return <HistoryStory content={HISTORY} />;
 }

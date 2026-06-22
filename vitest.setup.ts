@@ -27,3 +27,10 @@ if (typeof globalThis.ResizeObserver === "undefined") {
     disconnect() {}
   } as unknown as typeof ResizeObserver;
 }
+if (typeof globalThis.IntersectionObserver === "undefined") {
+  globalThis.IntersectionObserver = class {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  } as unknown as typeof IntersectionObserver;
+}
