@@ -38,7 +38,10 @@ export function HistoryStory({ content }: HistoryStoryProps) {
         {/* 좌측 sticky — 현재 시대 사진만(라벨·연도 제거, 의미는 우측 카드가 담당) */}
         <aside className={styles.aside} aria-hidden="true">
           <div className={styles.asideMedia}>
-            {activeItem.media ? <HistoryMedia media={activeItem.media} priority /> : null}
+            {activeItem.media ? (
+              // key=media.src — 활성 시대 교체 시 리마운트해 비디오 폴백 상태를 초기화
+              <HistoryMedia key={activeItem.media.src} media={activeItem.media} priority />
+            ) : null}
           </div>
         </aside>
 

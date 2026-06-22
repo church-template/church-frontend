@@ -50,7 +50,6 @@
   --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.04);
 
   /* --- 레이어(z-index) — portal이 고정 네비(z-nav) 위에 뜨도록(T04) --- */
-  --z-rail: 5;                          /* 연혁 레일 — 헤더(z-nav) 아래·sticky 미디어 위 */
   --z-nav: 10;
   --z-popover: 40;
   --z-overlay: 50;
@@ -197,7 +196,6 @@ body {
 @utility z-popover { z-index: var(--z-popover); }
 @utility z-overlay { z-index: var(--z-overlay); }
 @utility z-toast { z-index: var(--z-toast); }
-@utility z-rail { z-index: var(--z-rail); }
 
 @keyframes overlay-in { from { opacity: 0 } to { opacity: 1 } }
 @keyframes overlay-out { from { opacity: 1 } to { opacity: 0 } }
