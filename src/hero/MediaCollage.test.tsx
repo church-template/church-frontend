@@ -40,7 +40,7 @@ afterEach(() => {
   ioDisconnected = false;
 });
 
-const center: HeroMedia = { type: "image", src: "/hero-poster.jpg" };
+const center: HeroMedia = { type: "image", src: "/hero-poster.jpeg" };
 const tiles: HeroMedia[] = [
   { type: "image", src: "/collage-1.jpg", alt: "" },
   { type: "image", src: "/collage-2.jpg", alt: "" },
@@ -51,7 +51,9 @@ const tiles: HeroMedia[] = [
 describe("MediaCollage", () => {
   it("중앙 미디어 1 + 타일 4를 렌더한다(장식 alt)", () => {
     stubMatchMedia({ reduced: true });
-    const { container } = render(<MediaCollage center={center} tiles={tiles} />);
+    const { container } = render(
+      <MediaCollage center={center} tiles={tiles} />,
+    );
     const imgs = container.querySelectorAll("img");
     expect(imgs.length).toBe(5);
     imgs.forEach((img) => expect(img.getAttribute("alt")).toBe(""));
@@ -72,7 +74,9 @@ describe("MediaCollage", () => {
     const { container, unmount } = render(
       <MediaCollage center={center} tiles={tiles} />,
     );
-    const tile = container.querySelectorAll("div[class*='tile']")[0] as HTMLElement;
+    const tile = container.querySelectorAll(
+      "div[class*='tile']",
+    )[0] as HTMLElement;
     unmount();
     expect(removeSpy.mock.calls.some(([t]) => t === "scroll")).toBe(true);
     expect(tile.style.transform).toBe("");
@@ -96,7 +100,12 @@ describe("MediaCollage", () => {
     const target = observed[0];
     act(() => {
       ioCallback?.(
-        [{ isIntersecting: true, target } as unknown as IntersectionObserverEntry],
+        [
+          {
+            isIntersecting: true,
+            target,
+          } as unknown as IntersectionObserverEntry,
+        ],
         {} as IntersectionObserver,
       );
     });
@@ -127,11 +136,13 @@ describe("MediaCollage", () => {
     const videoCenter = {
       type: "video",
       src: "/hero.mp4",
-      poster: "/hero-poster.jpg",
+      poster: "/hero-poster.jpeg",
     } as const;
-    const { container } = render(<MediaCollage center={videoCenter} tiles={tiles} />);
+    const { container } = render(
+      <MediaCollage center={videoCenter} tiles={tiles} />,
+    );
     expect(container.querySelector("video")?.getAttribute("poster")).toBe(
-      "/hero-poster.jpg",
+      "/hero-poster.jpeg",
     );
   });
 
@@ -157,7 +168,9 @@ describe("MediaCollage", () => {
       { type: "video", src: "/x.mp4", poster: "/collage-1.jpg" },
       ...tiles.slice(1),
     ];
-    const { container } = render(<MediaCollage center={center} tiles={videoTiles} />);
+    const { container } = render(
+      <MediaCollage center={center} tiles={videoTiles} />,
+    );
     const video = container.querySelector("video")!;
     fireEvent.error(video);
     expect(container.querySelector("video")).toBeNull();
