@@ -177,12 +177,25 @@ export const VISION = {
   ],
 };
 
-// 목회자 인사말 페이지 — 소개·인사말·약력·목회 철학. 사진(/images/...) 등 미디어는 자산 준비 후 추가.
+// 목회자 인사말 페이지 — 소개·인사말·약력·목회 철학. 사진은 자산 준비 후 image에 주입.
+export type PastorPhilosophyKey =
+  | "worship"
+  | "bible"
+  | "fellowship"
+  | "community"
+  | "nextgen"
+  | "mission";
+
 export const PASTOR = {
   title: "목회자 인사말",
   name: "홍성균",
   position: "담임목사",
   degree: "한국침례신학대학교 석사 (M.Div)",
+  // 포트레이트 자산 — 미준비 시 null(플레이스홀더 폴백). 준비되면 { src, alt } 주입.
+  image: null as { src: string; alt: string } | null,
+  // 다크 밴드 핵심 인용 1문장 — 컴포넌트 발췌 금지(콘텐츠 하드코딩 방지).
+  pullQuote:
+    "은샘에서 함께함이 축복이 되는 행복한 신앙의 삶을 시작하시길 주님의 이름으로 축원합니다.",
   intro:
     "홍성균 목사님은 은샘침례교회를 섬기고 있습니다. 성경적인 설교와 따뜻한 목회로 성도들의 영적 성장을 돕고 있으며, 교회와 지역 사회를 위한 다양한 사역을 이끌고 있습니다.",
   greeting: [
@@ -201,14 +214,15 @@ export const PASTOR = {
   },
   philosophy: {
     heading: "목회 철학",
+    // 아이콘 매핑용 key 부여(컴포넌트가 매핑, 상수는 직렬화 키만 — MinistryCards 선례).
     items: [
-      "예배와 교회가 중심이 되는 신앙생활",
-      "성경 중심의 설교와 목회",
-      "성도들과의 따뜻한 교제와 돌봄",
-      "지역 사회를 섬기는 교회",
-      "다음 세대를 세우는 교육 사역",
-      "선교와 전도에 힘쓰는 교회",
-    ],
+      { key: "worship", text: "예배와 교회가 중심이 되는 신앙생활" },
+      { key: "bible", text: "성경 중심의 설교와 목회" },
+      { key: "fellowship", text: "성도들과의 따뜻한 교제와 돌봄" },
+      { key: "community", text: "지역 사회를 섬기는 교회" },
+      { key: "nextgen", text: "다음 세대를 세우는 교육 사역" },
+      { key: "mission", text: "선교와 전도에 힘쓰는 교회" },
+    ] satisfies { key: PastorPhilosophyKey; text: string }[],
   },
 };
 
