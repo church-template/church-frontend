@@ -37,6 +37,13 @@
   --color-error-active: #a81b27;      /* 파괴적 확인 버튼 hover·press */
   --color-on-error: #ffffff;          /* error 채움 위 텍스트 */
 
+  /* --- 로고 신학 상징색 (content.ts symbolism — 브랜드 팔레트 아님).
+   *     단일 액센트 원칙 유지: 큰 색면·버튼 금지, 작은 점·가는 룰·인라인 단어 강조에만. --- */
+  --color-symbol-blue: #0a3fd0;
+  --color-symbol-green: #157a47;
+  --color-symbol-red: #a81e2c;
+  --color-symbol-orange: #b8590a;
+
   /* --- 라운드 --- */
   --radius-xs: 4px;
   --radius-sm: 8px;
@@ -132,6 +139,10 @@
   --text-body-md: 20px;
   --text-body-md--line-height: 1.7;
   --text-body-md--font-weight: 400;
+
+  --text-body-lg: 24px;               /* 읽는 본문 강조(소망·이야기) — 고령 가독 lead */
+  --text-body-lg--line-height: 1.7;
+  --text-body-lg--font-weight: 400;
 
   --text-body-strong: 20px;
   --text-body-strong--line-height: 1.7;
