@@ -1,0 +1,4 @@
+/* 3:4 세로 초상 프레임 — 커스텀 비율은 CSS 모듈로(arbitrary value 금지). 박스 예약으로 CLS 0. */
+.frame { aspect-ratio: 3 / 4; }
+.media { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
+.placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
