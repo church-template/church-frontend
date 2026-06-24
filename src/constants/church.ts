@@ -10,6 +10,13 @@ export const CHURCH_NAME_FULL = "기독교 한국침례회 은샘교회";
 // (실제 DNS 연결은 별개 — 추후 SEO 메타 도입 시 그대로 사용).
 export const CHURCH_DOMAIN = "eunsaem.com";
 
+// 교회 로고 이미지 — 소개 히어로 등에서 소비. 교회별 자산이라 상수로 둔다.
+// alt는 약칭 CHURCH_NAME 기준(DESIGN.md: 로고 표기는 약칭 사용).
+export const CHURCH_LOGO = {
+  src: "/onlyLogo.png",
+  alt: `${CHURCH_NAME} 로고`,
+} as const;
+
 // 히어로 배경 — 정적 에셋(a안). public/ 에 파일을 두고 경로로 참조한다.
 // (백엔드 미디어 서빙은 Range 미지원이라 영상 스트리밍에 부적합 — 백엔드 답변 E, 가이드 13.3)
 export const HERO: HeroMedia = {

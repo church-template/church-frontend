@@ -20,6 +20,7 @@ const twMerge = extendTailwindMerge({
             "title-md",
             "title-sm",
             "body-md",
+            "body-lg",
             "body-strong",
             "body-sm",
             "datetime",

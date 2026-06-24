@@ -14,6 +14,7 @@ export const typo = {
   titleMd: "text-title-md",
   titleSm: "text-title-sm",
   bodyMd: "text-body-md",
+  bodyLg: "text-body-lg", // 읽는 본문 강조(소망·이야기 등) — 고령 가독
   bodyStrong: "text-body-strong",
   bodySm: "text-body-sm",
   datetime: "text-datetime tabular-nums", // 날짜·시간 자릿수 고정(tnum)

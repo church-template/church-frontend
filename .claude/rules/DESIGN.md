@@ -369,6 +369,7 @@ components:
 | `{typography.title-md}` | 22px | 600 | 카드 제목, 목록 제목 |
 | `{typography.title-sm}` | 20px | 600 | 목록 행 제목 (notice-row·bulletin-row) |
 | `{typography.body-md}` | 20px | 400 | 기본 본문 (행간 1.7) |
+| `{typography.body-lg}` | 24px | 400 | 읽는 본문 강조 (소망·이야기 등 장문, 행간 1.7) |
 | `{typography.body-sm}` | 18px | 400 | 보조 본문, 푸터 |
 | `{typography.datetime}` | 18px | 500 | 날짜·시간 (tnum) |
 | `{typography.caption}` | 16px | 400 | 캡션 |

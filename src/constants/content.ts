@@ -4,10 +4,14 @@ import type { HeroMedia } from "@/hero/types";
 export const ABOUT = {
   title: "소개 및 비전",
   statement: "함께함이 축복이 되는 교회",
+  statementHighlight: "축복", // 대표문구에서 primary로 강조할 단어
   intro: [
     "은샘침례교회는 하나님과 함께함이 축복이 되는 교회입니다.",
     "은샘침례교회는 성도들과 함께함이 축복이 되는 교회입니다.",
   ],
+  symbolismHeading: "로고에 담긴 네 가지 고백",
+  symbolismLead:
+    "로고를 감싸는 네 빛깔은 우리가 믿는 복음의 흐름입니다. 하나님의 사랑에서 시작해, 그분이 지으신 세상과 예수님의 보혈을 지나, 구원받은 성도에게로 이어집니다.",
   // 로고 상징색 — 색 자체가 신학적 상징(콘텐츠)이며 UI 브랜드 팔레트와 무관. 색 연출은 나중에.
   symbolism: [
     { color: "파랑색", title: "하나님", lines: ["전능하신 하나님의", "사랑과 은혜"] },
