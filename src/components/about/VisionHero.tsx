@@ -4,6 +4,7 @@ import { Reveal } from "@/components/main/Reveal";
 import { typo } from "@/constants/typography";
 import { cn } from "@/lib/utils";
 import { ABOUT } from "@/constants/content";
+import { CHURCH_LOGO } from "@/constants/church";
 
 // 대표문구에서 강조 단어만 primary로(단일 액센트). 강조어가 없으면 평문 그대로.
 function renderStatement(statement: string, highlight: string) {
@@ -45,8 +46,8 @@ export function VisionHero() {
           className="order-first justify-self-center lg:order-none lg:justify-self-end"
         >
           <Image
-            src="/onlyLogo.png"
-            alt="은샘침례교회 로고"
+            src={CHURCH_LOGO.src}
+            alt={CHURCH_LOGO.alt}
             width={512}
             height={512}
             priority

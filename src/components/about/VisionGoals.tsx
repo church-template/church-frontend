@@ -23,7 +23,7 @@ export function VisionGoals() {
               <li key={point}>
                 <Reveal delay={i * 100}>
                   <div className="flex h-full flex-col gap-base rounded-xl border border-hairline bg-canvas p-xl">
-                    <Icon className="size-8 text-primary" aria-hidden="true" />
+                    <Icon size={32} className="text-primary" aria-hidden="true" />
                     <p className={cn(typo.titleMd, "text-ink")}>{point}</p>
                   </div>
                 </Reveal>
