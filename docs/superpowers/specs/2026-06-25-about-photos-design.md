@@ -84,7 +84,7 @@ export const CHURCH_PHOTOS = {
 
 ## 5. 데이터 흐름
 
-```
+```text
 content.ts CHURCH_PHOTOS (상수)
   └─ page.tsx (서버, 정적 생성) ── props ──▶ ChurchPhotos (client)
                                               ├─ activeKey 토글 → 그룹 그리드 교체

@@ -61,7 +61,7 @@
 
 ## 데이터 흐름
 
-```
+```text
 content.ts CHURCH_PHOTOS (상수)
   └─ page.tsx (서버, 정적 생성) ── props ──▶ ChurchPhotos (client)
                                               ├─ Tabs(activeKey) → 그룹 그리드 교체
