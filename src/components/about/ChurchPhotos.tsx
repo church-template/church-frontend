@@ -32,6 +32,11 @@ export function ChurchPhotos({ empty, groups }: { empty: string; groups: PhotoGr
     if (next >= 0 && next < photos.length) setLightboxIndex(next);
   };
 
+  // groups가 비어 주입되면(외부 데이터) 화면이 빈 채로 남지 않도록 최소 fallback.
+  if (groups.length === 0) {
+    return <EmptyState message={empty} className="mt-xl" />;
+  }
+
   return (
     <>
       <Tabs
