@@ -230,10 +230,39 @@ export const PASTOR = {
   },
 };
 
-// 교회 사진(정적 시설 사진) 페이지 — 자산이 준비되면 그리드로 교체. 지금은 빈 상태 문구만.
-export const CHURCH_PHOTOS = {
+// 교회 사진(정적 시설 사진) — public/photos/{interior,exterior} 정적 에셋을 그룹별로 주입.
+// 분류·경로·alt는 상수에서만(하드코딩 금지). alt는 편집 쉬운 인덱스 기본값.
+export type ChurchPhoto = { src: string; alt: string };
+export type PhotoGroup = { key: string; title: string; photos: ChurchPhoto[] };
+
+export const CHURCH_PHOTOS: { title: string; empty: string; groups: PhotoGroup[] } = {
   title: "교회 사진",
   empty: "교회 사진을 준비 중입니다.",
+  groups: [
+    {
+      key: "interior",
+      title: "교회 내부",
+      photos: [
+        { src: "/photos/interior/in_1.jpg", alt: "교회 내부 1" },
+        { src: "/photos/interior/in_2.jpg", alt: "교회 내부 2" },
+        { src: "/photos/interior/in_3.jpg", alt: "교회 내부 3" },
+        { src: "/photos/interior/in_4.jpg", alt: "교회 내부 4" },
+        { src: "/photos/interior/in_5.jpg", alt: "교회 내부 5" },
+        { src: "/photos/interior/in_6.jpeg", alt: "교회 내부 6" },
+      ],
+    },
+    {
+      key: "exterior",
+      title: "교회 외부",
+      photos: [
+        { src: "/photos/exterior/out_1.jpg", alt: "교회 외부 1" },
+        { src: "/photos/exterior/out_2.jpg", alt: "교회 외부 2" },
+        { src: "/photos/exterior/out_3.jpeg", alt: "교회 외부 3" },
+        { src: "/photos/exterior/out_4.jpg", alt: "교회 외부 4" },
+        { src: "/photos/exterior/out_5.jpeg", alt: "교회 외부 5" },
+      ],
+    },
+  ],
 };
 
 export const LOCATION = {
