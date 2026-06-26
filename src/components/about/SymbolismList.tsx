@@ -12,6 +12,14 @@ const SYMBOL_DOT = [
   "bg-symbol-orange",
 ] as const;
 
+// 제목의 색이름 단어("파랑색" 등)에 입히는 글자색. 점과 같은 순서.
+const SYMBOL_TEXT = [
+  "text-symbol-blue",
+  "text-symbol-green",
+  "text-symbol-red",
+  "text-symbol-orange",
+] as const;
+
 // 밴드2 — 회색. 로고 4색을 01–04 넘버드 에디토리얼 리스트로(큰 색면 없이 작은 점·헤어라인만).
 export function SymbolismList() {
   return (
@@ -30,23 +38,21 @@ export function SymbolismList() {
           {ABOUT.symbolism.map((symbol, i) => (
             <li key={symbol.color} className="border-b border-hairline">
               <Reveal delay={i * 120}>
-                <div className="grid items-start gap-sm py-xl sm:grid-cols-[auto_1fr] sm:gap-xl">
-                  <span className={cn(typo.datetime, "text-muted")}>{`0${i + 1}`}</span>
-                  <div>
-                    <div className="flex items-center gap-sm">
-                      <span
-                        className={cn("size-3 shrink-0 rounded-full", SYMBOL_DOT[i])}
-                        aria-hidden="true"
-                      />
-                      <h3 className={cn(typo.titleLg, "text-ink")}>
-                        {`${symbol.color} · ${symbol.title}`}
-                      </h3>
-                    </div>
-                    <div className={cn(typo.bodyLg, "mt-sm text-ink")}>
-                      {symbol.lines.map((line) => (
-                        <p key={line}>{line}</p>
-                      ))}
-                    </div>
+                <div className="py-xl">
+                  <div className="flex items-center gap-sm">
+                    <span
+                      className={cn("size-3 shrink-0 rounded-full", SYMBOL_DOT[i])}
+                      aria-hidden="true"
+                    />
+                    <h3 className={cn(typo.titleLg, "text-ink")}>
+                      <span className={SYMBOL_TEXT[i]}>{symbol.color}</span>
+                      {` · ${symbol.title}`}
+                    </h3>
+                  </div>
+                  <div className={cn(typo.bodyLg, "mt-sm text-ink")}>
+                    {symbol.lines.map((line) => (
+                      <p key={line}>{line}</p>
+                    ))}
                   </div>
                 </div>
               </Reveal>

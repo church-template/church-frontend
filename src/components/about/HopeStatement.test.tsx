@@ -8,8 +8,9 @@ afterEach(() => vi.unstubAllGlobals());
 describe("HopeStatement", () => {
   it("소망 소제목과 본문을 렌더한다", () => {
     vi.stubGlobal("matchMedia", vi.fn(() => ({ matches: true })));
-    render(<HopeStatement />);
+    const { container } = render(<HopeStatement />);
+    const hopeText = ABOUT.hope.body.map((seg) => seg.text).join("");
     expect(screen.getByText(ABOUT.hope.heading)).toBeDefined();
-    expect(screen.getByText(ABOUT.hope.body)).toBeDefined();
+    expect(container.textContent).toContain(hopeText);
   });
 });

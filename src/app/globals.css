@@ -144,6 +144,10 @@
   --text-body-lg--line-height: 1.7;
   --text-body-lg--font-weight: 400;
 
+  --text-body-lg-strong: 28px;        /* 읽는 본문 내 의미 구절 강조(소망 4색) — body-lg보다 키우고 행간 낮춰 줄높이 유지 */
+  --text-body-lg-strong--line-height: 1.45;
+  --text-body-lg-strong--font-weight: 700;
+
   --text-body-strong: 20px;
   --text-body-strong--line-height: 1.7;
   --text-body-strong--font-weight: 700;
