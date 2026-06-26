@@ -20,8 +20,8 @@ export function VisionGoals() {
           {VISION.points.map((point, i) => {
             const Icon = ICONS[i] ?? Church;
             return (
-              <li key={point}>
-                <Reveal delay={i * 100}>
+              <li key={point} className="h-full">
+                <Reveal delay={i * 100} className="h-full">
                   <div className="flex h-full flex-col gap-base rounded-xl border border-hairline bg-canvas p-xl">
                     <Icon size={32} className="text-primary" aria-hidden="true" />
                     <p className={cn(typo.titleMd, "text-ink")}>{point}</p>
