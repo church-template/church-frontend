@@ -10,7 +10,9 @@ export type ButtonVariant =
   | "outlineOnDark"
   | "tertiary"
   | "pillCta"
-  | "destructive";
+  | "destructive"
+  | "kakao"
+  | "naver";
 
 // 모든 variant: 색·상태·focus-visible 링을 토큰 유틸로만 표현. 높이는 표준 숫자 스케일로 고정.
 // hover는 기존 토큰 재사용(프레스 토큰·표면 톤·on-dark 알파 틴트), 프레스는 1px 가라앉음으로 hover와 구분.
@@ -51,6 +53,17 @@ const variantClass: Record<ButtonVariant, string> = {
     "hover:bg-error-active active:bg-error-active active:translate-y-px",
     "disabled:opacity-50",
     "focus-visible:ring-2 focus-visible:ring-error focus-visible:ring-offset-2 focus-visible:ring-offset-surface-card",
+  ),
+  // 외부 지도 서비스 공식 버튼색(단일 액센트 예외 — 제3자 브랜드). hover/press는 brightness로 절제.
+  kakao: cn(
+    "bg-kakao text-kakao-ink rounded-lg h-12 px-5",
+    "hover:brightness-95 active:brightness-90 active:translate-y-px",
+    "focus-visible:ring-2 focus-visible:ring-kakao focus-visible:ring-offset-2 focus-visible:ring-offset-canvas",
+  ),
+  naver: cn(
+    "bg-naver text-naver-on rounded-lg h-12 px-5",
+    "hover:brightness-95 active:brightness-90 active:translate-y-px",
+    "focus-visible:ring-2 focus-visible:ring-naver focus-visible:ring-offset-2 focus-visible:ring-offset-canvas",
   ),
 };
 

@@ -1,6 +1,25 @@
 // 정적 페이지 콘텐츠·예배 시간·CTA 카피. 배포 시 이 파일만 교체(스펙 D4). 샘플 문구.
 import type { HeroMedia } from "@/hero/types";
 
+// 소망 본문 세그먼트 — 의미 구절 자체를 상징색 글자로(괄호 표기 없이). color 없는 조각은 평문.
+export interface HopeSegment {
+  text: string;
+  color?: "blue" | "green" | "red" | "orange";
+}
+
+const HOPE_BODY: HopeSegment[] = [
+  { text: "하나님의 사랑", color: "blue" },
+  { text: " 안에서, " },
+  { text: "하나님이 만드신 이 세상", color: "green" },
+  { text: " 가운데, " },
+  { text: "예수 그리스도의 보혈", color: "red" },
+  { text: "로 " },
+  { text: "구원받은 성도들", color: "orange" },
+  {
+    text: "이 함께 모여 서로 사랑하고 섬기며, 지역사회와 세상을 향해 하나님의 사랑을 전하는 축복의 통로가 되기를 소망합니다.",
+  },
+];
+
 export const ABOUT = {
   title: "소개 및 비전",
   statement: "함께함이 축복이 되는 교회",
@@ -33,7 +52,7 @@ export const ABOUT = {
   ],
   hope: {
     heading: "우리의 소망",
-    body: "하나님의 사랑(파랑) 안에서, 하나님이 만드신 이 세상(초록) 가운데, 예수 그리스도의 보혈(빨강)로 구원받은 성도들(주황)이 함께 모여 서로 사랑하고 섬기며, 지역사회와 세상을 향해 하나님의 사랑을 전하는 축복의 통로가 되기를 소망합니다.",
+    body: HOPE_BODY,
   },
   story: {
     heading: "우리의 이야기",
@@ -267,9 +286,21 @@ export const CHURCH_PHOTOS: { title: string; empty: string; groups: PhotoGroup[]
 
 export const LOCATION = {
   title: "오시는 길",
-  transit: [
-    "자가용: 교회 주차 공간이 마련되어 있습니다.",
-    "내비게이션: '은샘교회' 또는 '수암산로 260' 검색",
+  lead: "은샘교회를 찾아오시는 길을 안내합니다.",
+  // 약도(그림 지도). 실제 약도 이미지를 public/location/ 에 넣고 src만 교체하면 된다(단일 교체점).
+  map: { src: "/location/map-placeholder.svg", alt: "은샘교회 약도" },
+  directionsHeading: "찾아오는 방법",
+  directions: [
+    {
+      key: "car",
+      title: "자가용",
+      lines: [
+        "교회 주차 공간이 마련되어 있습니다.",
+        "내비게이션: '은샘교회' 또는 '수암산로 260' 검색",
+      ],
+    },
+    // 대중교통 실제 노선 문구는 교회가 채운다(placeholder).
+    { key: "transit", title: "대중교통", lines: ["버스 노선 정보 준비 중입니다."] },
   ],
 };
 

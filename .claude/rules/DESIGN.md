@@ -370,6 +370,7 @@ components:
 | `{typography.title-sm}` | 20px | 600 | 목록 행 제목 (notice-row·bulletin-row) |
 | `{typography.body-md}` | 20px | 400 | 기본 본문 (행간 1.7) |
 | `{typography.body-lg}` | 24px | 400 | 읽는 본문 강조 (소망·이야기 등 장문, 행간 1.7) |
+| `{typography.body-lg-strong}` | 28px | 700 | 읽는 본문 내 의미 구절 인라인 강조 (소망 4색 구절, 행간 1.45로 body-lg 줄높이 유지) |
 | `{typography.body-sm}` | 18px | 400 | 보조 본문, 푸터 |
 | `{typography.datetime}` | 18px | 500 | 날짜·시간 (tnum) |
 | `{typography.caption}` | 16px | 400 | 캡션 |
@@ -445,6 +446,7 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 - **`button-pill-cta`**: 히어로·CTA 밴드용 56px 대형 필 ("새가족 안내", "오시는 길").
 - **`button-secondary-light`** / **`button-outline-on-dark`** / **`button-tertiary-text`**: 보조 위계.
 - **`button-destructive`**: 파괴적 확인(회원 탈퇴 등) 전용 빨강 필(`bg-error` / hover `bg-error-active` / 텍스트 `on-error`). 48px. 페이지 트리거가 아니라 **모달의 확정 버튼**에만 쓴다. 친화 장치는 색이 아니라 비밀번호 재인증·경고문이다.
+- **`button-kakao`** / **`button-naver`**: 외부 지도 "…에서 보기" 버튼 전용(오시는 길). 각 서비스 공식 채움색(카카오 `bg-kakao`+검정 글자 / 네이버 `bg-naver`+흰 글자, hover·press는 `brightness`로 절제). **단일 액센트 원칙의 의도적 예외** — 제3자 브랜드라 교회 팔레트가 아니며 이 두 버튼 외엔 쓰지 않는다. 토큰: globals.css `--color-kakao`·`--color-kakao-ink`·`--color-naver`·`--color-naver-on`.
 
 ### 콘텐츠 카드
 - **`sermon-card`**: 16:9 썸네일(상단, 라운드는 카드와 함께 24px) + 제목
@@ -561,7 +563,7 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 - 본문 행간 1.7 유지.
 
 ### Don't
-- 두 번째 브랜드 컬러를 도입하지 않는다.
+- 두 번째 브랜드 컬러를 도입하지 않는다 — **단, 외부 지도 서비스 공식 버튼(`button-kakao`·`button-naver`)은 예외**(제3자 브랜드색, 해당 버튼에만).
 - 디스플레이를 700+로 볼드하지 않는다.
 - 그림자 단계를 추가하지 않는다.
 - CTA에 직각 모서리를 쓰지 않는다.
