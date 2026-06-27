@@ -286,9 +286,21 @@ export const CHURCH_PHOTOS: { title: string; empty: string; groups: PhotoGroup[]
 
 export const LOCATION = {
   title: "오시는 길",
-  transit: [
-    "자가용: 교회 주차 공간이 마련되어 있습니다.",
-    "내비게이션: '은샘교회' 또는 '수암산로 260' 검색",
+  lead: "은샘교회를 찾아오시는 길을 안내합니다.",
+  // 약도(그림 지도). 실제 약도 이미지를 public/location/ 에 넣고 src만 교체하면 된다(단일 교체점).
+  map: { src: "/location/map-placeholder.svg", alt: "은샘교회 약도" },
+  directionsHeading: "찾아오는 방법",
+  directions: [
+    {
+      key: "car",
+      title: "자가용",
+      lines: [
+        "교회 주차 공간이 마련되어 있습니다.",
+        "내비게이션: '은샘교회' 또는 '수암산로 260' 검색",
+      ],
+    },
+    // 대중교통 실제 노선 문구는 교회가 채운다(placeholder).
+    { key: "transit", title: "대중교통", lines: ["버스 노선 정보 준비 중입니다."] },
   ],
 };
 
