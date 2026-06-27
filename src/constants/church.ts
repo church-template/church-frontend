@@ -53,3 +53,7 @@ export const MAP_EMBED_SRC = "";
 // 임베드 미설정 시 외부 지도 폴백 — 교회/배포처가 지도 제공자를 바꿀 수 있게 상수로 노출.
 export const mapSearchUrl = (address: string) =>
   `https://map.kakao.com/?q=${encodeURIComponent(address)}`;
+
+// 네이버지도 폴백 — 카카오와 함께 외부 지도 선택지로 제공(둘 다 주소 검색).
+export const naverMapSearchUrl = (address: string) =>
+  `https://map.naver.com/p/search/${encodeURIComponent(address)}`;

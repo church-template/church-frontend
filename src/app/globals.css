@@ -44,6 +44,14 @@
   --color-symbol-red: #a81e2c;
   --color-symbol-orange: #b8590a;
 
+  /* --- 외부 지도 서비스 브랜드색 (카카오·네이버 "…에서 보기" 버튼 전용).
+   *     단일 액센트 원칙의 의도적 예외 — 제3자 공식 버튼색이라 교회 브랜드 팔레트 아님.
+   *     button-kakao/naver 외엔 쓰지 않는다(큰 색면·다른 CTA 금지). --- */
+  --color-kakao: #fee500;
+  --color-kakao-ink: #000000;         /* 카카오 노랑 위 라벨(공식 검정) */
+  --color-naver: #03c75a;
+  --color-naver-on: #ffffff;          /* 네이버 초록 위 라벨(흰색) */
+
   /* --- 라운드 --- */
   --radius-xs: 4px;
   --radius-sm: 8px;
