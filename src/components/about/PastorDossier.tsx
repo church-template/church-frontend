@@ -33,7 +33,7 @@ export function PastorDossier() {
           {PASTOR.credentials.items.map((item, i) => (
             <li key={item} className="border-t border-hairline-soft first:border-t-0">
               <Reveal delay={i * 120}>
-                <p className={cn(typo.bodyMd, "py-base text-body")}>{item}</p>
+                <p className={cn(typo.bodyLg, "py-base text-body")}>{item}</p>
               </Reveal>
             </li>
           ))}

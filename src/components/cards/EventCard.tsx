@@ -25,9 +25,9 @@ export function EventCard({ date, title, time, location, summary, href }: EventC
       <h3 className={cn(typo.titleMd, "mt-base text-ink")}>{title}</h3>
       {time ? <p className={cn(typo.datetime, "mt-xs text-body")}>{time}</p> : null}
       {location ? (
-        <p className={cn(typo.bodySm, "mt-xxs text-muted")}>{location}</p>
+        <p className={cn(typo.bodyMd, "mt-xxs text-muted")}>{location}</p>
       ) : null}
-      {summary ? <p className={cn(typo.bodySm, "mt-xs text-body")}>{summary}</p> : null}
+      {summary ? <p className={cn(typo.bodyMd, "mt-xs text-body")}>{summary}</p> : null}
     </>
   );
 

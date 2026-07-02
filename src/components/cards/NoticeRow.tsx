@@ -28,7 +28,7 @@ export function NoticeRow({ title, date, href, isPinned = false, isNew = false }
         {/* hover 시 제목만 primary로 전이 — 행 전체가 링크임을 조용히 알린다. */}
         <span
           className={cn(
-            typo.titleSm,
+            typo.titleMd,
             "truncate text-ink transition-colors duration-150 ease-out group-hover:text-primary",
           )}
         >

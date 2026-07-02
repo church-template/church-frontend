@@ -19,8 +19,8 @@ export function PastorIntro() {
               <span className={cn(typo.titleMd, "text-muted")}>{PASTOR.position}</span>
             </h1>
             <p className={cn(typo.datetime, "mt-xs text-muted")}>{PASTOR.degree}</p>
-            <p className={cn(typo.bodyMd, "mt-lg text-body")}>{PASTOR.intro}</p>
-            <div className={cn(typo.bodyMd, "mt-base text-body")}>
+            <p className={cn(typo.bodyLg, "mt-lg text-body")}>{PASTOR.intro}</p>
+            <div className={cn(typo.bodyLg, "mt-base text-body")}>
               {PASTOR.greeting.map((p) => (
                 <p key={p} className="mt-base first:mt-0">
                   {p}

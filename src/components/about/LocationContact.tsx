@@ -19,18 +19,18 @@ export function LocationContact() {
     <Container as="section" className="break-keep py-section">
       <Reveal>
         <h1 className={cn(typo.displayMd, "text-ink")}>{LOCATION.title}</h1>
-        <p className={cn(typo.bodyMd, "mt-base text-body")}>{LOCATION.lead}</p>
+        <p className={cn(typo.bodyLg, "mt-base text-body")}>{LOCATION.lead}</p>
 
         <div className="mt-xxl grid gap-xl lg:grid-cols-[5fr_7fr] lg:items-start">
           {/* 좌 — 연락 정보 */}
           <dl className="border-t border-hairline">
             <div className="border-b border-hairline py-base">
               <dt className={cn(typo.captionStrong, "text-muted")}>주소</dt>
-              <dd className={cn(typo.bodyMd, "mt-xs text-ink")}>{CHURCH_ADDRESS}</dd>
+              <dd className={cn(typo.bodyLg, "mt-xs text-ink")}>{CHURCH_ADDRESS}</dd>
             </div>
             <div className="border-b border-hairline py-base">
               <dt className={cn(typo.captionStrong, "text-muted")}>전화</dt>
-              <dd className={cn(typo.bodyMd, "mt-xs text-ink")}>
+              <dd className={cn(typo.bodyLg, "mt-xs text-ink")}>
                 <a href={`tel:${CHURCH_PHONE}`} className="hover:text-primary">
                   {CHURCH_PHONE}
                 </a>
@@ -38,7 +38,7 @@ export function LocationContact() {
             </div>
             <div className="border-b border-hairline py-base">
               <dt className={cn(typo.captionStrong, "text-muted")}>이메일</dt>
-              <dd className={cn(typo.bodyMd, "mt-xs break-all text-ink")}>
+              <dd className={cn(typo.bodyLg, "mt-xs break-all text-ink")}>
                 <a href={`mailto:${CHURCH_EMAIL}`} className="hover:text-primary">
                   {CHURCH_EMAIL}
                 </a>

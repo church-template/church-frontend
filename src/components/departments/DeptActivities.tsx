@@ -17,7 +17,7 @@ export function DeptActivities({ heading, items }: { heading: string; items: str
               className="flex items-center gap-sm border-b border-hairline py-base last:border-b-0"
             >
               <Check size={20} aria-hidden className="shrink-0 text-muted" />
-              <span className={cn(typo.bodyMd, "text-body")}>{item}</span>
+              <span className={cn(typo.bodyLg, "text-body")}>{item}</span>
             </li>
           ))}
         </ul>

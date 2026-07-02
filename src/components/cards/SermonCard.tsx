@@ -51,7 +51,7 @@ export function SermonCard({
       {/* flex-col + mt-auto: 칩을 위로, preacher·date를 카드 맨 아래로 고정(동일 높이 카드에서 날짜 하단 정렬). */}
       <div className="p-xl flex flex-1 flex-col">
         {subtitle ? (
-          <p className={cn(typo.caption, "text-muted")}>{subtitle}</p>
+          <p className={cn(typo.bodySm, "text-body")}>{subtitle}</p>
         ) : null}
         <h3 className={cn(typo.titleMd, "text-ink", subtitle && "mt-xxs")}>{title}</h3>
         {tags && tags.length > 0 ? (

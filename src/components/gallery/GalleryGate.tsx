@@ -78,7 +78,7 @@ function GalleryNotice({ title, body, action }: { title: string; body: string; a
   return (
     <div role="status" className="mt-xl flex flex-col items-center gap-sm py-xxl text-center">
       <p className={cn(typo.titleMd, "text-ink")}>{title}</p>
-      <p className={cn(typo.bodySm, "text-muted")}>{body}</p>
+      <p className={cn(typo.bodyMd, "text-muted")}>{body}</p>
       {action ? <div className="mt-sm">{action}</div> : null}
     </div>
   );

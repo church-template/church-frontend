@@ -32,15 +32,15 @@ export const HistoryChapter = forwardRef<HTMLLIElement, HistoryChapterProps>(
             <h2 id={headingId} className={cn(typo.displayMd, "text-ink")}>
               {item.text}
             </h2>
-            <p className={cn(typo.bodyMd, "text-body")}>{item.desc}</p>
+            <p className={cn(typo.bodyLg, "text-body")}>{item.desc}</p>
             <ul className={styles.cardDetails}>
               {item.details.map((d) => (
-                <li key={d} className={cn(typo.bodyMd, "text-body")}>
+                <li key={d} className={cn(typo.bodyLg, "text-body")}>
                   {d}
                 </li>
               ))}
             </ul>
-            <p className={cn(typo.bodyMd, "text-ink", styles.cardSig)}>{item.significance}</p>
+            <p className={cn(typo.bodyLg, "text-ink", styles.cardSig)}>{item.significance}</p>
           </div>
         </Reveal>
       </li>

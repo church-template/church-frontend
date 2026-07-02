@@ -19,7 +19,7 @@ export function EventDetailView({ event }: { event: EventDetailResponse }) {
     <div>
       <p className={cn(typo.datetime, "text-muted")}>{timeLine}</p>
       {event.location ? (
-        <p className={cn(typo.bodySm, "mt-xxs text-muted")}>{event.location}</p>
+        <p className={cn(typo.bodyMd, "mt-xxs text-muted")}>{event.location}</p>
       ) : null}
       {event.tags.length > 0 ? (
         <div className="mt-base flex flex-wrap gap-xs">

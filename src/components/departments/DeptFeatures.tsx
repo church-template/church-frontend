@@ -33,7 +33,7 @@ export function DeptFeatures({
     <Container as="section" className="break-keep py-section">
       <Reveal>
         <h2 className={cn(typo.displayMd, "text-ink")}>{heading}</h2>
-        {lead ? <p className={cn(typo.bodyMd, "mt-base text-body")}>{lead}</p> : null}
+        {lead ? <p className={cn(typo.bodyLg, "mt-base text-body")}>{lead}</p> : null}
       </Reveal>
       <div className="mt-lg grid gap-base sm:grid-cols-3">
         {items.map((f, i) => {

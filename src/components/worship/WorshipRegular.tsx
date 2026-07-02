@@ -11,7 +11,7 @@ export function WorshipRegular() {
     <Container as="section" className="break-keep py-section">
       <Reveal>
         <h1 className={cn(typo.displayMd, "text-ink")}>{WORSHIP.title}</h1>
-        <p className={cn(typo.bodyMd, "mt-base text-body")}>{WORSHIP.regularLead}</p>
+        <p className={cn(typo.bodyLg, "mt-base text-body")}>{WORSHIP.regularLead}</p>
       </Reveal>
       <ul className="mt-xxl grid gap-base sm:grid-cols-2">
         {WORSHIP_SERVICES.map((s, i) => (
@@ -23,7 +23,7 @@ export function WorshipRegular() {
                 {s.praise ? (
                   <p className={cn(typo.datetime, "mt-xxs text-muted")}>{s.praise}</p>
                 ) : null}
-                <div className={cn(typo.bodySm, "mt-base text-body")}>
+                <div className={cn(typo.bodyMd, "mt-base text-body")}>
                   {s.notes.map((note) => (
                     <p key={note} className="mt-xs first:mt-0">
                       {note}
