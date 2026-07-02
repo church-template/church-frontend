@@ -33,7 +33,7 @@ export function AlbumDetail({ id }: { id: number }) {
         </div>
       ) : isError || !album ? (
         <div className="mt-lg flex flex-col items-start gap-sm">
-          <p className={cn(typo.bodySm, "text-muted")}>앨범을 불러오지 못했습니다.</p>
+          <p className={cn(typo.bodyMd, "text-muted")}>앨범을 불러오지 못했습니다.</p>
           <Button variant="secondary" onClick={() => refetch()}>
             다시 시도
           </Button>

@@ -42,7 +42,7 @@ export function AlbumList() {
         </div>
       ) : albums.isError || !albums.data ? (
         <div className="flex flex-col items-start gap-sm py-xl">
-          <p className={cn(typo.bodySm, "text-muted")}>앨범을 불러오지 못했습니다.</p>
+          <p className={cn(typo.bodyMd, "text-muted")}>앨범을 불러오지 못했습니다.</p>
           <Button variant="secondary" onClick={() => albums.refetch()}>
             다시 시도
           </Button>

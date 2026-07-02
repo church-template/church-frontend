@@ -18,7 +18,7 @@ export function DeptInfo({ heading, items }: { heading: string; items: DeptInfoI
             <Reveal key={it.label} delay={i * 120} className="h-full">
               <Card className="h-full p-xl">
                 <dl>
-                  <dt className={cn(typo.bodySm, "text-muted")}>{it.label}</dt>
+                  <dt className={cn(typo.bodyMd, "text-muted")}>{it.label}</dt>
                   <dd className={cn(typo.titleMd, "mt-xs text-ink")}>{it.value}</dd>
                 </dl>
               </Card>
