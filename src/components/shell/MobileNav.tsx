@@ -41,17 +41,24 @@ export function MobileNav({ open, onOpenChange }: MobileNavProps) {
       {/* aria-describedby 명시적 해제 — 네비 시트는 별도 설명 텍스트가 불필요(Radix 경고 억제) */}
       <SheetContent side="right" className="gap-lg" aria-describedby={undefined}>
         <SheetTitle>메뉴</SheetTitle>
+        <div className="flex flex-col gap-xs border-b border-hairline pb-base">
+          <SheetClose asChild>
+            <Link href={authLink.href} className={cn(typo.navLink, "text-primary")}>
+              {authLink.label}
+            </Link>
+          </SheetClose>
+        </div>
         <nav className="flex flex-col gap-base">
           {NAV_PRIMARY.map((item) => (
             <div key={item.label} className="flex flex-col gap-xs">
               <SheetClose asChild>
-                <Link href={item.href} className={cn(typo.navLink, "text-ink")}>
+                <Link href={item.href} className={cn(typo.titleMd, "text-ink")}>
                   {item.label}
                 </Link>
               </SheetClose>
               {item.children.map((c) => (
                 <SheetClose asChild key={c.href}>
-                  <Link href={c.href} className={cn(typo.bodySm, "pl-sm text-body")}>
+                  <Link href={c.href} className={cn(typo.bodyMd, "pl-sm text-body")}>
                     {c.label}
                   </Link>
                 </SheetClose>
@@ -59,13 +66,6 @@ export function MobileNav({ open, onOpenChange }: MobileNavProps) {
             </div>
           ))}
         </nav>
-        <div className="mt-auto flex flex-col gap-xs border-t border-hairline pt-base">
-          <SheetClose asChild>
-            <Link href={authLink.href} className={cn(typo.navLink, "text-primary")}>
-              {authLink.label}
-            </Link>
-          </SheetClose>
-        </div>
       </SheetContent>
     </Sheet>
   );
