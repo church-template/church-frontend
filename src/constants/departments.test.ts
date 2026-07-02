@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import {
   DEPARTMENTS,
   DEPT_PAGE,
+  DEPT_SECTIONS,
   allDepartmentSlugs,
   findDepartment,
   thumbnailOf,
@@ -65,5 +66,29 @@ describe("사역 부서 상수", () => {
     expect(DEPT_PAGE.title.length).toBeGreaterThan(0);
     expect(DEPT_PAGE.leaderLabel.length).toBeGreaterThan(0);
     expect(DEPT_PAGE.subHeading.length).toBeGreaterThan(0);
+  });
+
+  it("학생부는 보강 섹션 데이터(intro·features·info·activities·programs·gallery·invite)를 보유한다", () => {
+    const student = findDepartment("student")!;
+    expect(student.intro?.heading).toBe("학생부 소개");
+    expect(student.features).toHaveLength(3);
+    expect(student.features?.[0]).toMatchObject({ icon: "book", title: "청소년 신앙 교육" });
+    expect(student.info?.map((i) => i.label)).toEqual([
+      "담당자",
+      "모임 시간",
+      "연락처",
+      "모임 장소",
+    ]);
+    expect(student.activities).toHaveLength(4);
+    expect(student.programs).toHaveLength(4);
+    expect(student.gallery?.length).toBeGreaterThan(0);
+    expect(student.invite?.heading).toBe("학생부에서 함께해요");
+  });
+
+  it("섹션 헤딩 상수를 노출한다(하드코딩 0)", () => {
+    expect(DEPT_SECTIONS.info).toBe("알림 사항");
+    expect(DEPT_SECTIONS.activities.length).toBeGreaterThan(0);
+    expect(DEPT_SECTIONS.programs.length).toBeGreaterThan(0);
+    expect(DEPT_SECTIONS.gallery.length).toBeGreaterThan(0);
   });
 });
