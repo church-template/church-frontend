@@ -304,17 +304,72 @@ export const LOCATION = {
   ],
 };
 
+export const WORSHIP = {
+  title: "예배 시간 안내",
+  regularLead: "매주 드리는 정기 예배에 참여하여 하나님과 더 가까이 만나세요.",
+  specialHeading: "특별 예배",
+  specialLead: "연중 진행되는 의미 있는 특별 예배들입니다.",
+  placeHeading: "예배 장소 안내",
+  placeLead: "모든 예배는 교회에서 진행됩니다.",
+  placeLandmark: "유리 건물",
+  attendHeading: "예배 참석 안내",
+  attendLead: "처음 오시는 분들도 편안하게 참석하실 수 있습니다.",
+  attendNotes: [
+    "오전 10시 40분부터 찬양으로 예배합니다.",
+    "예배 후 간단한 교제 시간이 있습니다.",
+    "주차 공간이 준비되어 있습니다.",
+  ],
+};
+
 export interface WorshipService {
   name: string;
   time: string;
-  place: string;
+  place: string; // 기존 유지 — 메인 ScheduleCard 소비
+  praise?: string; // 찬양 시간 서브라인(없으면 생략)
+  notes: string[]; // 예배별 설명 3줄
 }
-export const WORSHIP = { title: "예배 시간 안내" };
 export const WORSHIP_SERVICES: WorshipService[] = [
-  { name: "새벽예배", time: "월~토 오전 5:30", place: "본당" },
-  { name: "주일예배", time: "주일 오전 11:00", place: "본당" },
-  { name: "수요예배", time: "수요일 오후 7:20", place: "본당" },
-  { name: "학생·청년예배", time: "토요일 오전 11:00", place: "본당" },
+  {
+    name: "새벽예배",
+    time: "월~토 오전 5:30",
+    place: "본당",
+    notes: ["새벽 기도와 말씀 묵상", "하루를 시작하는 은혜로운 시간", "조용하고 경건한 분위기"],
+  },
+  {
+    name: "주일예배",
+    time: "주일 오전 11:00",
+    place: "본당",
+    praise: "오전 10시 40분 찬양",
+    notes: ["주일 대예배 시간", "전 성도가 함께 드리는 예배", "설교·찬양·성찬식 진행"],
+  },
+  {
+    name: "수요예배",
+    time: "수요일 오후 7:20",
+    place: "본당",
+    praise: "오후 7시 찬양",
+    notes: ["주중 말씀 은혜를 받는 시간", "성경 공부와 기도", "친밀한 교제와 나눔"],
+  },
+  {
+    name: "학생·청년예배",
+    time: "토요일 오전 11:00",
+    place: "본당",
+    notes: ["주말 예배 시간", "자유롭고 은혜로운 분위기", "학생·청년들을 위한 예배"],
+  },
+];
+
+export interface SpecialService {
+  name: string;
+  date: string; // 배지 — "1월 1일", "부활절 주일" 등 서술형 혼용
+  time: string;
+  desc: string;
+}
+export const SPECIAL_SERVICES: SpecialService[] = [
+  { name: "송구영신 예배", date: "1월 1일", time: "오전 0시", desc: "새해를 맞아 하나님께 감사드리는 특별예배" },
+  { name: "부활절 예배", date: "부활절 주일", time: "오전 11시", desc: "예수님의 부활을 기념하는 특별예배" },
+  { name: "창립기념감사 예배", date: "5월 셋째 주일", time: "오전 11시", desc: "교회 창립을 기념하며 하나님께 감사드리는 예배" },
+  { name: "맥추 감사절 예배", date: "6월 마지막 주일", time: "오전 11시", desc: "맥추 감사절을 맞아 첫 열매를 드리며 감사드리는 예배" },
+  { name: "추수 감사절 예배", date: "11월 셋째 주일", time: "오전 11시", desc: "한 해의 은혜를 되돌아보며 감사드리는 예배" },
+  { name: "성탄절 예배", date: "12월 25일", time: "오전 11시", desc: "예수님의 탄생을 기념하는 성탄절 특별예배" },
 ];
 
 export const CTA_BAND = {
