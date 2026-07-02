@@ -1,15 +1,29 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { WORSHIP, WORSHIP_SERVICES } from "@/constants/content";
+import type { ReactNode } from "react";
+import { WORSHIP } from "@/constants/content";
+
+vi.mock("next/link", () => ({
+  default: ({ href, children, ...rest }: { href: string; children: ReactNode }) => (
+    <a href={href} {...rest}>
+      {children}
+    </a>
+  ),
+}));
+
 import WorshipPage from "./page";
 
 describe("WorshipPage", () => {
-  it("제목과 예배 시간 카드를 렌더한다", () => {
+  it("정기·특별·장소 세 섹션을 조립해 렌더한다", () => {
+    vi.stubGlobal("matchMedia", vi.fn(() => ({ matches: true })));
     render(<WorshipPage />);
-    expect(screen.getByText(WORSHIP.title)).toBeDefined();
-    expect(screen.getByText(WORSHIP_SERVICES[0].name)).toBeDefined();
-    expect(screen.getByText(WORSHIP_SERVICES[0].time)).toBeDefined();
-    // 4종 전부 렌더되는지(slice 회귀 방지)
-    expect(screen.getAllByRole("heading", { level: 2 })).toHaveLength(WORSHIP_SERVICES.length);
+
+    expect(screen.getByRole("heading", { level: 1, name: WORSHIP.title })).toBeDefined();
+    expect(
+      screen.getByRole("heading", { level: 2, name: WORSHIP.specialHeading }),
+    ).toBeDefined();
+    expect(
+      screen.getByRole("heading", { level: 2, name: WORSHIP.placeHeading }),
+    ).toBeDefined();
   });
 });
