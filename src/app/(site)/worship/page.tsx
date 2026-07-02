@@ -1,21 +1,14 @@
-import { Container } from "@/components/shell/Container";
-import { typo } from "@/constants/typography";
-import { cn } from "@/lib/utils";
-import { WORSHIP, WORSHIP_SERVICES } from "@/constants/content";
+import { WorshipRegular } from "@/components/worship/WorshipRegular";
+import { WorshipSpecial } from "@/components/worship/WorshipSpecial";
+import { WorshipPlace } from "@/components/worship/WorshipPlace";
 
+// 예배 시간 안내 — 정적 생성(공개 콘텐츠는 상수 주입, API 호출 없음).
 export default function WorshipPage() {
   return (
-    <Container as="section" className="py-section">
-      <h1 className={cn(typo.displayMd, "text-ink")}>{WORSHIP.title}</h1>
-      <div className="mt-lg grid gap-base sm:grid-cols-2 lg:grid-cols-3">
-        {WORSHIP_SERVICES.map((s) => (
-          <div key={s.name} className="rounded-xl bg-surface-soft p-xl">
-            <h2 className={cn(typo.titleMd, "text-ink")}>{s.name}</h2>
-            <p className={cn(typo.datetime, "mt-xs text-body")}>{s.time}</p>
-            <p className={cn(typo.bodySm, "text-muted")}>{s.place}</p>
-          </div>
-        ))}
-      </div>
-    </Container>
+    <>
+      <WorshipRegular />
+      <WorshipSpecial />
+      <WorshipPlace />
+    </>
   );
 }
