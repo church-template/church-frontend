@@ -56,6 +56,7 @@ export default async function DepartmentDetailPage({
             <MarkdownContent source={dept.description} className="mt-base" />
           ) : null}
         </Container>
+        {/* 서사 퍼널: 소개 → 사진(감정 후크) → 활동·프로그램(무엇을) → 알림(언제/어디서) → 초대. */}
         {dept.intro && dept.features?.length ? (
           <DeptFeatures
             heading={dept.intro.heading}
@@ -63,16 +64,16 @@ export default async function DepartmentDetailPage({
             items={dept.features}
           />
         ) : null}
-        {dept.info?.length ? <DeptInfo heading={DEPT_SECTIONS.info} items={dept.info} /> : null}
+        {dept.gallery?.length ? (
+          <DeptGallery heading={DEPT_SECTIONS.gallery} photos={dept.gallery} />
+        ) : null}
         {dept.activities?.length ? (
           <DeptActivities heading={DEPT_SECTIONS.activities} items={dept.activities} />
         ) : null}
         {dept.programs?.length ? (
           <DeptPrograms heading={DEPT_SECTIONS.programs} items={dept.programs} />
         ) : null}
-        {dept.gallery?.length ? (
-          <DeptGallery heading={DEPT_SECTIONS.gallery} photos={dept.gallery} />
-        ) : null}
+        {dept.info?.length ? <DeptInfo heading={DEPT_SECTIONS.info} items={dept.info} /> : null}
         {dept.invite ? (
           <DeptInvite heading={dept.invite.heading} body={dept.invite.body} />
         ) : null}
