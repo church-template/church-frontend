@@ -57,7 +57,7 @@ export default async function SermonDetailPage({
       </p>
 
       {sermon.scripture || sermon.series ? (
-        <p className={cn(typo.bodySm, "mt-xxs text-body")}>
+        <p className={cn(typo.bodyMd, "mt-xxs text-body")}>
           {sermon.scripture ? <span>{sermon.scripture}</span> : null}
           {sermon.scripture && sermon.series ? " · " : ""}
           {sermon.series ? (

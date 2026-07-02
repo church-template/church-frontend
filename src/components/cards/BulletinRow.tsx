@@ -23,11 +23,11 @@ export function BulletinRow({ title, date, author, pdfUrl, actions }: BulletinRo
       )}
     >
       <span className="flex min-w-0 flex-col gap-xs">
-        <span className={cn(typo.titleSm, "truncate text-ink transition-colors duration-150 ease-out group-hover:text-primary")}>
+        <span className={cn(typo.titleMd, "truncate text-ink transition-colors duration-150 ease-out group-hover:text-primary")}>
           {title}
           <span className="sr-only">(새 탭에서 PDF 열림)</span>
         </span>
-        {author ? <span className={cn(typo.bodySm, "text-muted")}>{author}</span> : null}
+        {author ? <span className={cn(typo.bodyMd, "text-muted")}>{author}</span> : null}
       </span>
       <span className={cn(typo.datetime, "shrink-0 text-muted")}>{date}</span>
     </a>
