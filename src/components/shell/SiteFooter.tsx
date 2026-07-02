@@ -22,7 +22,7 @@ export function SiteFooter() {
         <div className="flex flex-col gap-xs lg:col-span-2">
           <span className={cn(typo.titleMd, "text-primary")}>{CHURCH_NAME}</span>
           {/* 주소는 한 줄 유지 — 좁은 컬럼에서 "260"만 다음 줄로 떨어지는 것 방지(전화·이메일은 짧아 영향 없음) */}
-          <address className={cn(typo.bodySm, "not-italic text-muted whitespace-nowrap")}>
+          <address className={cn(typo.bodyMd, "not-italic text-muted whitespace-nowrap")}>
             {CHURCH_ADDRESS}
             <br />
             {CHURCH_PHONE}
@@ -37,7 +37,7 @@ export function SiteFooter() {
               <Link
                 key={l.href}
                 href={l.href}
-                className={cn(typo.bodySm, "text-body hover:text-ink")}
+                className={cn(typo.bodyMd, "text-body hover:text-ink")}
               >
                 {l.label}
               </Link>

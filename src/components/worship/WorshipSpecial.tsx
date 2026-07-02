@@ -12,7 +12,7 @@ export function WorshipSpecial() {
       <Container>
         <Reveal>
           <h2 className={cn(typo.titleLg, "text-ink")}>{WORSHIP.specialHeading}</h2>
-          <p className={cn(typo.bodyMd, "mt-base text-body")}>{WORSHIP.specialLead}</p>
+          <p className={cn(typo.bodyLg, "mt-base text-body")}>{WORSHIP.specialLead}</p>
         </Reveal>
         <ul className="mt-xxl grid gap-base sm:grid-cols-2 lg:grid-cols-3">
           {SPECIAL_SERVICES.map((s, i) => (

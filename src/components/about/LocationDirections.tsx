@@ -25,7 +25,7 @@ export function LocationDirections() {
                   <div className="flex h-full flex-col gap-base rounded-xl border border-hairline bg-canvas p-xl">
                     <Icon size={32} className="text-primary" aria-hidden="true" />
                     <h3 className={cn(typo.titleMd, "text-ink")}>{item.title}</h3>
-                    <div className={cn(typo.bodyMd, "text-body")}>
+                    <div className={cn(typo.bodyLg, "text-body")}>
                       {item.lines.map((line) => (
                         <p key={line} className="mt-xs first:mt-0">
                           {line}

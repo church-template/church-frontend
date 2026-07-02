@@ -277,8 +277,9 @@ body {
  * @tailwindcss/typography(스택 밖) 미사용 — 토큰만 참조.
  * ============================================================ */
 .prose-church {
-  font-size: var(--text-body-md);
-  line-height: var(--text-body-md--line-height);
+  /* 상세 본문(설교·공지·일정·앨범·부서 description)은 장문 '읽는 본문' — 고령 가독 위해 body-lg(24px) lead. */
+  font-size: var(--text-body-lg);
+  line-height: var(--text-body-lg--line-height);
   color: var(--color-body);
 }
 .prose-church > * + * {

@@ -17,12 +17,12 @@ export function WorshipPlace() {
             {/* 좌 — 장소 안내 */}
             <div>
               <h2 className={cn(typo.titleLg, "text-on-dark")}>{WORSHIP.placeHeading}</h2>
-              <p className={cn(typo.bodyMd, "mt-base text-on-dark-soft")}>{WORSHIP.placeLead}</p>
+              <p className={cn(typo.bodyLg, "mt-base text-on-dark-soft")}>{WORSHIP.placeLead}</p>
               <dl className="mt-xl grid gap-lg">
                 <div>
                   <dt className={cn(typo.captionStrong, "text-on-dark-soft")}>주소</dt>
                   <dd className={cn(typo.bodyMd, "mt-xs text-on-dark")}>{CHURCH_ADDRESS}</dd>
-                  <dd className={cn(typo.bodySm, "mt-xxs text-on-dark-soft")}>
+                  <dd className={cn(typo.bodyMd, "mt-xxs text-on-dark-soft")}>
                     {WORSHIP.placeLandmark}
                   </dd>
                 </div>
@@ -45,7 +45,7 @@ export function WorshipPlace() {
             {/* 우 — 참석 안내 */}
             <div>
               <h3 className={cn(typo.titleMd, "text-on-dark")}>{WORSHIP.attendHeading}</h3>
-              <p className={cn(typo.bodySm, "mt-base text-on-dark-soft")}>{WORSHIP.attendLead}</p>
+              <p className={cn(typo.bodyMd, "mt-base text-on-dark-soft")}>{WORSHIP.attendLead}</p>
               <div className={cn(typo.bodyMd, "mt-base text-on-dark")}>
                 {WORSHIP.attendNotes.map((note) => (
                   <p key={note} className="mt-sm first:mt-0">
