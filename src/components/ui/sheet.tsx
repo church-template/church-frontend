@@ -49,7 +49,7 @@ const SheetContent = forwardRef<
     <SheetPrimitive.Content
       ref={ref}
       className={cn(
-        "fixed z-overlay flex flex-col gap-base border border-hairline bg-surface-card p-xl text-ink shadow-soft",
+        "fixed z-overlay flex flex-col gap-base overflow-y-auto overscroll-contain border border-hairline bg-surface-card p-xl text-ink shadow-soft",
         sheetSide[side],
         className,
       )}
