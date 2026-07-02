@@ -42,6 +42,15 @@ describe("DepartmentDetailPage (상세)", () => {
     // 실제 교회는 담당자·하위부서가 없어 해당 영역(인도 줄·하위부서 섹션)은 노출되지 않는다
     expect(screen.queryByText(/인도 ·/)).toBeNull();
     expect(screen.queryByRole("heading", { name: DEPT_PAGE.subHeading })).toBeNull();
+
+    // 보강 섹션(학생부 상수 구동)이 노출된다
+    expect(screen.getByRole("heading", { name: "알림 사항" })).toBeDefined();
+    expect(screen.getByText("학생부 담당 선생님")).toBeDefined();
+    expect(screen.getByRole("heading", { name: "주요 활동" })).toBeDefined();
+    expect(screen.getByRole("heading", { name: "특별 프로그램" })).toBeDefined();
+    expect(screen.getByRole("heading", { name: "여름 수련회" })).toBeDefined();
+    expect(screen.getByRole("heading", { name: "활동 사진" })).toBeDefined();
+    expect(screen.getByRole("heading", { name: "학생부에서 함께해요" })).toBeDefined();
   });
 
   it("없는 slug면 notFound()", async () => {
