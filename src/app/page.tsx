@@ -7,7 +7,6 @@ import { EventSection } from "@/components/main/EventSection";
 import { CtaBand } from "@/components/shell/CtaBand";
 import { SiteFooter } from "@/components/shell/SiteFooter";
 import { getMain } from "@/lib/api/main";
-import { MediaCollage } from "@/hero/MediaCollage";
 import { HistoryBand } from "@/components/main/HistoryBand";
 import { MinistryCards } from "@/components/main/MinistryCards";
 import { HERO, HERO_CAPTION, COLLAGE_TILES } from "@/constants/church";
@@ -28,8 +27,7 @@ export default async function Home() {
 
   return (
     <>
-      <HeroHeaderSync media={HERO} caption={caption}>
-        <MediaCollage center={HERO} tiles={COLLAGE_TILES} />
+      <HeroHeaderSync media={HERO} caption={caption} tiles={COLLAGE_TILES}>
         <HistoryBand />
         <MinistryCards />
         <WorshipSection />
