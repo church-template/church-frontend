@@ -1,15 +1,10 @@
 "use client";
 
-import {
-  useEffect,
-  useRef,
-  useState,
-  useSyncExternalStore,
-  type ReactNode,
-} from "react";
+import { useState, useSyncExternalStore, type ReactNode } from "react";
 import { SiteHeader } from "@/components/shell/SiteHeader";
-import CrossHero from "@/hero/CrossHero";
+import HeroReveal from "@/hero/HeroReveal";
 import type { HeroMedia } from "@/hero/types";
+import { useMediaFlag, MOBILE_MQ } from "@/lib/hooks/useMediaFlag";
 
 const REDUCED_MQ = "(prefers-reduced-motion: reduce)";
 
@@ -29,41 +24,25 @@ function useReducedMotion(): boolean {
 export interface HeroHeaderSyncProps {
   media: HeroMedia;
   caption: ReactNode;
+  /** 히어로 콜라주 타일 — HeroReveal에 전달. */
+  tiles: HeroMedia[];
   /** 히어로 뒤에 이어지는 본문 섹션들 — main 랜드마크 안에 함께 둔다. */
   children?: ReactNode;
 }
 
-// 메인 전용 합성(스펙 §8) — T07 SiteHeader의 스크롤 전환 TODO 해소.
-// 히어로(320vh)와 교차하는 동안 투명(on-dark), 벗어나면 fixed 유지 + 라이트 스킨(solid).
-// reduced-motion에선 히어로가 정적(덮개 없는 80vh)이라 IO 전환 시점이 불확정 +
-// 밝은 배경 위 on-dark 텍스트 가독성 위험 → 라이트 스킨으로 즉시 고정.
-export function HeroHeaderSync({ media, caption, children }: HeroHeaderSyncProps) {
-  const heroWrapRef = useRef<HTMLDivElement>(null);
-  const [pastHero, setPastHero] = useState(false);
+// 메인 전용 합성(스펙 §8) — SiteHeader 투명↔솔리드를 HeroReveal 타임라인에 배선.
+// 데스크톱: HeroReveal이 축소 시작 직전(p>=0.5) onSolid로 통지 → 흰 캔버스 노출 시점에 solid 전환(양방향).
+// 모바일/reduced: 흰 캔버스 정적 스택이라 on-dark 투명 헤더가 안 보임 → 처음부터 solid 고정.
+export function HeroHeaderSync({ media, caption, tiles, children }: HeroHeaderSyncProps) {
   const reduced = useReducedMotion();
-
-  useEffect(() => {
-    if (reduced) {
-      return; // 정적 히어로 — IO 불필요(solid는 reduced가 직접 결정)
-    }
-    const el = heroWrapRef.current;
-    if (!el) {
-      return;
-    }
-    const io = new IntersectionObserver(([entry]) => {
-      setPastHero(!entry.isIntersecting);
-    });
-    io.observe(el);
-    return () => io.disconnect();
-  }, [reduced]);
+  const isMobile = useMediaFlag(MOBILE_MQ);
+  const [solid, setSolid] = useState(false);
 
   return (
     <>
-      <SiteHeader variant="transparent" solid={reduced || pastHero} />
+      <SiteHeader variant="transparent" solid={reduced || isMobile || solid} />
       <main className="flex-1">
-        <div ref={heroWrapRef}>
-          <CrossHero media={media} caption={caption} />
-        </div>
+        <HeroReveal media={media} caption={caption} tiles={tiles} onSolid={setSolid} />
         {children}
       </main>
     </>

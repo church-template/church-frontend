@@ -1,0 +1,188 @@
+/* 십자가 리빌 + 콜라주 단일 타임라인. 슬롯 %·vw 수치·색·라디우스는 토큰/스펙(§4)이 단일 진실.
+   카피 clamp 폰트·rgba 커버는 CrossHero 계승 예외(hex/px 인라인 금지의 사전 승인 수치). */
+.hero {
+  position: relative;
+  height: 400vh;
+  background: var(--color-canvas);
+  overflow-x: clip; /* 타일 슬라이드 인 대기 위치(±50vw)가 가로 스크롤을 만들지 않게 */
+}
+.sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.center {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  will-change: clip-path;
+}
+.center video,
+.center img,
+.tile video,
+.tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.cover {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+}
+
+.tile {
+  position: absolute;
+  z-index: 3;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  opacity: 0; /* 데스크톱: 스크럽(JS)이 채움 / 모바일: tileShown이 채움 / reduced: 최하단 블록이 복원 */
+  will-change: transform, opacity;
+}
+
+/* 슬롯 기하(스펙 §4) — 안쪽으로 붙이고 상하 어긋남(T1↑T3↓·T2↓T4↑) */
+.tile1 {
+  left: 14%;
+  top: 10%;
+  width: 15vw;
+  aspect-ratio: 3 / 4;
+}
+.tile2 {
+  left: 7%;
+  bottom: 12%;
+  width: 19vw;
+  aspect-ratio: 4 / 3;
+}
+.tile3 {
+  right: 7%;
+  top: 16%;
+  width: 18vw;
+  aspect-ratio: 16 / 10;
+}
+.tile4 {
+  right: 13%;
+  bottom: 8%;
+  width: 14vw;
+  aspect-ratio: 3 / 4;
+}
+
+.caption {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  z-index: 4;
+  text-align: center;
+  transform: translateY(calc(-50% + 30px));
+  color: var(--color-on-dark);
+  font-size: clamp(26px, 4vw, 48px);
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: -0.02em; /* DESIGN.md display 계열 */
+  margin: 0;
+  opacity: 0;
+  will-change: transform, opacity;
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* 모바일(<640) — 십자가 인트로 생략, sticky·스크럽 폐기, 세로 스택 카드 + 좌/우 1회 슬라이드 인 */
+@media (max-width: 639px) {
+  .hero {
+    height: auto;
+    padding: 0 var(--container-padding) var(--spacing-xl);
+  }
+  .sticky {
+    position: static;
+    height: auto;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-base);
+  }
+  .cover {
+    display: none;
+  }
+  .center {
+    position: static;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+  }
+  .tile,
+  .tile1,
+  .tile2,
+  .tile3,
+  .tile4 {
+    position: static;
+    width: 76vw;
+    transition:
+      transform 0.6s ease,
+      opacity 0.6s ease;
+  }
+  .tile1,
+  .tile3 {
+    align-self: flex-start;
+    transform: translateX(-40vw);
+  }
+  .tile2,
+  .tile4 {
+    align-self: flex-end;
+    transform: translateX(40vw);
+  }
+  .tileShown {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  .caption {
+    position: static;
+    order: -1; /* 스택 상단 정적 제목 */
+    opacity: 1;
+    transform: none;
+    color: var(--color-ink);
+    text-shadow: none;
+    font-size: clamp(22px, 6vw, 32px);
+  }
+}
+
+/* reduced-motion — JS 미등록: 데스크톱은 완성 콜라주 정적, 모바일은 스택 즉시 표시(스펙 §6) */
+@media (prefers-reduced-motion: reduce) {
+  .hero {
+    height: auto;
+  }
+  .sticky {
+    position: static;
+  }
+  .cover {
+    display: none;
+  }
+  .tile,
+  .tile1,
+  .tile2,
+  .tile3,
+  .tile4 {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) and (min-width: 640px) {
+  .sticky {
+    height: 100vh;
+    height: 100dvh;
+  }
+  .center {
+    clip-path: inset(14% 34% round var(--radius-xl));
+  }
+  .caption {
+    opacity: 1;
+    transform: translateY(-50%);
+  }
+}
