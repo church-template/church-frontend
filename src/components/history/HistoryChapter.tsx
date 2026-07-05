@@ -24,7 +24,10 @@ export function HistoryChapter({ item, index, dark = false }: HistoryChapterProp
       <Reveal>
         <div className={cn(styles.chapter, mirrored && styles.mirrored, dark && styles.dark)}>
           <div className={cn(styles.cell, styles.numCell)}>
-            <span aria-hidden="true" className={cn(typo.displayXl, dark ? "text-on-dark" : "text-ink")}>
+            <span
+              aria-hidden="true"
+              className={cn(typo.displayXl, "tabular-nums", dark ? "text-on-dark" : "text-ink")}
+            >
               {num}
             </span>
           </div>

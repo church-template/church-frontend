@@ -68,7 +68,8 @@
 ### 3.3 다크 밴드 (마지막 챕터)
 
 같은 그리드 구조에 톤만 반전: 배경 `{colors.surface-dark}`, 내부 구분선은 on-dark
-헤어라인(`rgba` 화이트 계열 — 다크 밴드 내부 전용, DESIGN 구현 노트 3 준수), 번호·제목
+헤어라인(`color-mix(in srgb, on-dark 16%, surface-dark)` — 흰 캔버스 위 알파 합성
+무효화를 피해 토큰 혼합으로 산출), 번호·제목
 `{colors.on-dark}`, 연도·본문 `{colors.on-dark-soft}`(메인 `HistoryBand` 다크 카드
 관례와 동일). 의의 인용은 텍스트 `{colors.on-dark}` + 보더 `{colors.primary}` 유지.
 canvas 계열 토큰 재사용 금지.
@@ -108,8 +109,8 @@ DESIGN.md 연출 구획에 항목 추가:
   aria-hidden)·지그재그 미러·마지막 챕터 다크 밴드(`surface-dark`·on-dark 토큰).
   도트 픽셀 장식·추가 스크롤 연출은 채택하지 않음(단일 액센트·절제 원칙).
 
-신규 토큰·라이브러리 없음. hex·px 인라인 없음(다크 밴드 내부 on-dark 헤어라인
-rgba만 구현 노트 3 관례 적용).
+신규 토큰·라이브러리 없음. hex·px 인라인 없음(다크 밴드 내부 구분선도 raw rgba 대신
+`color-mix` 토큰 혼합 — 예외 불요).
 
 ## 7. 테스트 계획 (vitest 현행 관례)
 

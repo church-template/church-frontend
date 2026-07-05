@@ -1,7 +1,7 @@
 /* 연혁 — 에디토리얼 챕터 그리드(카카오 지속가능성 재해석, 스펙 2026-07-05 §3).
  * 셀 구분선 = 컨테이너 배경(헤어라인색) + gap 1px 트릭: 셀별 보더 방향 관리 없이
  * 미러·모바일 스택에서 구분선이 자동 정합된다. 다크 챕터는 비치는 배경만 on-dark
- * 헤어라인(rgba — 다크 밴드 내부 전용, DESIGN 구현 노트 3)으로 교체. */
+ * 헤어라인(color-mix — 페이지 캔버스 위 알파 합성 무효화를 피해 토큰 혼합으로 산출)으로 교체. */
 
 /* 히어로 — 중앙 정렬. word-break: keep-all로 한글 단어 중간 줄바꿈 방지. */
 .hero { padding-block: var(--spacing-section); text-align: center; word-break: keep-all; }
@@ -35,7 +35,7 @@
 .bodySig { margin-top: var(--spacing-sm); border-left: 3px solid var(--color-primary); padding-left: var(--spacing-base); }
 
 /* 다크 챕터(마지막) — 셀 배경·구분선만 반전, 구조 동일(스펙 §3.3) */
-.dark { background: rgba(255, 255, 255, 0.16); border-color: var(--color-surface-dark); }
+.dark { background: color-mix(in srgb, var(--color-on-dark) 16%, var(--color-surface-dark)); border-color: var(--color-surface-dark); }
 .dark .cell { background: var(--color-surface-dark); }
 
 @media (min-width: 1024px) {

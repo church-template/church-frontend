@@ -478,7 +478,7 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
   챕터 = 외곽 `{rounded.xl}` + 1px `{colors.hairline}`, 내부 셀 구분선은 "컨테이너 배경+gap 1px" 트릭.
   대형 챕터 번호(`{typography.display-xl}`·aria-hidden) + 연도(`{typography.datetime}` primary) + 제목 +
   사진(`HistoryMedia`) + 본문 셀, 챕터마다 좌우 미러(지그재그, DOM 순서 유지). 마지막 챕터는
-  `{colors.surface-dark}` 다크 밴드(내부 구분선만 on-dark rgba 예외). 도트 픽셀 장식·추가 스크롤
+  `{colors.surface-dark}` 다크 밴드(내부 구분선은 on-dark·surface-dark `color-mix` 혼합). 도트 픽셀 장식·추가 스크롤
   연출은 채택하지 않음(단일 액센트·절제). 등장은 `Reveal` 재사용, 모바일은 세로 스택.
 - **`ministry-cards`**: 사역 카드 3-up(모바일 1-up). lucide 아이콘(32·currentColor) + 제목 +
   설명, 배경 토큰 교차는 history-band와 시작점을 달리한다. 동일한 Reveal 등장.
