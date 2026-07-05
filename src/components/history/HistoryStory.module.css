@@ -1,39 +1,60 @@
-/* 연혁 — 차분한 에디토리얼 스크롤(당근 컬처 참고): 제목·시대 균일 등장 + 2단(좌 sticky 현재 시대 사진 / 우 카드 스크롤).
- * 풀스크린 히어로 없음. 스크롤 진입 Reveal·sticky·IntersectionObserver만 → reduced-motion/무JS에서도 자연 동작. */
+/* 연혁 — 에디토리얼 챕터 그리드(카카오 지속가능성 재해석, 스펙 2026-07-05 §3).
+ * 셀 구분선 = 컨테이너 배경(헤어라인색) + gap 1px 트릭: 셀별 보더 방향 관리 없이
+ * 미러·모바일 스택에서 구분선이 자동 정합된다. 다크 챕터는 비치는 배경만 on-dark
+ * 헤어라인(rgba — 다크 밴드 내부 전용, DESIGN 구현 노트 3)으로 교체. */
 
 /* 히어로 — 중앙 정렬. word-break: keep-all로 한글 단어 중간 줄바꿈 방지. */
 .hero { padding-block: var(--spacing-section); text-align: center; word-break: keep-all; }
 .heroHead { margin-top: var(--spacing-sm); margin-inline: auto; max-width: var(--container-narrow); }
 
-/* 타임라인 — 모바일 단일 스택, 데스크톱 2단 */
-.timeline { display: block; padding-block: var(--spacing-section); }
-
-/* 좌측 aside — 데스크톱 전용 sticky(현재 시대 연도+사진). 시각 강조용이라 aria-hidden(의미는 우측 카드가 담당). */
-.aside { display: none; }
-.asideInner { display: flex; flex-direction: column; gap: var(--spacing-base); }
-.asideYear { margin-top: var(--spacing-xs); }
-.asideMedia { aspect-ratio: 4 / 3; border-radius: var(--radius-xl); overflow: hidden; background: var(--color-surface-soft); }
-.asideMedia :global(img),
-.asideMedia :global(video) { width: 100%; height: 100%; object-fit: cover; display: block; }
-.asideTitle { margin-top: var(--spacing-xs); }
-
-/* 우측 카드 스택 */
-.cards { display: flex; flex-direction: column; gap: var(--spacing-xxl); list-style: none; word-break: keep-all; }
+/* 챕터 목록 */
+.timeline { padding-block: var(--spacing-section); }
+.cards { display: flex; flex-direction: column; gap: var(--spacing-xl); list-style: none; word-break: keep-all; }
 .card { scroll-margin-top: calc(var(--spacing-nav) + var(--spacing-lg)); }
-.cardInner { display: flex; flex-direction: column; gap: var(--spacing-sm); }
-.cardMedia { aspect-ratio: 16 / 9; border-radius: var(--radius-xl); overflow: hidden; background: var(--color-surface-soft); margin-bottom: var(--spacing-base); }
-.cardMedia :global(img),
-.cardMedia :global(video) { width: 100%; height: 100%; object-fit: cover; display: block; }
-.cardDetails { display: flex; flex-direction: column; gap: var(--spacing-xs); padding-left: var(--spacing-lg); list-style: disc; }
-.cardSig { margin-top: var(--spacing-sm); border-left: 3px solid var(--color-primary); padding-left: var(--spacing-base); }
+
+/* 챕터 그리드 — 모바일: 세로 스택(번호 → 연도·제목 → 사진 → 본문) */
+.chapter {
+  display: grid;
+  gap: 1px;
+  background: var(--color-hairline);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  grid-template-areas: "num" "title" "media" "body";
+}
+.cell { background: var(--color-canvas); padding: var(--spacing-lg); }
+.numCell { grid-area: num; }
+.titleCell { grid-area: title; display: flex; flex-direction: column; justify-content: flex-end; gap: var(--spacing-xs); }
+.mediaCell { grid-area: media; padding: 0; aspect-ratio: 16 / 9; }
+.mediaCell :global(img),
+.mediaCell :global(video) { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* 데스크톱 2행의 번호 열 자리 맞춤용 빈 셀 — 모바일 스택에선 숨김 */
+.spacerCell { grid-area: spacer; display: none; }
+.bodyCell { grid-area: body; }
+.bodyDetails { display: flex; flex-direction: column; gap: var(--spacing-xs); margin-top: var(--spacing-sm); padding-left: var(--spacing-lg); list-style: disc; }
+.bodySig { margin-top: var(--spacing-sm); border-left: 3px solid var(--color-primary); padding-left: var(--spacing-base); }
+
+/* 다크 챕터(마지막) — 셀 배경·구분선만 반전, 구조 동일(스펙 §3.3) */
+.dark { background: rgba(255, 255, 255, 0.16); border-color: var(--color-surface-dark); }
+.dark .cell { background: var(--color-surface-dark); }
 
 @media (min-width: 1024px) {
-  .timeline {
-    display: grid; grid-template-columns: 5fr 7fr; gap: var(--spacing-section);
-    align-items: start;
+  /* 1행 [번호|연도·제목|사진] + 2행 [자리맞춤|본문(2열 스팬)] */
+  .chapter {
+    grid-template-columns: 1.1fr 2fr 2.4fr;
+    grid-template-areas:
+      "num    title media"
+      "spacer body  body";
   }
-  .aside { display: block; position: sticky; top: calc(var(--spacing-nav) + var(--spacing-xl)); align-self: start; }
-  .cards { gap: calc(var(--spacing-section) * 1.4); }
-  /* 데스크톱: 카드 내 사진은 좌측 aside가 담당하므로 숨김(연도 라벨은 의미상 유지) */
-  .cardMedia { display: none; }
+  /* 짝수 번째 챕터(0기준 홀수 index) 좌우 반전 — 지그재그. DOM 순서는 그대로. */
+  .mirrored {
+    grid-template-columns: 2.4fr 2fr 1.1fr;
+    grid-template-areas:
+      "media title num"
+      "body  body  spacer";
+  }
+  .mirrored .numCell { text-align: right; }
+  .spacerCell { display: block; }
+  /* 1행 최소 높이 확보(스펙 §3.2) — 사진이 행 높이를 채우도록 비율 대신 min-height */
+  .mediaCell { aspect-ratio: auto; min-height: 16rem; }
 }
