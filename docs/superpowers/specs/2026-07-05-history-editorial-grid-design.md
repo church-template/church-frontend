@@ -60,7 +60,7 @@
 - 연도: `typo.datetime` + `text-primary`
 - 제목: `typo.displayMd` + `text-ink`, 셀 하단 정렬(`justify-content: flex-end`)
 - 사진 셀: `HistoryMedia` 재사용, 패딩 0, `object-fit: cover`로 셀 충전(1행 최소 높이
-  기준). 미디어 없는 항목은 사진 셀 자체를 생략하고 연도·제목 셀이 잔여 폭 차지
+  기준). 미디어 없는 항목은 사진 셀을 빈 셀(캔버스 배경)로 유지한다(grid-template-areas 고정 — 셀 생략 시 헤어라인 배경이 노출되는 것을 방지)
 - 본문 셀: 설명 `typo.bodyLg` + `text-body`, 세부 목록 disc, 의의 인용은 현행
   `border-left 3px {colors.primary}` 스타일 유지
 - 챕터 간 간격: `{spacing.xl}`(32px)
@@ -75,7 +75,7 @@ canvas 계열 토큰 재사용 금지.
 
 ### 3.4 모바일 (<1024px)
 
-미러 없이 챕터 전부 세로 스택: `[번호·연도 행] → [제목] → [사진] → [본문]`.
+미러 없이 챕터 전부 세로 스택: `[번호] → [연도·제목] → [사진] → [본문]` (연도·제목은 데스크톱과 동일 셀 — 셀 분해 없이 스택 전환만).
 외곽 보더·라운드 유지, 셀 구분선은 가로 헤어라인으로 전환. 번호 크기는
 `typo.displayXl` 토큰의 기존 반응형 규칙을 그대로 따른다(신규 clamp 정의 없음).
 
