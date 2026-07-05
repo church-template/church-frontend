@@ -27,6 +27,9 @@ export function Reveal({ children, delay = 0, className }: RevealProps) {
       ([entry]) => {
         if (entry.isIntersecting) {
           entry.target.classList.add(styles.shown);
+          // 모듈 해시 클래스는 외부 CSS가 선택할 수 없어, 하위 모듈이 등장과 동기된
+          // 자체 연출(예: 연혁 사진 와이프)을 걸 수 있는 공개 신호를 함께 남긴다.
+          entry.target.setAttribute("data-revealed", "");
           io.unobserve(entry.target);
         }
       },
