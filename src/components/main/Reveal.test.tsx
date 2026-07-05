@@ -43,6 +43,8 @@ describe("Reveal", () => {
       );
     });
     expect(target.className).toMatch(/shown/);
+    // 모듈 해시 클래스는 외부 CSS가 선택 불가 — 하위 연출 동기용 공개 신호(data-revealed) 검증
+    expect(target.getAttribute("data-revealed")).toBe("");
     expect(container.textContent).toBe("내용");
   });
 

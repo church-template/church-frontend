@@ -25,9 +25,18 @@
 .cell { background: var(--color-canvas); padding: var(--spacing-lg); }
 .numCell { grid-area: num; }
 .titleCell { grid-area: title; display: flex; flex-direction: column; justify-content: flex-end; gap: var(--spacing-xs); }
-.mediaCell { grid-area: media; padding: 0; aspect-ratio: 16 / 9; }
+/* 사진 방향성 와이프 — 챕터 Reveal의 공개 신호([data-revealed])와 동기. 사진이 우측(표준)이면
+ * 좌→우로 열려 시선이 텍스트→사진으로 흐르고, 미러(데스크톱)는 반대. clip-path만 전환(reflow 금지).
+ * 0.7s/0.15s는 Reveal(0.6s)에 겹쳐 따라오는 연출 수치. */
+.mediaCell {
+  grid-area: media; padding: 0; aspect-ratio: 16 / 9;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.7s ease 0.15s;
+}
 .mediaCell :global(img),
 .mediaCell :global(video) { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* .cell 병기로 특이도 상승 — 뒤따르는 데스크톱 미러 방향 규칙보다 항상 우선(등장 후 클립 해제) */
+[data-revealed] .cell.mediaCell { clip-path: inset(0 0 0 0); }
 /* 데스크톱 2행의 번호 열 자리 맞춤용 빈 셀 — 모바일 스택에선 숨김 */
 .spacerCell { grid-area: spacer; display: none; }
 .bodyCell { grid-area: body; }
@@ -57,4 +66,12 @@
   .spacerCell { display: block; }
   /* 1행 최소 높이 확보(스펙 §3.2) — 사진이 행 높이를 채우도록 비율 대신 min-height */
   .mediaCell { aspect-ratio: auto; min-height: 16rem; }
+  /* 미러 챕터(사진 좌측)는 와이프 반대 방향(우→좌) — 모바일 스택은 좌우 의미가 없어 데스크톱만 */
+  .mirrored .mediaCell { clip-path: inset(0 0 0 100%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* 와이프 정적 표시 — Reveal reduced 경로(IO 미등록)와 동일 원칙 */
+  .mediaCell,
+  .mirrored .mediaCell { clip-path: none; transition: none; }
 }
