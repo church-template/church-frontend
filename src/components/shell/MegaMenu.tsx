@@ -2,6 +2,7 @@ import Link from "next/link";
 import {
   Bell,
   BookOpen,
+  BookOpenCheck,
   Calendar,
   CalendarClock,
   Church,
@@ -29,6 +30,7 @@ const ICONS: Record<NavIconKey, LucideIcon> = {
   mapPin: MapPin,
   calendarClock: CalendarClock,
   bookOpen: BookOpen,
+  bookOpenCheck: BookOpenCheck,
   graduationCap: GraduationCap,
   bell: Bell,
   calendar: Calendar,

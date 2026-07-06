@@ -6,6 +6,7 @@ export type NavIconKey =
   | "mapPin"
   | "calendarClock"
   | "bookOpen"
+  | "bookOpenCheck"
   | "graduationCap"
   | "bell"
   | "calendar"
@@ -39,6 +40,7 @@ const ABOUT_LINKS: NavLink[] = [
 const WORSHIP_LINKS: NavLink[] = [
   { label: "예배시간", href: "/worship", icon: "calendarClock" },
   { label: "설교", href: "/sermons", icon: "bookOpen" },
+  { label: "성경통독", href: "/challenges", icon: "bookOpenCheck" },
 ];
 // 사역 부서 — slug는 constants/departments.ts의 DEPARTMENTS와 일치(navigation.test가 드리프트 감시).
 const MINISTRY_LINKS: NavLink[] = [
