@@ -181,3 +181,68 @@ export interface PositionResponse {
   sortOrder: number;
   createdAt: string; // ISO. 화면 미표시(정렬·진단용)
 }
+
+// ── 성경통독 챌린지(회원전용, CHALLENGE_PARTICIPATE) — OpenAPI Challenge*·MyProgress·Participation ──
+export type ChallengeStatus = "UPCOMING" | "ONGOING" | "ENDED";
+
+export interface ChallengeCardResponse {
+  id: number;
+  title: string;
+  startBook: number; // 1~66
+  endBook: number;
+  startDate: string; // "YYYY-MM-DD"
+  endDate: string;
+  targetDays: number;
+  totalChapters: number;
+  dailyGoal: number;
+  status: ChallengeStatus;
+}
+
+export interface ChallengeDetailResponse extends ChallengeCardResponse {
+  description?: string | null; // raw 마크다운
+  joined: boolean;
+  version: number; // 낙관락 — 어드민 PATCH에서 전송
+}
+
+export interface ChallengeSummaryResponse {
+  id: number;
+  title: string;
+  startDate: string;
+  endDate: string;
+  status: ChallengeStatus;
+  totalChapters: number;
+}
+
+export interface BiblePositionResponse {
+  book: string; // 백엔드 한글 권 이름(constants/bible.ts NAMES와 일치)
+  chapter: number;
+}
+
+export interface MyProgressResponse {
+  progressRate: number; // 현재 회독 기준 %
+  currentPosition: BiblePositionResponse | null; // 마지막으로 읽은 장 — chaptersRead 0이면 null
+  chaptersRead: number; // 현재 회독 포인터(0~totalChapters)
+  totalChapters: number;
+  todayChapters: number; // 오늘 이미 기록한 장 수
+  dailyGoal: number;
+  todayDone: boolean;
+  streakDays: number;
+  roundsCompleted: number;
+  paceDays: number | null; // ENDED면 null. 양수=빠름
+  challenge: ChallengeSummaryResponse;
+}
+
+export interface ReadingLogResponse {
+  readDate: string; // "YYYY-MM-DD"
+  chapters: number;
+}
+
+export interface MyParticipationResponse {
+  challenge: ChallengeSummaryResponse;
+  joinedAt: string; // "YYYY-MM-DD"
+  progressRate: number;
+  chaptersRead: number;
+  roundsCompleted: number;
+  completed: boolean; // rounds ≥ 1
+  streakDays: number;
+}
