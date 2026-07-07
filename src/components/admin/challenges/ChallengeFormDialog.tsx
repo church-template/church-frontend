@@ -44,7 +44,7 @@ export function ChallengeFormDialog({ open, onOpenChange, mode, editId }: Challe
   const [banner, setBanner] = useState<string | undefined>(); // 400 detail(참여자 존재 시 범위·기간 거부 — 스펙 §7)
 
   // targetDays만 coerce(네이티브 input) — 입력·출력 타입이 갈려 useForm 제네릭 셋 다 명시(ReadDialog 선례).
-  const { register, handleSubmit, control, reset, setError, setValue, watch, formState: { errors } } =
+  const { register, handleSubmit, control, reset, setError, setValue, watch, formState: { errors, dirtyFields } } =
     useForm<z.input<typeof challengeSchema>, unknown, ChallengeFormValues>({
       resolver: zodResolver(challengeSchema), defaultValues: EMPTY,
     });
@@ -78,12 +78,24 @@ export function ChallengeFormDialog({ open, onOpenChange, mode, editId }: Challe
 
   const mutation = useMutation({
     mutationFn: (v: ChallengeFormValues) => {
+      if (isEdit) {
+        // 백엔드가 필드 존재(presence)만으로 구간·기간 변경을 판정해 참여자 있으면 400 거부(스펙 §7)
+        // → 변경된 필드만 전송. description은 dirty면 빈 문자열도 그대로(소개 삭제 허용, 생략 금지).
+        const body: Partial<ChallengeFormValues> = {};
+        if (dirtyFields.title) body.title = v.title;
+        if (dirtyFields.description) body.description = v.description;
+        if (dirtyFields.startBook) body.startBook = v.startBook;
+        if (dirtyFields.endBook) body.endBook = v.endBook;
+        if (dirtyFields.startDate) body.startDate = v.startDate;
+        if (dirtyFields.targetDays) body.targetDays = v.targetDays;
+        return patchChallenge(editId as number, { ...body, version });
+      }
       const body = {
         title: v.title,
         ...(v.description.trim() === "" ? {} : { description: v.description }),
         startBook: v.startBook, endBook: v.endBook, startDate: v.startDate, targetDays: v.targetDays,
       };
-      return isEdit ? patchChallenge(editId as number, { ...body, version }) : createChallenge(body);
+      return createChallenge(body);
     },
     onError: (e: unknown) => {
       // 참여자 존재 시 범위·기간 수정 거부(400) → 폼 상단 배너(스펙 §7). 그 외는 공통 처리.
@@ -146,7 +158,10 @@ export function ChallengeFormDialog({ open, onOpenChange, mode, editId }: Challe
             <div className="flex gap-xs">
               {PRESETS.map((p) => (
                 <Button key={p.label} type="button" variant="secondary"
-                  onClick={() => { setValue("startBook", p.startBook, { shouldValidate: true }); setValue("endBook", p.endBook, { shouldValidate: true }); }}>
+                  onClick={() => {
+                    setValue("startBook", p.startBook, { shouldValidate: true, shouldDirty: true });
+                    setValue("endBook", p.endBook, { shouldValidate: true, shouldDirty: true });
+                  }}>
                   {p.label}
                 </Button>
               ))}

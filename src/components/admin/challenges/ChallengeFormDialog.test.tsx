@@ -11,6 +11,12 @@ vi.mock("@/lib/api/challenges", async (importOriginal) => ({
   fetchChallenge: fetchChallengeMock,
 }));
 vi.mock("@/lib/notify", () => ({ notify: { success: vi.fn(), error: vi.fn() } }));
+// MarkdownEditor는 별도 테스트 대상 — value/onChange를 그대로 전달하는 textarea로 대체(테스트 관례).
+vi.mock("@/components/admin/MarkdownEditor", () => ({
+  MarkdownEditor: ({ value, onChange }: { value: string; onChange: (v: string) => void }) => (
+    <textarea aria-label="소개" value={value} onChange={(e) => onChange(e.target.value)} />
+  ),
+}));
 
 import { ChallengeFormDialog } from "./ChallengeFormDialog";
 import { ApiError } from "@/lib/auth/apiError";
@@ -62,7 +68,7 @@ describe("ChallengeFormDialog", () => {
     expect(createMock).not.toHaveBeenCalled();
   });
 
-  it("edit: fresh 상세로 시드 후 PATCH(version 포함)", async () => {
+  it("edit: fresh 상세로 시드 후 PATCH(dirty 필드만 + version)", async () => {
     fetchChallengeMock.mockResolvedValue({
       id: 5, title: "기존", startBook: 1, endBook: 66, startDate: "2026-01-05", endDate: "2027-01-03",
       targetDays: 365, totalChapters: 1189, dailyGoal: 4, status: "ONGOING", joined: false, version: 2, description: "",
@@ -74,7 +80,36 @@ describe("ChallengeFormDialog", () => {
     fireEvent.click(screen.getByRole("button", { name: "저장" }));
     await waitFor(() => expect(patchMock).toHaveBeenCalled());
     expect(patchMock.mock.calls[0][0]).toBe(5);
-    expect(patchMock.mock.calls[0][1]).toMatchObject({ title: "수정됨", version: 2 });
+    // 제목만 변경 — 구간·기간 필드는 부재해야 참여자 있는 챌린지도 수정 가능(스펙 §7 회귀 방지).
+    expect(patchMock.mock.calls[0][1]).toEqual({ title: "수정됨", version: 2 });
+  });
+
+  it("edit: 프리셋으로 범위 변경 → dirty로 잡혀 PATCH body에 포함", async () => {
+    fetchChallengeMock.mockResolvedValue({
+      id: 5, title: "기존", startBook: 1, endBook: 39, startDate: "2026-01-05", endDate: "2027-01-03",
+      targetDays: 365, totalChapters: 1189, dailyGoal: 4, status: "ONGOING", joined: false, version: 2, description: "",
+    });
+    patchMock.mockResolvedValue({ id: 5 });
+    renderDialog({ mode: "edit", editId: 5 });
+    await waitFor(() => expect((screen.getByLabelText("제목") as HTMLInputElement).value).toBe("기존"));
+    fireEvent.click(screen.getByRole("button", { name: "신약" }));
+    fireEvent.click(screen.getByRole("button", { name: "저장" }));
+    await waitFor(() => expect(patchMock).toHaveBeenCalled());
+    expect(patchMock.mock.calls[0][1]).toMatchObject({ startBook: 40, endBook: 66 });
+  });
+
+  it("edit: 소개를 비우면 PATCH body에 description: \"\" 포함(삭제 허용)", async () => {
+    fetchChallengeMock.mockResolvedValue({
+      id: 5, title: "기존", startBook: 1, endBook: 66, startDate: "2026-01-05", endDate: "2027-01-03",
+      targetDays: 365, totalChapters: 1189, dailyGoal: 4, status: "ONGOING", joined: false, version: 2, description: "기존 소개",
+    });
+    patchMock.mockResolvedValue({ id: 5 });
+    renderDialog({ mode: "edit", editId: 5 });
+    await waitFor(() => expect((screen.getByLabelText("소개") as HTMLTextAreaElement).value).toBe("기존 소개"));
+    fireEvent.change(screen.getByLabelText("소개"), { target: { value: "" } });
+    fireEvent.click(screen.getByRole("button", { name: "저장" }));
+    await waitFor(() => expect(patchMock).toHaveBeenCalled());
+    expect(patchMock.mock.calls[0][1]).toMatchObject({ description: "" });
   });
 
   it("400 INVALID_INPUT_VALUE detail은 폼 상단 배너로", async () => {

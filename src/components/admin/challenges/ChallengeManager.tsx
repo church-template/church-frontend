@@ -24,7 +24,8 @@ export function ChallengeManager() {
   const list = useChallenges({ page: 0 });
 
   // CHALLENGE_MANAGE만 있고 CHALLENGE_PARTICIPATE 없는 계정의 403 안내(스펙 §7 어드민 엣지).
-  const forbidden = list.isError && list.error instanceof ApiError && list.error.status === 403;
+  // 분기는 errorCode로만(status·title 금지 — 프로젝트 계약, 가이드 4장).
+  const forbidden = list.isError && list.error instanceof ApiError && list.error.errorCode === "ACCESS_DENIED";
   useEffect(() => {
     if (list.isError && !forbidden) adminOnError()(list.error);
   }, [list.isError, forbidden, list.error]);

@@ -21,6 +21,11 @@ describe("ReadingCalendar", () => {
     expect(props.onSelectDay).toHaveBeenCalledWith("2026-01-20", 5);
   });
 
+  it("읽은 날 셀에 장 수 표시", () => {
+    render(<ReadingCalendar {...props} />);
+    expect(screen.getByText("5장")).toBeDefined();
+  });
+
   it("빈 날(범위 내) 탭하면 onSelectDay(date, null)", () => {
     render(<ReadingCalendar {...props} />);
     fireEvent.click(screen.getByRole("button", { name: "1월 21일 · 기록 없음" }));

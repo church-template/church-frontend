@@ -26,6 +26,7 @@ describe("TodayBand", () => {
     expect(screen.getByText(/23일 연속으로 읽고 있어요/)).toBeDefined();
     expect(screen.getByText(/목표보다 3일 빨라요/)).toBeDefined();
     expect(screen.getByText(/260장 중 4장/)).toBeDefined();
+    expect(screen.getByText(/오늘 읽을 곳 · \d+월 \d+일/)).toBeDefined();
   });
 
   it("권 경계 넘는 범위는 양끝 권 표기", () => {

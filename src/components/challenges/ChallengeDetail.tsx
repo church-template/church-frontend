@@ -8,6 +8,7 @@ import { Button, buttonVariants } from "@/components/ui/Button";
 import { Skeleton } from "@/components/common/Skeleton";
 import { MarkdownContent } from "@/components/common/MarkdownContent";
 import { adminOnError } from "@/lib/admin/mutationHandlers";
+import { notify } from "@/lib/notify";
 import { ApiError } from "@/lib/auth/apiError";
 import { formatDate } from "@/lib/date";
 import { kstCivilFromDate } from "@/lib/calendar";
@@ -121,7 +122,9 @@ export function ChallengeDetail({ id }: { id: number }) {
           </p>
           <Button
             variant="primary" loading={join.isPending}
-            onClick={() => join.mutate(undefined, { onError: adminOnError({ onDuplicate: () => detail.refetch() }) })}
+            onClick={() => join.mutate(undefined, {
+              onError: adminOnError({ onDuplicate: () => { notify.error("이미 참여 중이에요."); void detail.refetch(); } }),
+            })}
             className="mt-lg h-14 w-full max-w-[var(--container-modal)]"
           >
             챌린지 참여하기
@@ -136,14 +139,17 @@ export function ChallengeDetail({ id }: { id: number }) {
             logs={logs.data ?? []}
             year={month.year} month={month.month}
             onMonthChange={(year, m) => setMonth({ year, month: m })}
-            onSelectDay={(date, existing) =>
+            onSelectDay={(date, existing) => {
+              // 오늘 = 남은 목표(remaining), 과거 빈 날 = 하루 목표(dailyGoal) — remaining은 "오늘" 개념이라 과거엔 무의미.
+              const t = civilToday();
+              const isToday = date === `${t.y}-${String(t.m).padStart(2, "0")}-${String(t.d).padStart(2, "0")}`;
               setTarget({
                 date,
                 label: `${Number(date.slice(5, 7))}월 ${Number(date.slice(8, 10))}일`,
                 existing,
-                defaultChapters: Math.max(remaining, 1),
-              })
-            }
+                defaultChapters: isToday ? Math.max(remaining, 1) : Math.max(progress.data?.dailyGoal ?? 1, 1),
+              });
+            }}
           />
         </div>
       ) : null}

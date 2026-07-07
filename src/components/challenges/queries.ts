@@ -20,23 +20,25 @@ export function useChallenge(id: number, enabled = true) {
   return useQuery({ queryKey: ["challenge", id], queryFn: () => fetchChallenge(id), enabled, retry: false });
 }
 
-// joined일 때만 호출(미참여 404 방지 — 스펙 §3). 자정 경계는 refetchOnWindowFocus(기본값)로 자연 갱신.
+// joined일 때만 호출(미참여 404 방지 — 스펙 §3). 전역 기본이 false라 쿼리 단위로 켠다(자정 경계·탭 복귀 시 오늘 상태 갱신).
 export function useMyProgress(id: number, enabled: boolean) {
   return useQuery({
     queryKey: ["challenge", id, "progress"],
     queryFn: () => fetchMyProgress(id),
     enabled,
     retry: false,
+    refetchOnWindowFocus: true,
   });
 }
 
-// month = 표시 중인 월의 {from,to}(YYYY-MM-DD) — 월별 캐시(스펙 §3·§4).
+// month = 표시 중인 월의 {from,to}(YYYY-MM-DD) — 월별 캐시(스펙 §3·§4). 전역 기본이 false라 쿼리 단위로 켠다(자정 경계·탭 복귀 시 오늘 상태 갱신).
 export function useMyLogs(id: number, month: { from: string; to: string }, enabled: boolean) {
   return useQuery({
     queryKey: ["challenge", id, "logs", month],
     queryFn: () => fetchMyLogs(id, month),
     enabled,
     retry: false,
+    refetchOnWindowFocus: true,
   });
 }
 

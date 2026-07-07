@@ -4,7 +4,10 @@ import { cn } from "@/lib/utils";
 import { typo } from "@/constants/typography";
 import { Button } from "@/components/ui/Button";
 import { locate } from "@/constants/bible";
+import { kstCivilFromDate, civilWeekday } from "@/lib/calendar";
 import type { ChallengeDetailResponse, MyProgressResponse } from "@/lib/api/types";
+
+const WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"];
 
 interface TodayBandProps {
   detail: ChallengeDetailResponse;
@@ -34,12 +37,20 @@ export function TodayBand({ detail, progress, pending, onReadToday, onAdjust, on
   const nextPos = locate(detail.startBook, Math.min(progress.chaptersRead + 1, progress.totalChapters));
 
   // "1월 5일에 시작해요" — formatDate("2026. 1. 5.")는 조사와 어색해 월·일만 직접 표기.
-  const [, sm, sd] = detail.startDate.split("-").map(Number);
+  const [sy, sm, sd] = detail.startDate.split("-").map(Number);
+  // D-day·날짜 헤더 공용 — KST 오늘(civil) 기준 Date.UTC 산술로 런타임 TZ 무관 비교(스펙 §9).
+  const todayCivil = kstCivilFromDate(new Date());
+  const dDay = Math.round(
+    (Date.UTC(sy, sm - 1, sd) - Date.UTC(todayCivil.y, todayCivil.m - 1, todayCivil.d)) / 86_400_000,
+  );
+  const weekdayLabel = WEEKDAYS[civilWeekday(todayCivil)];
 
   return (
     <section className="rounded-xl bg-surface-dark px-lg py-xxl text-center">
       {status === "UPCOMING" ? (
-        <p className={cn(typo.displayMd, "text-on-dark")}>{sm}월 {sd}일에 시작해요</p>
+        <p className={cn(typo.displayMd, "text-on-dark")}>
+          {sm}월 {sd}일에 시작해요{dDay > 0 ? ` (D-${dDay})` : ""}
+        </p>
       ) : (
         <>
           {status === "ENDED" ? (
@@ -57,7 +68,7 @@ export function TodayBand({ detail, progress, pending, onReadToday, onAdjust, on
             </div>
           ) : (
             <>
-              <p className={cn(typo.bodySm, "text-on-dark-soft")}>오늘 읽을 곳</p>
+              <p className={cn(typo.bodySm, "text-on-dark-soft")}>오늘 읽을 곳 · {todayCivil.m}월 {todayCivil.d}일 ({weekdayLabel})</p>
               <p className={cn(typo.displayXl, "mt-sm text-on-dark")}>
                 {todayRangeLabel(detail, progress, remaining)}
               </p>

@@ -84,7 +84,12 @@ export function ReadingCalendar({ startDate, logs, year, month, onMonthChange, o
               )}
             >
               <span className={cn(typo.caption, isToday ? "font-semibold text-primary" : "text-body")}>{cell.civil.d}</span>
-              {chapters != null ? <Check size={14} className="text-primary" aria-hidden /> : null}
+              {chapters != null ? (
+                <span className="flex flex-col items-center gap-0 leading-none">
+                  <Check size={10} className="text-primary" aria-hidden />
+                  <span className={cn(typo.caption, "text-primary leading-none")}>{chapters}장</span>
+                </span>
+              ) : null}
             </button>
           );
         })}
