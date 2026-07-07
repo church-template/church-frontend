@@ -30,6 +30,10 @@
       "description": "일정 공개 조회/관리 API(스펙 §5.6)"
     },
     {
+      "name": "통독 챌린지",
+      "description": "성경 통독 챌린지 API(설계 2026-07-06)"
+    },
+    {
       "name": "역할",
       "description": "역할 목록·생성·수정·삭제·권한 일괄설정 API(스펙 §5.4). 전 메서드 ROLE_MANAGE 필요."
     },
@@ -1220,6 +1224,265 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/DepartmentDetailResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "유효하지 않은 입력값",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "인증 실패/토큰 무효",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "권한 없음",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "리소스 없음",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "충돌(중복·낙관락·참조)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/bible-challenges/{id}/read": {
+      "post": {
+        "tags": ["통독 챌린지"],
+        "summary": "읽음 기록",
+        "description": "\"오늘 N장 읽음\"을 기록한다. 본문 생략/빈 객체 = 해당 날짜의 남은 목표치.\n\n- 인증(JWT): 필요 — `CHALLENGE_PARTICIPATE`\n- 경로 변수: `id` — 챌린지 ID\n- 요청 본문: `ChallengeReadRequest` — `chapters`(기본 남은 목표치)·`date`(기본 오늘, 소급 = 챌린지 시작일~오늘)\n- 반환값: `MyProgressResponse` — 갱신된 대시보드\n- 부수효과: 같은 날 재기록은 누적 · 구간 끝 도달 시 회독 +1·초과분 이월 · 동시 클릭 시 409\n",
+        "operationId": "read",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChallengeReadRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/MyProgressResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "유효하지 않은 입력값",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "인증 실패/토큰 무효",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "권한 없음",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "리소스 없음",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "충돌(중복·낙관락·참조)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["통독 챌린지"],
+        "summary": "읽음 기록 취소",
+        "description": "해당 날짜의 기록을 취소한다(실수 클릭 복구).\n\n- 인증(JWT): 필요 — `CHALLENGE_PARTICIPATE`\n- 경로 변수: `id` — 챌린지 ID\n- 요청 파라미터: `date`(기본 오늘)\n- 반환값: `MyProgressResponse` — 롤백된 대시보드\n- 부수효과: 해당 날짜 로그 물리 삭제 + 포인터 롤백(회독 경계 역이월) · 로그 없으면 404\n",
+        "operationId": "cancelRead",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/MyProgressResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "유효하지 않은 입력값",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "인증 실패/토큰 무효",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "권한 없음",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "리소스 없음",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "충돌(중복·낙관락·참조)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/bible-challenges/{id}/join": {
+      "post": {
+        "tags": ["통독 챌린지"],
+        "summary": "챌린지 참여",
+        "description": "챌린지에 참여한다(201 Created).\n\n- 인증(JWT): 필요 — `CHALLENGE_PARTICIPATE`\n- 경로 변수: `id`\n- 반환값: `MyProgressResponse` — 초기 대시보드(진행 0)\n- 부수효과: 중복 참여 시 409 DUPLICATE_RESOURCE\n",
+        "operationId": "join",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/MyProgressResponse"
                 }
               }
             }
@@ -2891,6 +3154,86 @@
         }
       }
     },
+    "/api/admin/bible-challenges": {
+      "post": {
+        "tags": ["통독 챌린지"],
+        "summary": "챌린지 개설",
+        "description": "새 통독 챌린지를 개설한다(201 Created).\n\n- 인증(JWT): 필요 — `CHALLENGE_MANAGE`\n- 요청 본문: `ChallengeCreateRequest` — 제목(필수)·설명·권 구간(`startBook`~`endBook`, 1~66)·시작일·목표 일수\n- 반환값: `ChallengeDetailResponse` — 파생값(종료일·총 장수·하루 목표·상태) 포함\n- 부수효과: 없음 (성경 구조는 코드 상수 — 별도 데이터 준비 불필요)\n",
+        "operationId": "create_9",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChallengeCreateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChallengeDetailResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "유효하지 않은 입력값",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "인증 실패/토큰 무효",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "권한 없음",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "리소스 없음",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "충돌(중복·낙관락·참조)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/admin/agreements/reset": {
       "post": {
         "tags": ["약관(관리)"],
@@ -4230,6 +4573,169 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/BulletinDetailResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "유효하지 않은 입력값",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "인증 실패/토큰 무효",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "권한 없음",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "리소스 없음",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "충돌(중복·낙관락·참조)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/bible-challenges/{id}": {
+      "delete": {
+        "tags": ["통독 챌린지"],
+        "summary": "챌린지 삭제",
+        "description": "챌린지를 삭제한다(204 No Content).\n\n- 인증(JWT): 필요 — `CHALLENGE_MANAGE`\n- 경로 변수: `id` — 삭제할 챌린지 ID\n- 반환값: 없음(204)\n- 부수효과: soft delete — 참여·로그는 이력 보존(마이페이지에 계속 표시), 신규 기록만 차단\n",
+        "operationId": "delete_9",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "유효하지 않은 입력값",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "인증 실패/토큰 무효",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "권한 없음",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "리소스 없음",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "충돌(중복·낙관락·참조)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["통독 챌린지"],
+        "summary": "챌린지 수정",
+        "description": "챌린지를 부분 수정한다(PATCH). null 필드는 미변경.\n\n- 인증(JWT): 필요 — `CHALLENGE_MANAGE`\n- 경로 변수: `id` — 수정할 챌린지 ID\n- 요청 본문: `ChallengePatchRequest` — 변경 필드 + `version`(낙관락, 필수)\n- 반환값: `ChallengeDetailResponse`(`version`은 증가 후 값)\n- 부수효과: `version` 불일치 시 409 · 참여자 존재 시 구간·기간(startBook/endBook/startDate/targetDays) 수정은 400\n",
+        "operationId": "patch_6",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChallengePatchRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChallengeDetailResponse"
                 }
               }
             }
@@ -5841,12 +6347,436 @@
         }
       }
     },
+    "/api/bible-challenges": {
+      "get": {
+        "tags": ["통독 챌린지"],
+        "summary": "챌린지 목록",
+        "description": "챌린지 카드 목록(파생 status 포함, 본문 description 제외).\n\n- 인증(JWT): 필요 — `CHALLENGE_PARTICIPATE`(MEMBER)\n- 요청 파라미터: `page`·`size`·`sort`(기본 startDate,desc)\n- 반환값: `Page\u003CChallengeCardResponse\u003E`\n",
+        "operationId": "list_11",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PagedModelChallengeCardResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "유효하지 않은 입력값",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "인증 실패/토큰 무효",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "권한 없음",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "리소스 없음",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "충돌(중복·낙관락·참조)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/bible-challenges/{id}": {
+      "get": {
+        "tags": ["통독 챌린지"],
+        "summary": "챌린지 상세",
+        "description": "챌린지 상세(본문·내 참여 여부 `joined` 포함).\n\n- 인증(JWT): 필요 — `CHALLENGE_PARTICIPATE`\n- 경로 변수: `id`\n- 반환값: `ChallengeDetailResponse`\n",
+        "operationId": "get_6",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChallengeDetailResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "유효하지 않은 입력값",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "인증 실패/토큰 무효",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "권한 없음",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "리소스 없음",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "충돌(중복·낙관락·참조)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/bible-challenges/{id}/my-progress": {
+      "get": {
+        "tags": ["통독 챌린지"],
+        "summary": "내 진행 대시보드",
+        "description": "진행률·현재 위치·오늘 현황·스트릭·회독·페이스를 한 번에 반환한다(UI 원샷).\n\n- 인증(JWT): 필요 — `CHALLENGE_PARTICIPATE`\n- 경로 변수: `id` — 챌린지 ID\n- 반환값: `MyProgressResponse` — `currentPosition` null=회독 시작 전, `paceDays` null=기간 종료\n",
+        "operationId": "myProgress",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/MyProgressResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "유효하지 않은 입력값",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "인증 실패/토큰 무효",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "권한 없음",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "리소스 없음",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "충돌(중복·낙관락·참조)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/bible-challenges/{id}/my-logs": {
+      "get": {
+        "tags": ["통독 챌린지"],
+        "summary": "내 읽기 로그",
+        "description": "달력 히트맵용 날짜별 로그(배열 — 페이지 아님).\n\n- 인증(JWT): 필요 — `CHALLENGE_PARTICIPATE`\n- 경로 변수: `id` — 챌린지 ID\n- 요청 파라미터: `from`·`to`(생략 시 챌린지 기간 전체)\n- 반환값: `List\u003CReadingLogResponse\u003E` — 날짜 오름차순\n",
+        "operationId": "myLogs",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReadingLogResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "유효하지 않은 입력값",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "인증 실패/토큰 무효",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "권한 없음",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "리소스 없음",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "충돌(중복·낙관락·참조)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/bible-challenges/my-participations": {
+      "get": {
+        "tags": ["통독 챌린지"],
+        "summary": "내 참여 이력",
+        "description": "마이페이지용 — 전 챌린지 참여 이력(과거 포함, 삭제된 챌린지 이력도 보존 표시).\n\n- 인증(JWT): 필요 — `CHALLENGE_PARTICIPATE`\n- 요청 파라미터: `page`·`size`·`sort`(기본 createdAt,desc = 최근 참여순)\n- 반환값: `Page\u003CMyParticipationResponse\u003E` — 진행률·회독·완주 여부·스트릭 포함\n",
+        "operationId": "myParticipations",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PagedModelMyParticipationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "유효하지 않은 입력값",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "인증 실패/토큰 무효",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "권한 없음",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "리소스 없음",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "충돌(중복·낙관락·참조)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/admin/permissions": {
       "get": {
         "tags": ["권한"],
         "summary": "권한 목록",
         "description": "시스템에 정의된 전체 권한 카탈로그를 name 오름차순으로 조회한다(비페이징 평배열). 역할 권한 일괄설정 시 유효한 권한 이름 확인에 사용한다.\n\n- 인증(JWT): 필요 — `ROLE_MANAGE`\n- 반환값: `List\u003CPermissionResponse\u003E` — 각 권한의 id·name(코드용 영문 키)·description(한글 설명)\n",
-        "operationId": "list_11",
+        "operationId": "list_12",
         "responses": {
           "200": {
             "description": "OK",
@@ -5919,7 +6849,7 @@
         "tags": ["미디어(관리)"],
         "summary": "단건 조회",
         "description": "미디어 한 건의 메타를 조회한다(파일 바이트가 아닌 메타).\n\n- 인증(JWT): 필요 — `MEDIA_MANAGE`\n- 경로 변수: `id` — 조회할 미디어 ID\n- 반환값: `MediaResponse` — 미디어 메타(id·파일명·mimeType·size·업로더·생성일)\n",
-        "operationId": "get_6",
+        "operationId": "get_7",
         "parameters": [
           {
             "name": "id",
@@ -5998,7 +6928,7 @@
         "tags": ["미디어(관리)"],
         "summary": "삭제",
         "description": "미디어를 차단형으로 삭제한다(라이브러리 원본 제거). 파일과 DB 레코드를 모두 지우는 유일한 경로다.\n\n- 인증(JWT): 필요 — `MEDIA_MANAGE`\n- 경로 변수: `id` — 삭제할 미디어 ID\n- 반환값: 없음(204)\n- 부수효과: 차단형 삭제 — 본문·`gallery_photos`·`bulletins`에 참조가 1건이라도 있으면 409 MEDIA_IN_USE + `references` 목록 반환 · 참조 0일 때만 DB 행을 먼저 확정(flush) 후 파일 제거(I/O 실패 시 롤백으로 깨진 참조 0)\n",
-        "operationId": "delete_9",
+        "operationId": "delete_10",
         "parameters": [
           {
             "name": "id",
@@ -6862,6 +7792,107 @@
           }
         }
       },
+      "ChallengeReadRequest": {
+        "type": "object",
+        "properties": {
+          "chapters": {
+            "type": "integer",
+            "format": "int32",
+            "maximum": 1189,
+            "minimum": 1
+          },
+          "date": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "BiblePositionResponse": {
+        "type": "object",
+        "properties": {
+          "book": {
+            "type": "string"
+          },
+          "chapter": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ChallengeSummaryResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "title": {
+            "type": "string"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["UPCOMING", "ONGOING", "ENDED"]
+          },
+          "totalChapters": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "MyProgressResponse": {
+        "type": "object",
+        "properties": {
+          "progressRate": {
+            "type": "number",
+            "format": "double"
+          },
+          "currentPosition": {
+            "$ref": "#/components/schemas/BiblePositionResponse"
+          },
+          "chaptersRead": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalChapters": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "todayChapters": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dailyGoal": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "todayDone": {
+            "type": "boolean"
+          },
+          "streakDays": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "roundsCompleted": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "paceDays": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "challenge": {
+            "$ref": "#/components/schemas/ChallengeSummaryResponse"
+          }
+        }
+      },
       "SignupRequest": {
         "type": "object",
         "properties": {
@@ -7398,6 +8429,98 @@
           }
         }
       },
+      "ChallengeCreateRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 50000,
+            "minLength": 0
+          },
+          "startBook": {
+            "type": "integer",
+            "format": "int32",
+            "maximum": 66,
+            "minimum": 1
+          },
+          "endBook": {
+            "type": "integer",
+            "format": "int32",
+            "maximum": 66,
+            "minimum": 1
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "targetDays": {
+            "type": "integer",
+            "format": "int32",
+            "maximum": 3650,
+            "minimum": 1
+          }
+        },
+        "required": ["endBook", "startBook", "startDate", "targetDays", "title"]
+      },
+      "ChallengeDetailResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "startBook": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "endBook": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "targetDays": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalChapters": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dailyGoal": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["UPCOMING", "ONGOING", "ENDED"]
+          },
+          "joined": {
+            "type": "boolean"
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
       "AgreementResetRequest": {
         "type": "object",
         "properties": {
@@ -7754,6 +8877,48 @@
           "sortOrder": {
             "type": "integer",
             "format": "int32"
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": ["version"]
+      },
+      "ChallengePatchRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 50000,
+            "minLength": 0
+          },
+          "startBook": {
+            "type": "integer",
+            "format": "int32",
+            "maximum": 66,
+            "minimum": 1
+          },
+          "endBook": {
+            "type": "integer",
+            "format": "int32",
+            "maximum": 66,
+            "minimum": 1
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "targetDays": {
+            "type": "integer",
+            "format": "int32",
+            "maximum": 3650,
+            "minimum": 1
           },
           "version": {
             "type": "integer",
@@ -8134,6 +9299,122 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/BulletinCardResponse"
+            }
+          },
+          "page": {
+            "$ref": "#/components/schemas/PageMetadata"
+          }
+        }
+      },
+      "ChallengeCardResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "title": {
+            "type": "string"
+          },
+          "startBook": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "endBook": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "targetDays": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalChapters": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dailyGoal": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["UPCOMING", "ONGOING", "ENDED"]
+          }
+        }
+      },
+      "PagedModelChallengeCardResponse": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChallengeCardResponse"
+            }
+          },
+          "page": {
+            "$ref": "#/components/schemas/PageMetadata"
+          }
+        }
+      },
+      "ReadingLogResponse": {
+        "type": "object",
+        "properties": {
+          "readDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "chapters": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "MyParticipationResponse": {
+        "type": "object",
+        "properties": {
+          "challenge": {
+            "$ref": "#/components/schemas/ChallengeSummaryResponse"
+          },
+          "joinedAt": {
+            "type": "string",
+            "format": "date"
+          },
+          "progressRate": {
+            "type": "number",
+            "format": "double"
+          },
+          "chaptersRead": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "roundsCompleted": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "completed": {
+            "type": "boolean"
+          },
+          "streakDays": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "PagedModelMyParticipationResponse": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MyParticipationResponse"
             }
           },
           "page": {

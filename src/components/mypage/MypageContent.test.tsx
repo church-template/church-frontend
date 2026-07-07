@@ -17,6 +17,9 @@ vi.mock("./ProfileCard", () => ({ ProfileCard: () => <div>ProfileCard</div> }));
 vi.mock("./PasswordChangeSection", () => ({ PasswordChangeSection: () => <div>PasswordChangeSection</div> }));
 vi.mock("./AgreementStatus", () => ({ AgreementStatus: () => <div>AgreementStatus</div> }));
 vi.mock("./WithdrawDialog", () => ({ WithdrawDialog: () => <div>WithdrawDialog</div> }));
+// MyChallengeHistory는 useHasPermission·useMyParticipations를 직접 호출 — 이 파일이 "@/lib/auth/useMe"를
+// 전체 목킹(useMe만 export)하므로 실물을 쓰면 useHasPermission 미정의로 깨진다. 오케스트레이션 무관 자식이라 stub.
+vi.mock("./MyChallengeHistory", () => ({ MyChallengeHistory: () => <div>MyChallengeHistory</div> }));
 // Reveal은 window.matchMedia·IntersectionObserver 의존 — jsdom에서 오케스트레이션 무관 자식이라 stub.
 vi.mock("@/components/main/Reveal", () => ({
   Reveal: ({ children }: { children: React.ReactNode }) => <>{children}</>,

@@ -31,6 +31,7 @@
   --color-on-primary: #ffffff;
   --color-on-dark: #ffffff;
   --color-on-dark-soft: #a8acb3;
+  --color-primary-on-dark: #4d82ff;  /* 다크 밴드 위 액센트 — #0052ff는 다크 위 대비 부족(challenge-today-band 전용) */
 
   --color-success: #05b169;           /* 폼 메시지 텍스트 색으로만 */
   --color-error: #cf202f;

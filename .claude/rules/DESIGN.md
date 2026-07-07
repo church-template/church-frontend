@@ -329,6 +329,7 @@ components:
 - **Primary** (`{colors.primary}`): 유일한 액션 컬러. 기본 CTA 필, 로고, 인라인 링크.
 - **Primary Active** (`{colors.primary-active}`): 프레스 상태.
 - **Primary Soft** (`{colors.primary-soft}`): 블루 틴트 배경 — 강조 배지, 선택 상태, 캘린더의 오늘 표시.
+- **Primary On Dark** (`{colors.primary-on-dark}`): 다크 밴드 위 액센트(#0052ff는 다크 위 대비 부족) — `challenge-today-band` 전용.
 
 ### 서피스
 - **Canvas** (`{colors.canvas}`): 기본 페이지 바닥.
@@ -514,6 +515,22 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 
 ### 마이페이지
 - **`manage-hub`**: 마이페이지 관리 허브 섹션. `useMe().permissions` 기준 권한 보유 도메인만 카드로 노출(보유 0이면 섹션 비노출). 카드 = `{rounded.xl}`(24px) + 1px 헤어라인, hover 시 보더 `{colors.primary}` 전이. 공개 도메인 카드는 해당 공개 페이지로, 운영 도메인은 `/mypage/manage/*`로 링크. 어드민 화면이라 가독성 우선 단순 변형이되 토큰 공유(hex·px 인라인 금지). **카드는 테마 카테고리(콘텐츠·미디어/업로드·조직·회원/권한, `MANAGE_CATEGORIES` 순서)로 묶어 섹션 분리**: 카테고리 제목 `{typography.title-sm}`(600) ↔ 카드 라벨 `{typography.body-md}`(400)의 **굵기 대비** + 카테고리 경계 1px 헤어라인 divider(첫 그룹 제외 `border-t` + 상하 여백)로 '정보가 바뀌는 지점'을 드러낸다(그림자 단계 추가 없이 헤어라인+무게 위계만). 보유 카드 0개인 카테고리는 제목째 비노출. 관리 제목 아래에는 2px `{colors.ink}` 앵커 구분선(`border-t-2`, 카테고리 사이 1px 헤어라인보다 두껍게)을 두어 제목↔카테고리 위계를 강조한다.
+
+### 성경통독 챌린지
+
+- **`my-challenge-history`**: 마이페이지 "내 통독 이력" 섹션. 참여 이력 행(제목 `{typography.body-md}` 600 + 상태·완독 Badge +
+  기간·진행 요약 `{typography.body-sm}` `{colors.muted}`) 리스트, 1px 헤어라인 구분(notice-row 결), 행 전체가 상세 링크.
+  `CHALLENGE_PARTICIPATE` 미보유·이력 0건이면 섹션째 비노출(manage-hub 관례, Reveal은 null 체크 뒤 내부 래핑).
+- **`challenge-today-band`**: 챌린지 상세의 "오늘의 통독" 다크 밴드(C-2 몰입형). `{colors.surface-dark}` 배경 +
+  on-dark 텍스트, 모바일 좌우 풀블리드. 초대형 타이포 `{typography.display-xl}`(모바일 clamp 축소), 구절 강조는
+  `{colors.primary-on-dark}`(#0052ff의 다크 위 대비 보정 — 이 밴드 전용). CTA "다 읽었어요"는 풀폭(모바일)
+  56px primary 필. 기록 완료 상태는 밴드 내 반투명 카드 + `{rounded.full}` 체크 플레이트. 문구는 일상어만
+  (스트릭→"N일 연속으로 읽고 있어요", 페이스→"목표보다 N일 빨라요"). UPCOMING=D-day, ENDED=완주 응원 문구.
+- **`reading-calendar`**: 벽걸이 달력식 월 그리드(히트맵 아님, EventCalendar의 monthMatrix 재사용). 읽은 날
+  `{colors.primary-soft}` 채움 + ✓ + 장 수, 오늘 `{colors.primary}` 2px 테두리, 셀 `{rounded.sm}`. 셀 탭 =
+  기록/취소 다이얼로그 입구(시작일~오늘 범위만 활성). 월 이동은 챌린지 시작월~현재월.
+- **`challenge-feature-card`**: 목록 상단 피처 카드. 참여 중 ONGOING = 다크 미니 밴드(오늘 읽을 곳·진행 요약 +
+  "오늘 기록하러 가기") / 미참여 ONGOING = 참여 CTA. `{rounded.xl}`, 카드 그리드보다 큰 단일 카드.
 
 ### 어드민 공용 (Admin Shared)
 
