@@ -51,7 +51,7 @@ export function ChallengeDetail({ id }: { id: number }) {
   // read 400(날짜 범위·장 수)은 다이얼로그 인라인, 나머지는 errorCode 토스트(스펙 §7).
   const onDialogError = (e: unknown) => {
     if (e instanceof ApiError && e.errorCode === "INVALID_INPUT_VALUE") setDialogError(e.detail ?? "입력값을 확인해 주세요.");
-    else adminOnError()(e);
+    else adminOnError({ onReedit: () => void progress.refetch() })(e);
   };
   const closeDialog = () => { setTarget(null); setDialogError(undefined); };
 
@@ -99,9 +99,12 @@ export function ChallengeDetail({ id }: { id: number }) {
             onReadToday={() => record.mutate({}, { onError: adminOnError({ onReedit: () => { void progress.refetch(); } }) })}
             onAdjust={() => {
               const t = civilToday();
+              const alreadyRecorded = progress.data.todayChapters > 0;
               setTarget({
                 date: `${t.y}-${String(t.m).padStart(2, "0")}-${String(t.d).padStart(2, "0")}`,
-                label: "오늘", existing: null, defaultChapters: Math.max(remaining, 1),
+                label: "오늘", existing: null,
+                add: alreadyRecorded,
+                defaultChapters: alreadyRecorded ? 1 : Math.max(remaining, 1),
               });
             }}
             onBackfill={() => calendarRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })}

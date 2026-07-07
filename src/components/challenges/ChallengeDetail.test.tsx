@@ -73,4 +73,12 @@ describe("ChallengeDetail", () => {
     fireEvent.click(await screen.findByRole("button", { name: "다 읽었어요" }));
     await waitFor(() => expect(recordMock).toHaveBeenCalledWith(1, {}));
   });
+
+  it("오늘 이미 기록 있음: 더 읽었어요 클릭 → '더 읽은 장 수' 라벨로 다이얼로그 오픈", async () => {
+    fetchChallengeMock.mockResolvedValue({ ...detail, joined: true });
+    fetchMyProgressMock.mockResolvedValue({ ...progress, todayDone: true, todayChapters: 4 });
+    renderDetail();
+    fireEvent.click(await screen.findByRole("button", { name: "더 읽었어요" }));
+    expect(await screen.findByLabelText("더 읽은 장 수")).toBeDefined();
+  });
 });

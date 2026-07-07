@@ -36,4 +36,14 @@ describe("ReadDialog", () => {
     render(<ReadDialog {...base} error="기록 가능한 날짜가 아닙니다." target={{ date: "2026-01-20", label: "1월 20일", existing: null, defaultChapters: 4 }} />);
     expect(screen.getByText("기록 가능한 날짜가 아닙니다.")).toBeDefined();
   });
+
+  it("add 타깃: 라벨 '더 읽은 장 수', 저장 시 onRecord(date, chapters) 그대로 호출", async () => {
+    const onRecord = vi.fn();
+    render(<ReadDialog {...base} onRecord={onRecord} target={{ date: "2026-01-20", label: "오늘", existing: null, defaultChapters: 1, add: true }} />);
+    const input = screen.getByLabelText("더 읽은 장 수") as HTMLInputElement;
+    expect(input.value).toBe("1");
+    fireEvent.change(input, { target: { value: "2" } });
+    fireEvent.click(screen.getByRole("button", { name: "기록하기" }));
+    await waitFor(() => expect(onRecord).toHaveBeenCalledWith("2026-01-20", 2));
+  });
 });

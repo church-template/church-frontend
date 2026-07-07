@@ -15,6 +15,7 @@ export interface ReadDialogTarget {
   label: string; // "1월 20일" — 제목 표기
   existing: number | null; // 그날 이미 기록한 장 수(없으면 null → 기록 모드)
   defaultChapters: number; // 기록 모드 기본값 = 하루 목표(남은 목표)
+  add?: boolean; // true면 서버 누적(additive) 기록 — "더 읽었어요" 흐름, 라벨에 추가 의미를 드러낸다
 }
 
 interface ReadDialogProps {
@@ -44,7 +45,7 @@ export function ReadDialog({ target, onOpenChange, pending, error, onRecord, onC
     <Dialog open={target != null} onOpenChange={onOpenChange}>
       <DialogContent aria-describedby={undefined}>
         <DialogHeader>
-          <DialogTitle>{target ? `${target.label} 읽기 기록` : "읽기 기록"}</DialogTitle>
+          <DialogTitle>{target ? (target.add ? `${target.label} 추가 기록` : `${target.label} 읽기 기록`) : "읽기 기록"}</DialogTitle>
         </DialogHeader>
         {target?.existing != null ? (
           <div className="flex flex-col gap-base">
@@ -65,7 +66,7 @@ export function ReadDialog({ target, onOpenChange, pending, error, onRecord, onC
             className="flex flex-col gap-base"
           >
             <div className="flex flex-col gap-xxs">
-              <label htmlFor="read-chapters" className={cn(typo.bodySm, "text-body")}>읽은 장 수</label>
+              <label htmlFor="read-chapters" className={cn(typo.bodySm, "text-body")}>{target.add ? "더 읽은 장 수" : "읽은 장 수"}</label>
               {/* min/step(네이티브 제약)은 넣지 않는다 — jsdom·브라우저가 submit 이벤트 자체를 조용히
                   가로막아 RHF+zod 검증 메시지가 아예 뜨지 않는다(실제 재현·확인). 검증은 zod가 전담. */}
               <Input
