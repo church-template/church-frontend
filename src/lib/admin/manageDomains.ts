@@ -29,6 +29,7 @@ export const MANAGE_DOMAINS: ManageDomain[] = [
   { key: "departments", label: "부서 관리", permission: "DEPT_WRITE", href: "/mypage/manage/departments", kind: "manage", category: "org" },
   { key: "media", label: "미디어 관리", permission: "MEDIA_MANAGE", href: "/mypage/manage/media", kind: "manage", category: "media" },
   { key: "tags", label: "태그 관리", permission: "TAG_MANAGE", href: "/mypage/manage/tags", kind: "manage", category: "content" },
+  { key: "challenges", label: "통독 챌린지 관리", permission: "CHALLENGE_MANAGE", href: "/mypage/manage/challenges", kind: "manage", category: "content" },
   { key: "positions", label: "직분 관리", permission: "POSITION_MANAGE", href: "/mypage/manage/positions", kind: "manage", category: "org" },
   { key: "members", label: "회원 관리", permission: "MEMBER_MANAGE", href: "/mypage/manage/members", kind: "manage", category: "governance" },
   { key: "roles", label: "역할·권한 관리", permission: "ROLE_MANAGE", href: "/mypage/manage/roles", kind: "manage", category: "governance" },
