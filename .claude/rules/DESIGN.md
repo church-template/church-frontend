@@ -518,6 +518,9 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 
 ### 성경통독 챌린지
 
+- **`my-challenge-history`**: 마이페이지 "내 통독 이력" 섹션. 참여 이력 행(제목 `{typography.body-md}` 600 + 상태·완독 Badge +
+  기간·진행 요약 `{typography.body-sm}` `{colors.muted}`) 리스트, 1px 헤어라인 구분(notice-row 결), 행 전체가 상세 링크.
+  `CHALLENGE_PARTICIPATE` 미보유·이력 0건이면 섹션째 비노출(manage-hub 관례, Reveal은 null 체크 뒤 내부 래핑).
 - **`challenge-today-band`**: 챌린지 상세의 "오늘의 통독" 다크 밴드(C-2 몰입형). `{colors.surface-dark}` 배경 +
   on-dark 텍스트, 모바일 좌우 풀블리드. 초대형 타이포 `{typography.display-xl}`(모바일 clamp 축소), 구절 강조는
   `{colors.primary-on-dark}`(#0052ff의 다크 위 대비 보정 — 이 밴드 전용). CTA "다 읽었어요"는 풀폭(모바일)
