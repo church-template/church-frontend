@@ -175,7 +175,22 @@ onSuccess(progress):
    List(피처 3케이스) / MyChallengeHistory(0건 비노출) / Manager(version 시드·409 재편집·400 detail) / FormDialog(프리셋·미리보기).
 4. 회귀 — `navigation.test`(새 링크·아이콘 키), 페이지 얇은 렌더.
 
-## 9. 제외 (YAGNI)
+## 9. 구현 노트 (2026-07-07 구현 완료 시점 — 승인된 이탈·후속)
+
+구현(#88, 커밋 8cb8b77..d9162c9)에서 리뷰를 거쳐 승인된 이탈:
+
+- **폭 제약**: `max-w-md`류 t-shirt 클래스가 spacing 토큰과 충돌 → `max-w-[var(--container-modal)]` 사용.
+- **통계 문장은 평문 렌더**(`<b>` 인라인 강조 제거) — RTL getByText가 자식 요소로 쪼개진 문장을 못 잡는 테스트 제약.
+- **number input의 `min`/`step` 미사용** — 네이티브 제약 검증이 jsdom·브라우저에서 submit을 삼켜 zod 단독 검증으로 통일.
+- **Reveal은 null 체크 뒤 컴포넌트 내부 래핑**(ManageHub 관례) — 0건 비노출 시 flex gap 잔여물 방지.
+- **훅 시그니처 확장**: `useChallenge(id, enabled)` · `fetchMyParticipations({page, size})`(키 `["my-participations", page, size]`) — 목록 피처 판별의 페이지네이션 취약점 제거(startBook은 상세에서 소싱, 참여 스캔 size 50).
+- **어드민 PATCH는 dirty 필드만 전송** — 백엔드가 구간·기간 변경을 필드 존재(presence)로 판정하므로, 참여자 있는 챌린지의 제목·소개 수정이 가능하려면 미변경 필드를 body에서 제외해야 한다. 프리셋 setValue는 `shouldDirty: true`.
+- **`refetchOnWindowFocus`는 쿼리 단위 오버라이드** — 전역 기본이 false라 `useMyProgress`·`useMyLogs`에서만 true(자정 경계 갱신).
+- **소급 기록 기본값**: 오늘 = 남은 목표, 과거 날짜 = 하루 목표. 기록 완료 후 "더 읽었어요"는 추가(additive) 의미를 라벨("더 읽은 장 수"·"추가 기록")로 명시, 기본값 1.
+
+후속 항목(머지 비차단, 최종 리뷰 판정): 409 토스트 문구 톤(회원 흐름), 어드민 목록 page 0 고정(챌린지 13개 초과 시 Pagination 필요), `STATUS_LABELS` 상수 파일 분리, 참여 스캔 50 상한(초과 시 피처 미표시 열화).
+
+## 10. 제외 (YAGNI)
 
 메인 페이지 배너(공개 RSC ↔ 회원 API 불일치), 리더보드/랭킹(백엔드 없음), 알림·리마인더, 소셜 공유,
 지난 기록 "수정" UI(취소 후 재기록으로 충분 — 백엔드 동일 판단), 챌린지 복제(폼 프리필로 충분하나 이번 범위 밖),
