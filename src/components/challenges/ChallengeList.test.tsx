@@ -2,12 +2,13 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-const { fetchChallengesMock, fetchPartsMock, fetchProgressMock } = vi.hoisted(() => ({
-  fetchChallengesMock: vi.fn(), fetchPartsMock: vi.fn(), fetchProgressMock: vi.fn(),
+const { fetchChallengesMock, fetchPartsMock, fetchProgressMock, fetchChallengeMock } = vi.hoisted(() => ({
+  fetchChallengesMock: vi.fn(), fetchPartsMock: vi.fn(), fetchProgressMock: vi.fn(), fetchChallengeMock: vi.fn(),
 }));
 vi.mock("@/lib/api/challenges", async (importOriginal) => ({
   ...(await importOriginal<object>()),
   fetchChallenges: fetchChallengesMock, fetchMyParticipations: fetchPartsMock, fetchMyProgress: fetchProgressMock,
+  fetchChallenge: fetchChallengeMock,
 }));
 vi.mock("next/navigation", () => ({ useSearchParams: () => new URLSearchParams(""), usePathname: () => "/challenges" }));
 vi.mock("next/link", () => ({ default: ({ href, children }: { href: string; children: React.ReactNode }) => <a href={href}>{children}</a> }));
@@ -28,6 +29,8 @@ const progress = {
   todayChapters: 0, dailyGoal: 4, todayDone: false, streakDays: 23, roundsCompleted: 0, paceDays: 3,
   challenge: participation.challenge,
 };
+// 상세 fixture — startBook은 목록 카드가 아니라 이 상세에서 온다(Finding 1).
+const detail = { ...card, description: null, joined: true, version: 1 };
 
 let qc: QueryClient;
 beforeEach(() => {
@@ -41,9 +44,19 @@ describe("ChallengeList — 피처 판별 3케이스(스펙 §3)", () => {
     fetchChallengesMock.mockResolvedValue(page([card]));
     fetchPartsMock.mockResolvedValue(page([participation]));
     fetchProgressMock.mockResolvedValue(progress);
+    fetchChallengeMock.mockResolvedValue(detail);
     renderList();
     const cta = await screen.findByRole("link", { name: /오늘 기록하러 가기/ });
     expect(cta.getAttribute("href")).toBe("/challenges/1");
+    expect(await screen.findByText(/마태복음 5장부터/)).toBeDefined();
+  });
+
+  it("참여 중 챌린지가 목록 페이지에 없어도(다른 카드만) 상세 startBook으로 오늘 위치 계산(Finding 1)", async () => {
+    fetchChallengesMock.mockResolvedValue(page([{ ...card, id: 2, status: "ENDED", title: "다른 챌린지" }]));
+    fetchPartsMock.mockResolvedValue(page([participation]));
+    fetchProgressMock.mockResolvedValue(progress);
+    fetchChallengeMock.mockResolvedValue(detail);
+    renderList();
     expect(await screen.findByText(/마태복음 5장부터/)).toBeDefined();
   });
 
@@ -70,5 +83,13 @@ describe("ChallengeList — 피처 판별 3케이스(스펙 §3)", () => {
     expect(await screen.findByText("지난 통독")).toBeDefined();
     expect(screen.getByText("종료")).toBeDefined();
     expect(screen.getByText(/마태복음 ~ 요한계시록 · 260장 · 하루 4장/)).toBeDefined();
+  });
+
+  it("ENDED 카드만 있고 참여도 없으면 피처 섹션 미노출", async () => {
+    fetchChallengesMock.mockResolvedValue(page([{ ...card, id: 2, status: "ENDED", title: "지난 통독" }]));
+    fetchPartsMock.mockResolvedValue(page([]));
+    renderList();
+    await screen.findByText("지난 통독");
+    expect(screen.queryByText("진행 중인 챌린지")).toBeNull();
   });
 });

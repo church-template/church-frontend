@@ -51,6 +51,11 @@ describe("목록·상세·이력 GET", () => {
       `/api/bible-challenges/my-participations?page=0&size=${CHALLENGE_PAGE_SIZE}`,
     );
   });
+  it("fetchMyParticipations: size 지정 시 해당 값으로 쿼리(피처 스캔 50건 등)", async () => {
+    authFetchMock.mockImplementation(() => Promise.resolve(jsonRes({ content: [], page: { size: 50, number: 0, totalElements: 0, totalPages: 0 } })));
+    await fetchMyParticipations({ page: 0, size: 50 });
+    expect(authFetchMock).toHaveBeenLastCalledWith("/api/bible-challenges/my-participations?page=0&size=50");
+  });
 });
 
 describe("쓰기 3종 — MyProgressResponse 반환", () => {

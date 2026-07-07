@@ -2,7 +2,7 @@
 import { useMutation, useQuery, useQueryClient, keepPreviousData } from "@tanstack/react-query";
 import {
   fetchChallenges, fetchChallenge, fetchMyProgress, fetchMyLogs, fetchMyParticipations,
-  joinChallenge, recordRead, cancelRead,
+  joinChallenge, recordRead, cancelRead, CHALLENGE_PAGE_SIZE,
 } from "@/lib/api/challenges";
 import type { MyProgressResponse } from "@/lib/api/types";
 
@@ -16,8 +16,8 @@ export function useChallenges(params: { page?: number }) {
   });
 }
 
-export function useChallenge(id: number) {
-  return useQuery({ queryKey: ["challenge", id], queryFn: () => fetchChallenge(id), retry: false });
+export function useChallenge(id: number, enabled = true) {
+  return useQuery({ queryKey: ["challenge", id], queryFn: () => fetchChallenge(id), enabled, retry: false });
 }
 
 // joined일 때만 호출(미참여 404 방지 — 스펙 §3). 자정 경계는 refetchOnWindowFocus(기본값)로 자연 갱신.
@@ -40,10 +40,10 @@ export function useMyLogs(id: number, month: { from: string; to: string }, enabl
   });
 }
 
-export function useMyParticipations(page: number, enabled = true) {
+export function useMyParticipations(page: number, enabled = true, size = CHALLENGE_PAGE_SIZE) {
   return useQuery({
-    queryKey: ["my-participations", page],
-    queryFn: () => fetchMyParticipations({ page }),
+    queryKey: ["my-participations", page, size],
+    queryFn: () => fetchMyParticipations({ page, size }),
     placeholderData: keepPreviousData,
     enabled,
     retry: false,

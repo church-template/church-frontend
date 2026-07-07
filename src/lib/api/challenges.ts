@@ -31,8 +31,10 @@ export async function fetchMyLogs(id: number, range?: { from?: string; to?: stri
   return parseJson(await authFetch(`/api/bible-challenges/${id}/my-logs${qs ? `?${qs}` : ""}`));
 }
 
-export async function fetchMyParticipations(params: { page?: number }): Promise<Page<MyParticipationResponse>> {
-  const qs = buildListQuery({ page: params.page, size: CHALLENGE_PAGE_SIZE });
+export async function fetchMyParticipations(
+  params: { page?: number; size?: number },
+): Promise<Page<MyParticipationResponse>> {
+  const qs = buildListQuery({ page: params.page, size: params.size ?? CHALLENGE_PAGE_SIZE });
   return parseJson(await authFetch(`/api/bible-challenges/my-participations${qs}`));
 }
 

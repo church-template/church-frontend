@@ -10,7 +10,7 @@ import { EmptyState } from "@/components/common/EmptyState";
 import { Pagination } from "@/components/common/Pagination";
 import { locate, formatRange } from "@/constants/bible";
 import { formatDate } from "@/lib/date";
-import { useChallenges, useMyParticipations, useMyProgress } from "./queries";
+import { useChallenge, useChallenges, useMyParticipations, useMyProgress } from "./queries";
 import { STATUS_LABELS } from "./ChallengeDetail";
 import type { ChallengeCardResponse } from "@/lib/api/types";
 
@@ -21,13 +21,17 @@ export function ChallengeList() {
   const page = Number.isInteger(pageParam) && pageParam >= 1 ? pageParam - 1 : 0;
 
   const list = useChallenges({ page });
-  const parts = useMyParticipations(0);
+  // 참여 이력 50건까지 스캔(연 단위 챌린지 기준 수십 년 커버) — 초과 시 피처 미표시로 열화될 뿐 오표시는 없음.
+  const parts = useMyParticipations(0, true, 50);
 
   // 피처 판별(스펙 §3): 목록 응답엔 joined가 없어 참여 이력에서 ONGOING 참여를 찾는다.
   const joinedOngoing = parts.data?.content.find((p) => p.challenge.status === "ONGOING");
   const listOngoing = list.data?.content.find((c) => c.status === "ONGOING");
   const featured = joinedOngoing?.challenge ?? (listOngoing ? { id: listOngoing.id, title: listOngoing.title } : null);
   const progress = useMyProgress(joinedOngoing?.challenge.id ?? 0, joinedOngoing != null);
+  // startBook은 목록 페이지에서 찾지 않는다(참여 챌린지가 다른 페이지에 있으면 창세기로 오판) — 상세에서 직접 조회.
+  // 상세 진입 시 ["challenge", id] 캐시를 그대로 재사용하므로 낭비 없음.
+  const featuredDetail = useChallenge(joinedOngoing?.challenge.id ?? 0, joinedOngoing != null);
 
   if (list.isPending || parts.isPending) {
     return (
@@ -42,10 +46,9 @@ export function ChallengeList() {
   }
 
   const cards = list.data.content;
-  const nextPos = progress.data
+  const nextPos = progress.data && featuredDetail.data
     ? locate(
-        // 참여 중 피처의 "오늘 읽을 곳" — 목록 카드에서 startBook을 찾는다(같은 목록에 반드시 존재).
-        cards.find((c) => c.id === joinedOngoing?.challenge.id)?.startBook ?? 1,
+        featuredDetail.data.startBook,
         Math.min(progress.data.chaptersRead + 1, progress.data.totalChapters),
       )
     : null;
