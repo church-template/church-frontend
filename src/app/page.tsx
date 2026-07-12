@@ -9,7 +9,12 @@ import { SiteFooter } from "@/components/shell/SiteFooter";
 import { getMain } from "@/lib/api/main";
 import { HistoryBand } from "@/components/main/HistoryBand";
 import { MinistryCards } from "@/components/main/MinistryCards";
-import { HERO, HERO_CAPTION, COLLAGE_TILES } from "@/constants/church";
+import {
+  HERO,
+  HERO_CAPTION,
+  HERO_POSTER_ASPECT,
+  COLLAGE_TILES,
+} from "@/constants/church";
 
 // 메인(가이드 13.4) — 공개 콘텐츠 서버 fetch. SiteShell 대신 투명 헤더를 직접 합성(T07 §5.2).
 export default async function Home() {
@@ -27,7 +32,12 @@ export default async function Home() {
 
   return (
     <>
-      <HeroHeaderSync media={HERO} caption={caption} tiles={COLLAGE_TILES}>
+      <HeroHeaderSync
+        media={HERO}
+        caption={caption}
+        tiles={COLLAGE_TILES}
+        posterAspect={HERO_POSTER_ASPECT}
+      >
         <HistoryBand />
         <MinistryCards />
         <WorshipSection />

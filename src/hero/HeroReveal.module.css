@@ -18,7 +18,7 @@
   position: absolute;
   inset: 0;
   z-index: 1;
-  will-change: clip-path;
+  will-change: opacity;
 }
 .center video,
 .center img,
@@ -30,6 +30,15 @@
   display: block;
 }
 
+/* 영상 위에 겹쳐 페이드 인하는 포스터(풀스크린 유지). 절대배치라 비배치 <video> 위에 그려진다
+   (z-index 불필요). 크기·object-fit은 위의 .center img 규칙이 적용한다. */
+.posterOverlay {
+  position: absolute;
+  inset: 0;
+  opacity: 0; /* 데스크톱: 스크럽(JS)이 채운다 */
+  will-change: opacity;
+}
+
 .cover {
   position: absolute;
   inset: 0;
@@ -38,6 +47,9 @@
   height: 100%;
 }
 
+/* 타일 슬롯. left/top/width/height는 HeroReveal.tsx의 measure()가 인라인으로 넣는다 —
+   컬럼 폭이 사진 비율에서 역산되므로(크롭 0) CSS만으로는 표현할 수 없다.
+   여기서는 외형(hairline·라운드)과 초기 상태만 정의한다. */
 .tile {
   position: absolute;
   z-index: 3;
@@ -46,32 +58,6 @@
   overflow: hidden;
   opacity: 0; /* 데스크톱: 스크럽(JS)이 채움 / 모바일: tileShown이 채움 / reduced: 최하단 블록이 복원 */
   will-change: transform, opacity;
-}
-
-/* 슬롯 기하(스펙 §4) — 안쪽으로 붙이고 상하 어긋남(T1↑T3↓·T2↓T4↑) */
-.tile1 {
-  left: 14%;
-  top: 10%;
-  width: 15vw;
-  aspect-ratio: 3 / 4;
-}
-.tile2 {
-  left: 7%;
-  bottom: 12%;
-  width: 19vw;
-  aspect-ratio: 4 / 3;
-}
-.tile3 {
-  right: 7%;
-  top: 16%;
-  width: 18vw;
-  aspect-ratio: 16 / 10;
-}
-.tile4 {
-  right: 13%;
-  bottom: 8%;
-  width: 14vw;
-  aspect-ratio: 3 / 4;
 }
 
 .caption {
@@ -93,8 +79,11 @@
   text-shadow: 0 2px 24px rgba(0, 0, 0, 0.4);
 }
 
-/* 모바일(<640) — 십자가 인트로 생략, sticky·스크럽 폐기, 세로 스택 카드 + 좌/우 1회 슬라이드 인 */
-@media (max-width: 639px) {
+/* 정적 스택 — 모바일(<640) **및** reduced-motion(폭 무관).
+   십자가 인트로·sticky·스크럽을 모두 폐기하고 [카피 → 포스터 카드 → 사진 4장]을 세로로 쌓는다.
+   reduced를 데스크톱 스크럽의 "최종 프레임"(사진만)으로 두면 포스터를 아예 못 보게 되므로
+   같은 콘텐츠를 다 보여주는 이 스택을 공유한다. JS는 인라인 기하를 쓰지 않는다. */
+@media (max-width: 639px), (prefers-reduced-motion: reduce) {
   .hero {
     height: auto;
     padding: 0 var(--container-padding) var(--spacing-xl);
@@ -106,34 +95,41 @@
     display: flex;
     flex-direction: column;
     gap: var(--spacing-base);
+    max-width: var(--container-max); /* 데스크톱 reduced에서 콘텐츠 캡 유지 */
+    margin: 0 auto;
   }
   .cover {
     display: none;
   }
+  /* aspect-ratio는 인라인(posterAspect) — 포스터를 크롭 없이 세운다. */
   .center {
     position: static;
-    aspect-ratio: 4 / 5;
     border-radius: var(--radius-xl);
     overflow: hidden;
   }
-  .tile,
-  .tile1,
-  .tile2,
-  .tile3,
-  .tile4 {
+  /* 스크럽이 없고 <video>가 poster를 직접 표시한다(source media 미매칭).
+     게다가 .center가 static이라 절대배치 오버레이가 밖으로 탈출하므로 반드시 숨긴다. */
+  .posterOverlay {
+    display: none;
+  }
+  /* 컬럼 그리드가 성립하지 않는다 — 세로 스택. 데스크톱↔모바일 전환 시 cleanup이 인라인을 지운다. */
+  .tile {
     position: static;
     width: 76vw;
+    max-width: 100%;
+    height: auto; /* 인라인 height를 쓰지 않는 경로 — 사진 비율대로 흐른다 */
     transition:
       transform 0.6s ease,
       opacity 0.6s ease;
   }
-  .tile1,
-  .tile3 {
+  .tile img {
+    height: auto;
+  }
+  .tileL {
     align-self: flex-start;
     transform: translateX(-40vw);
   }
-  .tile2,
-  .tile4 {
+  .tileR {
     align-self: flex-end;
     transform: translateX(40vw);
   }
@@ -152,37 +148,12 @@
   }
 }
 
-/* reduced-motion — JS 미등록: 데스크톱은 완성 콜라주 정적, 모바일은 스택 즉시 표시(스펙 §6) */
+/* reduced-motion은 IntersectionObserver도 등록하지 않는다 — 슬라이드 인 없이 즉시 완성 상태.
+   .tileL/.tileR의 대기 transform을 덮어야 하므로 반드시 스택 블록 뒤에 온다(동일 특이도). */
 @media (prefers-reduced-motion: reduce) {
-  .hero {
-    height: auto;
-  }
-  .sticky {
-    position: static;
-  }
-  .cover {
-    display: none;
-  }
-  .tile,
-  .tile1,
-  .tile2,
-  .tile3,
-  .tile4 {
+  .tile {
     opacity: 1;
     transform: none;
     transition: none;
-  }
-}
-@media (prefers-reduced-motion: reduce) and (min-width: 640px) {
-  .sticky {
-    height: 100vh;
-    height: 100dvh;
-  }
-  .center {
-    clip-path: inset(14% 34% round var(--radius-xl));
-  }
-  .caption {
-    opacity: 1;
-    transform: translateY(-50%);
   }
 }

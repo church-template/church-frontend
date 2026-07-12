@@ -35,7 +35,17 @@ function setup(reduced = false) {
   );
   vi.stubGlobal("IntersectionObserver", MockIO);
   render(
-    <HeroHeaderSync media={{ type: "image", src: "/bg.jpg" }} caption="카피">
+    <HeroHeaderSync
+      media={{ type: "image", src: "/bg.jpg" }}
+      caption="카피"
+      tiles={[
+        { src: "/t1.jpg", alt: "", aspect: 1.17 },
+        { src: "/t2.jpg", alt: "", aspect: 1.78 },
+        { src: "/t3.jpg", alt: "", aspect: 1.5 },
+        { src: "/t4.jpg", alt: "", aspect: 1.78 },
+      ]}
+      posterAspect={1.32}
+    >
       <p>본문</p>
     </HeroHeaderSync>,
   );

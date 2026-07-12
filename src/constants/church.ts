@@ -1,7 +1,7 @@
 // 교회 고유값·콘텐츠 상수.
 // "환경"이 아니라 "교회"마다 다를 뿐이라 env가 아니라 상수로 둔다(매직스트링 방지).
 // 컴포넌트는 이 상수를 import해서 쓴다 — 문자열 인라인 금지(가이드 12장).
-import type { HeroMedia } from "@/hero/types";
+import type { CollageTile, HeroMedia } from "@/hero/types";
 
 export const CHURCH_NAME = "은샘교회";
 // 정식 명칭 — 저작권·약관 등 공식 표기용. 헤더·푸터 로고는 약칭 CHURCH_NAME을 쓴다.
@@ -25,19 +25,25 @@ export const HERO: HeroMedia = {
   poster: "/hero-poster.jpeg",
 };
 
+// 중앙 카드(축소 후 포스터가 굳는 자리)의 비율 = 포스터 원본 비율. 콜라주 레이아웃의 입력이라
+// 상수로 둔다 — 이 값이 원본과 다르면 중앙 카드에서 포스터가 잘린다. hero-poster.jpeg: 1920×1456.
+export const HERO_POSTER_ASPECT = 1920 / 1456;
+
 // 풀스크린 후 등장 카피 — 줄 단위 배열이라 "\n" 이스케이프가 필요 없다.
 export const HERO_CAPTION = [
   "함께함이 축복이 되는 교회",
   "은샘교회에 오신 것을 환영합니다",
 ];
 
-// 콜라주 타일(MediaCollage 스펙 C2·C4) — 데스크톱 4장, 모바일은 앞 2장만 노출(컴포넌트가 처리).
+// 콜라주 타일 — 데스크톱은 좌우 2컬럼(0·2번 왼쪽 / 1·3번 오른쪽), 모바일은 세로 스택.
+// aspect는 원본 픽셀 비율 그대로여야 한다: HeroReveal이 이 값에서 컬럼 폭을 역산해 좌·우 컬럼과
+// 중앙 카드의 높이를 맞춘다(크롭 0). 값이 틀리면 정렬이 조용히 어긋난다.
 // 장식 미디어라 alt 기본 "". 의미 있는 사진으로 교체 시 alt도 채운다.
-export const COLLAGE_TILES: HeroMedia[] = [
-  { type: "image", src: "/collage-1.jpg", alt: "" },
-  { type: "image", src: "/collage-2.jpg", alt: "" },
-  { type: "image", src: "/collage-3.jpg", alt: "" },
-  { type: "image", src: "/collage-4.jpg", alt: "" },
+export const COLLAGE_TILES: CollageTile[] = [
+  { src: "/collage-1.jpeg", alt: "", aspect: 1160 / 992 },
+  { src: "/collage-2.jpeg", alt: "", aspect: 4032 / 2268 },
+  { src: "/collage-3.jpeg", alt: "", aspect: 5184 / 3456 },
+  { src: "/collage-4.jpeg", alt: "", aspect: 4000 / 2252 },
 ];
 
 // 교회 소재지·연락처 — 푸터·오시는 길에서 소비. 교회별 값이라 상수(env 아님, 스펙 D2).

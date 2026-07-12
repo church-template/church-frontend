@@ -466,11 +466,20 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
   CTA 2개(primary + outline-on-dark). 상하 96px.
 
 ### 연출
-- **`media-collage`**: 메인 히어로(14A) 직후의 스크럽 섹션. 풀스크린 미디어(히어로와 동일)가
-  `clip-path: inset(... round {rounded.xl})`로 중앙 카드로 축소되고, 주변 타일(데스크톱 4·
-  모바일 2, `{rounded.xl}` + hairline)이 가장자리에서 슬라이드 인해 캔버스 위 콜라주를 만든다.
-  transform/clip-path/opacity만 사용(reflow 금지), reduced-motion은 완성 콜라주 정적 표시.
-  슬롯 기하·구간 수치는 스펙(docs/superpowers/specs/2026-06-11-media-collage-design.md §4)이 단일 진실.
+- **`media-collage`**: 메인 히어로(14A)와 한 몸인 스크럽 구간(`HeroReveal`). 풀스크린 영상이
+  **풀스크린을 유지한 채** 포스터로 크로스페이드되고(축소 없음), 그 포스터가 흰 캔버스로 페이드
+  아웃하면서 사진 4장이 좌·우 2컬럼 격자(`{rounded.xl}` + hairline)로 흘러 들어온다 — 좌 컬럼은
+  아래에서, 우 컬럼은 위에서. 가장자리에서 날아오는 방식이 아니다.
+  **히어로 미디어는 카드로 남지 않는다**: 창으로 들여다보는 축소 카드는 포스터 면적의 일부만
+  보여주면서 컨테이너 폭의 절반을 먹어 사진을 작게 만들었다. 풀스크린에서 제 몫을 다 보여준 뒤
+  비켜주고, 그 폭 전부를 사진이 가져간다.
+  **슬롯에 사진을 맞추지 않고 사진 비율에 슬롯을 맞춘다**: 컬럼 폭을 사진 비율에서 역산해 좌·우
+  컬럼 높이를 일치시키므로 크롭 0이다(두 컬럼 폭이 서로 다른 비대칭이 그 대가 — 의도된 결과).
+  콜라주 폭은 `{layout.container-max}`에 캡되고(콘텐츠 규칙 — 히어로 미디어만 풀블리드), 헤더
+  아래 남는 높이에도 캡된다(짧은 뷰포트에서 상단 타일이 헤더에 잘리지 않게).
+  transform/opacity만 사용(reflow 금지). reduced-motion은 폭 무관하게 정적 세로 스택(카피 →
+  포스터 카드 → 사진 4장) — 최종 프레임만 남기면 포스터를 아예 못 보기 때문에 모바일 스택을 공유한다.
+  레이아웃 대수·구간 수치는 스펙(docs/superpowers/specs/2026-07-13-collage-column-grid-design.md)이 단일 진실.
 - **`history-band`**: 연혁 카드 시퀀스(참조: 우리은행 Dream). 연도 배지 + 헤드라인 + 설명의
   풀폭 라운드 밴드(`{rounded.xl}`)가 세로로 이어지고, 배경은 surface-dark·primary-soft·
   surface-soft 토큰 교차(브랜드 3색 직역 금지 — 단일 액센트 원칙). 뷰포트 진입 시 1회
