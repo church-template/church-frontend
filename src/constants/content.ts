@@ -33,7 +33,11 @@ export const ABOUT = {
     "로고를 감싸는 네 빛깔은 우리가 믿는 복음의 흐름입니다. 하나님의 사랑에서 시작해, 그분이 지으신 세상과 예수님의 보혈을 지나, 구원받은 성도에게로 이어집니다.",
   // 로고 상징색 — 색 자체가 신학적 상징(콘텐츠)이며 UI 브랜드 팔레트와 무관. 색 연출은 나중에.
   symbolism: [
-    { color: "파랑색", title: "하나님", lines: ["전능하신 하나님의", "사랑과 은혜"] },
+    {
+      color: "파랑색",
+      title: "하나님",
+      lines: ["전능하신 하나님의", "사랑과 은혜"],
+    },
     {
       color: "초록색",
       title: "하나님이 만드신 세상",
@@ -95,7 +99,8 @@ export const HISTORY = {
         "소수의 성도들과 함께 교회의 기초를 세움",
         "기독교한국침례회 소속으로 시작",
       ],
-      significance: "은샘교회 역사의 출발점이자 하나님의 부르심에 순종한 신앙의 시작",
+      significance:
+        "은샘교회 역사의 출발점이자 하나님의 부르심에 순종한 신앙의 시작",
       media: { type: "image", src: "/history/2011-04.jpg", alt: "" },
     },
     {
@@ -123,7 +128,8 @@ export const HISTORY = {
         "교회 성장에 따른 필요한 시설 개선",
         "예배와 교제 공간의 효율적 활용",
       ],
-      significance: "교회 성장에 발맞춘 공간 확대로 많은 성도들을 품을 수 있게 됨",
+      significance:
+        "교회 성장에 발맞춘 공간 확대로 많은 성도들을 품을 수 있게 됨",
       media: { type: "image", src: "/history/2015.jpg", alt: "" },
     },
     {
@@ -182,7 +188,7 @@ export const HISTORY = {
       ],
       significance:
         "디지털 시대에 맞는 새로운 소통 방식으로 더 많은 사람들에게 복음을 전할 수 있게 됨",
-      media: { type: "image", src: "/history/2025.jpg", alt: "" },
+      media: { type: "image", src: "/history/2025.png", alt: "" },
     },
   ],
 } satisfies HistoryContent;
@@ -214,8 +220,9 @@ export const PASTOR = {
   name: "홍성균",
   position: "담임목사",
   degree: "한국침례신학대학교 석사 (M.Div)",
-  // 포트레이트 자산 — 미준비 시 null(플레이스홀더 폴백). 준비되면 { src, alt } 주입.
-  image: null as { src: string; alt: string } | null,
+  // 포트레이트 자산 — public/ 기준 절대경로. null로 두면 플레이스홀더 폴백(PastorPortrait).
+  // aspect(가로/세로)는 액자를 사진에 맞춰 크롭을 없애는 입력이다 — 사진 교체 시 함께 갱신.
+  image: { src: "/pastor.jpg", alt: "홍성균 담임목사", aspect: 1073 / 2007 },
   // 다크 밴드 핵심 인용 1문장 — 컴포넌트 발췌 금지(콘텐츠 하드코딩 방지).
   pullQuote:
     "은샘에서 함께함이 축복이 되는 행복한 신앙의 삶을 시작하시길 주님의 이름으로 축원합니다.",
@@ -254,7 +261,11 @@ export const PASTOR = {
 export type ChurchPhoto = { src: string; alt: string };
 export type PhotoGroup = { key: string; title: string; photos: ChurchPhoto[] };
 
-export const CHURCH_PHOTOS: { title: string; empty: string; groups: PhotoGroup[] } = {
+export const CHURCH_PHOTOS: {
+  title: string;
+  empty: string;
+  groups: PhotoGroup[];
+} = {
   title: "교회 사진",
   empty: "교회 사진을 준비 중입니다.",
   groups: [
@@ -300,7 +311,11 @@ export const LOCATION = {
       ],
     },
     // 대중교통 실제 노선 문구는 교회가 채운다(placeholder).
-    { key: "transit", title: "대중교통", lines: ["버스 노선 정보 준비 중입니다."] },
+    {
+      key: "transit",
+      title: "대중교통",
+      lines: ["버스 노선 정보 준비 중입니다."],
+    },
   ],
 };
 
@@ -333,27 +348,43 @@ export const WORSHIP_SERVICES: WorshipService[] = [
     name: "새벽예배",
     time: "월~토 오전 5:30",
     place: "본당",
-    notes: ["새벽 기도와 말씀 묵상", "하루를 시작하는 은혜로운 시간", "조용하고 경건한 분위기"],
+    notes: [
+      "새벽 기도와 말씀 묵상",
+      "하루를 시작하는 은혜로운 시간",
+      "조용하고 경건한 분위기",
+    ],
   },
   {
     name: "주일예배",
     time: "주일 오전 11:00",
     place: "본당",
     praise: "오전 10시 40분 찬양",
-    notes: ["주일 대예배 시간", "전 성도가 함께 드리는 예배", "설교·찬양·성찬식 진행"],
+    notes: [
+      "주일 대예배 시간",
+      "전 성도가 함께 드리는 예배",
+      "설교·찬양·성찬식 진행",
+    ],
   },
   {
     name: "수요예배",
     time: "수요일 오후 7:20",
     place: "본당",
     praise: "오후 7시 찬양",
-    notes: ["주중 말씀 은혜를 받는 시간", "성경 공부와 기도", "친밀한 교제와 나눔"],
+    notes: [
+      "주중 말씀 은혜를 받는 시간",
+      "성경 공부와 기도",
+      "친밀한 교제와 나눔",
+    ],
   },
   {
     name: "학생·청년예배",
     time: "토요일 오전 11:00",
     place: "본당",
-    notes: ["주말 예배 시간", "자유롭고 은혜로운 분위기", "학생·청년들을 위한 예배"],
+    notes: [
+      "주말 예배 시간",
+      "자유롭고 은혜로운 분위기",
+      "학생·청년들을 위한 예배",
+    ],
   },
 ];
 
@@ -364,12 +395,42 @@ export interface SpecialService {
   desc: string;
 }
 export const SPECIAL_SERVICES: SpecialService[] = [
-  { name: "송구영신 예배", date: "1월 1일", time: "오전 0시", desc: "새해를 맞아 하나님께 감사드리는 특별예배" },
-  { name: "부활절 예배", date: "부활절 주일", time: "오전 11시", desc: "예수님의 부활을 기념하는 특별예배" },
-  { name: "창립기념감사 예배", date: "5월 셋째 주일", time: "오전 11시", desc: "교회 창립을 기념하며 하나님께 감사드리는 예배" },
-  { name: "맥추 감사절 예배", date: "6월 마지막 주일", time: "오전 11시", desc: "맥추 감사절을 맞아 첫 열매를 드리며 감사드리는 예배" },
-  { name: "추수 감사절 예배", date: "11월 셋째 주일", time: "오전 11시", desc: "한 해의 은혜를 되돌아보며 감사드리는 예배" },
-  { name: "성탄절 예배", date: "12월 25일", time: "오전 11시", desc: "예수님의 탄생을 기념하는 성탄절 특별예배" },
+  {
+    name: "송구영신 예배",
+    date: "1월 1일",
+    time: "오전 0시",
+    desc: "새해를 맞아 하나님께 감사드리는 특별예배",
+  },
+  {
+    name: "부활절 예배",
+    date: "부활절 주일",
+    time: "오전 11시",
+    desc: "예수님의 부활을 기념하는 특별예배",
+  },
+  {
+    name: "창립기념감사 예배",
+    date: "5월 셋째 주일",
+    time: "오전 11시",
+    desc: "교회 창립을 기념하며 하나님께 감사드리는 예배",
+  },
+  {
+    name: "맥추 감사절 예배",
+    date: "6월 마지막 주일",
+    time: "오전 11시",
+    desc: "맥추 감사절을 맞아 첫 열매를 드리며 감사드리는 예배",
+  },
+  {
+    name: "추수 감사절 예배",
+    date: "11월 셋째 주일",
+    time: "오전 11시",
+    desc: "한 해의 은혜를 되돌아보며 감사드리는 예배",
+  },
+  {
+    name: "성탄절 예배",
+    date: "12월 25일",
+    time: "오전 11시",
+    desc: "예수님의 탄생을 기념하는 성탄절 특별예배",
+  },
 ];
 
 export const CTA_BAND = {
@@ -387,9 +448,21 @@ export interface Ministry {
   desc: string;
 }
 export const MINISTRIES: Ministry[] = [
-  { key: "worship", title: "말씀 중심의 예배", desc: "주일과 평일, 삶의 자리마다 말씀으로 예배합니다." },
-  { key: "nextgen", title: "다음 세대 양육", desc: "영유아부터 청년까지 세대별 교육으로 신앙을 세웁니다." },
-  { key: "serving", title: "지역 사회 섬김", desc: "지역과 이웃의 필요에 응답하는 섬김을 실천합니다." },
+  {
+    key: "worship",
+    title: "말씀 중심의 예배",
+    desc: "주일과 평일, 삶의 자리마다 말씀으로 예배합니다.",
+  },
+  {
+    key: "nextgen",
+    title: "다음 세대 양육",
+    desc: "영유아부터 청년까지 세대별 교육으로 신앙을 세웁니다.",
+  },
+  {
+    key: "serving",
+    title: "지역 사회 섬김",
+    desc: "지역과 이웃의 필요에 응답하는 섬김을 실천합니다.",
+  },
 ];
 
 // 메인 데이터 섹션 타이틀·빈 상태 문구(가이드 13.2 빈 배열 처리) — 콘텐츠 하드코딩 금지(12장).
