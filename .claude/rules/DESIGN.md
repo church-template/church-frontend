@@ -371,6 +371,7 @@ components:
 | `{typography.title-sm}` | 20px | 600 | 목록 행 제목 (notice-row·bulletin-row) |
 | `{typography.body-md}` | 20px | 400 | 기본 본문 (행간 1.7) |
 | `{typography.body-lg}` | 24px | 400 | 읽는 본문 강조 (소망·이야기 등 장문, 행간 1.7) |
+| `{typography.body-xl}` | 32px | 600 | **지금 읽는 문장** — `reading-spotlight`에서 켜진 문장만 body-lg(24px/400)에서 여기까지 부푼다 |
 | `{typography.body-lg-strong}` | 28px | 700 | 읽는 본문 내 의미 구절 인라인 강조 (소망 4색 구절, 행간 1.45로 body-lg 줄높이 유지) |
 | `{typography.body-sm}` | 18px | 400 | 보조 본문, 푸터 |
 | `{typography.datetime}` | 18px | 500 | 날짜·시간 (tnum) |
@@ -480,6 +481,18 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
   transform/opacity만 사용(reflow 금지). reduced-motion은 폭 무관하게 정적 세로 스택(카피 →
   포스터 카드 → 사진 4장) — 최종 프레임만 남기면 포스터를 아예 못 보기 때문에 모바일 스택을 공유한다.
   레이아웃 대수·구간 수치는 스펙(docs/superpowers/specs/2026-07-13-collage-column-grid-design.md)이 단일 진실.
+- **`reading-spotlight`**: 목회자 인사말(`/about/pastor`) 본문의 리딩 강조. 본문을 **문장 span으로 쪼개** 스크롤에
+  따라 **한 문장씩** 켠다 — 켜진 문장만 `{colors.ink}` + `{typography.body-xl}`(32px/600)로 부풀고, 나머지는
+  `{typography.body-lg}`(24px/400) + `{colors.muted-soft}`로 흐리다(형광펜 배경 없음 — 단일 액센트·문서 톤 유지).
+  줄 높이는 큰 글자 기준으로 고정해(`calc(--text-body-xl * 1.5)`) 문장이 부풀어도 본문이 출렁이지 않게 한다.
+  CSS 스크롤 타임라인만 쓴다(JS 0줄).
+  **데스크톱(≥64rem 폭·≥48rem 높이)은 섹션을 화면에 고정(sticky)한 채** 강조가 문장을 하나씩 밟고 내려가고, 마지막
+  문장이 끝나면 고정이 풀리며 다음 섹션으로 넘어간다 — `view-timeline`의 `contain` 구간이 곧 고정 구간이라
+  별도 계산이 없다. 고정 길이 = `100vh + 문장수 × 20vh`(본문이 길면 그만큼 길어진다). 좁거나 낮은 뷰포트는
+  고정하지 않고(콘텐츠가 화면보다 커 잘린 채 멈추므로) 문장이 화면 중앙대를 지날 때 켜진다. **강조 밖 문장을
+  지우지 않는다**(고령 가독성 > 몰입). 켜짐은 `animation-fill-mode: none` + 문장별 `animation-range` 등분으로
+  성립. 미지원 브라우저·reduced-motion은 평문(`{colors.body}`)·고정 없음.
+  대수·노브는 스펙(docs/superpowers/specs/2026-07-13-pastor-reading-spotlight-design.md).
 - **`history-band`**: 연혁 카드 시퀀스(참조: 우리은행 Dream). 연도 배지 + 헤드라인 + 설명의
   풀폭 라운드 밴드(`{rounded.xl}`)가 세로로 이어지고, 배경은 surface-dark·primary-soft·
   surface-soft 토큰 교차(브랜드 3색 직역 금지 — 단일 액센트 원칙). 뷰포트 진입 시 1회
