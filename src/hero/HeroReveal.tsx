@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
 import styles from "./HeroReveal.module.css";
 import { lerp, clamp01, segment } from "./scrub";
-import { useMediaFlag, REDUCED_MQ, MOBILE_MQ } from "@/lib/hooks/useMediaFlag";
+import { useMediaFlag, REDUCED_MQ } from "@/lib/hooks/useMediaFlag";
 import type { CollageTile, HeroMedia } from "./types";
 
 export interface HeroRevealProps {
@@ -58,7 +58,14 @@ const P = {
   solid: 0.64, // onSolid(true) 임계 — 포스터가 걷히며 흰 캔버스가 드러나기 직전
   heroOut: [0.66, 0.8], // 포스터 페이드 아웃 → 흰 캔버스
   // 타일 진입 0.70–0.96 (heroOut과 겹쳐 끊김 없이)
+  seq: [0.7, 0.98], // 좁은 폭 전용 — 이 구간을 타일 수로 등분해 한 장씩 넘긴다
 } as const;
+
+// 좁은 폭(<640) — 2컬럼 격자면 사진이 컬럼 폭 절반까지 쪼그라든다. 격자를 포기하고 장면 단위로
+// 화면 폭 가득 넘긴다(장면 분할은 seqGroups). 스크럽 길이는 CSS의 .hero 높이가 정한다(모바일 500vh).
+const SINGLE_MQ = "(max-width: 639px)";
+const SEQ_HOLD = 0.6; // 등분 구간 중 페이드 인에 쓰는 비율(나머지는 홀드 — 눈에 담을 시간)
+const SEQ_FROM_Y = 5; // 진입 오프셋(vh)
 
 // 영상을 실제로 재생할 환경. 이 쿼리가 안 맞으면 브라우저는 <source>를 건너뛰고 poster만 띄운다
 // (HTML 스펙 "show poster flag") — 즉 모바일·reduced-motion은 영상 바이트를 0 받는다.
@@ -111,7 +118,6 @@ export default function HeroReveal({
   const captionRef = useRef<HTMLParagraphElement>(null);
   const tileRefs = useRef<(HTMLDivElement | null)[]>([]);
   const reduced = useMediaFlag(REDUCED_MQ);
-  const isMobile = useMediaFlag(MOBILE_MQ);
 
   useEffect(() => {
     if (reduced) {
@@ -120,28 +126,9 @@ export default function HeroReveal({
       return;
     }
 
-    if (isMobile) {
-      // 모바일: 십자가 인트로 생략, 세로 스택 카드 — 화면 진입 시 1회 슬라이드 인(스크럽 없음).
-      const io = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add(styles.tileShown);
-              io.unobserve(entry.target);
-            }
-          });
-        },
-        { threshold: 0.25 },
-      );
-      tileRefs.current.forEach((el) => {
-        if (el) {
-          io.observe(el);
-        }
-      });
-      return () => io.disconnect();
-    }
-
-    // 데스크톱: 스크롤 진행도 비례 단일 rAF 스크럽 — 십자가 리빌 + 카피 + 축소 + 타일 통합.
+    // 모바일 포함 전 폭 공통: 스크롤 진행도 비례 단일 rAF 스크럽 — 십자가 리빌 + 카피 + 축소 + 타일 통합.
+    // 모바일은 <source media>가 안 맞아 <video>가 poster를 그대로 보여주므로(§RevealMedia 주석)
+    // 영상 다운로드 없이 같은 스크럽을 탄다.
     const root = rootRef.current!;
     const sticky = stickyRef.current!;
     const centerEl = centerRef.current!;
@@ -156,10 +143,21 @@ export default function HeroReveal({
       cx = 0,
       cy = 0,
       ticking = false,
-      lastSolid = false;
+      lastSolid = false,
+      // 영상이 안 도는 환경(모바일)에서는 포스터가 곧 히어로다. <video poster>는 브라우저마다
+      // object-fit 적용이 달라 믿을 수 없으므로, 포스터 <img>를 처음부터 덮어 crop-cover를 보장한다.
+      posterOnly = false,
+      single = false; // 좁은 폭 — 콜라주 격자 대신 장면 단위 순차 표시
 
     // 슬롯은 실제로 넘어온 타일 수만큼만 — TILES를 그대로 순회하면 tiles가 모자랄 때 터진다.
     const slots = TILES.slice(0, tiles.length);
+
+    // 좁은 폭의 장면 분할 — 1번은 세로가 길어 혼자 크게, 나머지(가로가 긴 사진들)는 한 화면에
+    // 세로로 쌓아 한 번에 보여준다. 장면 하나가 스크럽 구간을 통째로 쓴다.
+    const seqGroups = [
+      [0],
+      slots.map((_, i) => i).slice(1),
+    ].filter((g) => g.length);
     // 컬럼별 사진 비율의 역수 합 — 폭 1px당 늘어나는 컬럼 높이.
     const invSum = (col: "L" | "R") =>
       slots.reduce(
@@ -170,6 +168,8 @@ export default function HeroReveal({
       slots.filter((t) => t.col === col).length;
 
     const measure = () => {
+      posterOnly = !window.matchMedia(VIDEO_MQ).matches;
+      single = window.matchMedia(SINGLE_MQ).matches;
       const cs = getComputedStyle(root);
       const containerMax = parseFloat(cs.getPropertyValue("--container-max"));
       const pad = parseFloat(cs.getPropertyValue("--container-padding"));
@@ -183,6 +183,30 @@ export default function HeroReveal({
       cy = vh / 2;
       startScale = (Math.min(vw, vh) * (START_PCT / 100)) / 100;
       targetScale = Math.max(vw / CROSS.vbw, vh / 100) * 1.1;
+
+      // 순차 모드 — 장면(그룹)마다 헤더 아래 중앙에 세로 컬럼 하나. 폭은 컨테이너 규칙을 따르되
+      // 그룹 전체 높이가 남는 높이를 넘으면 폭에서 역산해 줄인다(크롭 0 유지).
+      if (single) {
+        const availH = vh - nav - 2 * pad;
+        const maxW = Math.min(containerMax - 2 * pad, vw - 2 * pad);
+        seqGroups.forEach((group) => {
+          const invs = group.reduce((a, i) => a + 1 / tiles[i].aspect, 0);
+          const vGap = (group.length - 1) * gap;
+          const w = Math.min(maxW, (availH - vGap) / invs);
+          let top = nav + (vh - nav - (w * invs + vGap)) / 2;
+          group.forEach((i) => {
+            const el = tileEls[i];
+            if (!el) return;
+            const h = w / tiles[i].aspect;
+            el.style.left = `${(vw - w) / 2}px`;
+            el.style.top = `${top}px`;
+            el.style.width = `${w}px`;
+            el.style.height = `${h}px`;
+            top += h + gap;
+          });
+        });
+        return;
+      }
 
       // 한쪽 컬럼이 비면 컬럼 높이를 맞추는 대수가 성립하지 않는다(좌2·우2 계약 위반).
       // 십자가·카피·포스터는 살리고 콜라주 기하만 건너뛴다.
@@ -245,23 +269,43 @@ export default function HeroReveal({
 
       // 4) 영상 → 포스터 크로스페이드(풀스크린 유지) → 포스터 페이드 아웃 → 흰 캔버스
       if (posterEl) {
-        posterEl.style.opacity = String(
-          segment(p, P.posterIn[0], P.posterIn[1]),
-        );
+        posterEl.style.opacity = posterOnly
+          ? "1"
+          : String(segment(p, P.posterIn[0], P.posterIn[1]));
       }
       // 페이드는 선형 — easeOut을 걸면 앞구간에서 확 사라지고 끝에서 늘어져 끊겨 보인다.
       centerEl.style.opacity = String(
         1 - segment(p, P.heroOut[0], P.heroOut[1]),
       );
 
-      // 5b) 타일 진입 — 좌 컬럼은 아래에서 ↑, 우 컬럼은 위에서 ↓ 흘러 들어와 격자에 멈춘다.
-      slots.forEach((conf, i) => {
-        const el = tileEls[i];
-        if (!el) return;
-        const tt = segment(p, conf.seg[0], conf.seg[1]);
-        el.style.opacity = String(tt);
-        el.style.transform = `translateY(${lerp(conf.fromY, 0, tt)}vh)`;
-      });
+      // 5b) 타일 진입 — 격자: 좌 컬럼은 아래에서 ↑, 우 컬럼은 위에서 ↓ 흘러 들어와 멈춘다.
+      if (single) {
+        // 순차(좁은 폭): 장면이 등분 구간마다 아래에서 올라오고 앞 장면은 빠진다(곱셈 퇴장).
+        // 사진 비율이 제각각이라 겹쳐 덮는 것으로는 앞 장면이 삐져나온다 — 반드시 크로스페이드.
+        const span = (P.seq[1] - P.seq[0]) / seqGroups.length;
+        const groupIn = (g: number) =>
+          segment(p, P.seq[0] + g * span, P.seq[0] + (g + SEQ_HOLD) * span);
+        seqGroups.forEach((group, g) => {
+          const tt = groupIn(g);
+          const out = g < seqGroups.length - 1 ? groupIn(g + 1) : 0;
+          const opacity = String(tt * (1 - out));
+          const transform = `translateY(${lerp(SEQ_FROM_Y, 0, tt)}vh)`;
+          group.forEach((i) => {
+            const el = tileEls[i];
+            if (!el) return;
+            el.style.opacity = opacity;
+            el.style.transform = transform;
+          });
+        });
+      } else {
+        slots.forEach((conf, i) => {
+          const el = tileEls[i];
+          if (!el) return;
+          const tt = segment(p, conf.seg[0], conf.seg[1]);
+          el.style.opacity = String(tt);
+          el.style.transform = `translateY(${lerp(conf.fromY, 0, tt)}vh)`;
+        });
+      }
 
       // 헤더 — 포스터가 걷히기 직전 임계 교차 시 solid 통지(양방향).
       const solid = p >= P.solid;
@@ -306,17 +350,17 @@ export default function HeroReveal({
       captionEl.style.transform = "";
       hole.removeAttribute("transform");
     };
-  }, [reduced, isMobile, onSolid, tiles, posterAspect]);
+  }, [reduced, onSolid, tiles, posterAspect]);
 
   return (
     <section ref={rootRef} className={styles.hero}>
       <div ref={stickyRef} className={styles.sticky}>
-        {/* aspect-ratio는 정적 스택(모바일·reduced)에서만 먹는다 — 스크럽 모드의 .center는
-            absolute inset:0이라 폭·높이가 이미 확정되어 무시된다. */}
+        {/* 포스터 비율은 변수로만 넘긴다 — aspect-ratio를 직접 걸면 스크럽 모드(absolute inset:0)에서도
+            폭에서 높이를 역산해 세로 화면이 납작하게 잘린다. CSS가 정적 스택(reduced)에서만 소비한다. */}
         <div
           ref={centerRef}
           className={styles.center}
-          style={{ aspectRatio: posterAspect }}
+          style={{ "--poster-aspect": posterAspect } as CSSProperties}
         >
           <RevealMedia media={media} />
           {media.type === "video" && media.poster ? (
