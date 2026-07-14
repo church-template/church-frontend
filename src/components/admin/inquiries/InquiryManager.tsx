@@ -104,15 +104,14 @@ export function InquiryManager() {
 
         {/* aria-controls가 가리키는 패널 — 탭 트리거와 목록 영역의 연결을 스크린리더에 알린다. */}
         <TabsContent value={filter}>
-          <div className="mt-base">
-            <DataTable
-              columns={columns}
-              rows={inquiries.data?.content ?? []}
-              rowKey={(q) => q.id}
-              loading={inquiries.isPending}
-              empty={<EmptyState message="접수된 문의가 없습니다." />}
-            />
-          </div>
+          {/* 탭↔표 간격은 TabsContent의 pt-base가 이미 준다 — mt를 더하면 여백이 두 배가 된다. */}
+          <DataTable
+            columns={columns}
+            rows={inquiries.data?.content ?? []}
+            rowKey={(q) => q.id}
+            loading={inquiries.isPending}
+            empty={<EmptyState message="접수된 문의가 없습니다." />}
+          />
 
           {pageMeta && pageMeta.totalPages > 1 ? (
             <div className="mt-xl">
