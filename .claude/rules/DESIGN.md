@@ -544,7 +544,7 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
   체크 시 `{colors.primary}` 채움 + on-primary lucide `Check`. 라벨 포함 행 전체가 클릭
   영역(행 높이 ≥ 48px — 고령 터치). 에러 메시지는 text-input과 동일(아래 caption, semantic 토큰).
 - **`inquiry-form`**: 공개 문의 접수 폼(`/about/location`). `text-input`·`Textarea`·`checkbox`(+`TermsDialog` 전문 보기) 조합에 48px `button-primary`. 비회원 제출이라 인증 없음.
-  **배치**: 연락처(흰 섹션) 다음의 `{colors.surface-soft}` 밴드에서 **좌 문의 카드 : 우 `찾아오는 방법` = 7:5** 2컬럼(모바일 세로 스택). 문의가 이 페이지의 주 행동이라 폭을 더 준다. 문의 카드는 회색 밴드 위의 `{colors.canvas}` 카드(`{rounded.xl}` + hairline + `{spacing.xl}` 패딩) — 밴드 배경·컨테이너는 페이지가 소유한다.
+  **배치**: 연락처(흰 섹션) 다음의 `{colors.surface-soft}` 밴드에서 **좌 `찾아오는 방법` : 우 문의 카드 = 5:7** 2컬럼(모바일 세로 스택). 문의가 이 페이지의 주 행동이라 폭을 더 준다. 문의 카드는 회색 밴드 위의 `{colors.canvas}` 카드(`{rounded.xl}` + hairline + `{spacing.xl}` 패딩) — 밴드 배경·컨테이너는 페이지가 소유한다.
   **필수 표기**: 필수/선택은 라벨 텍스트(`이름 (필수)`·`이메일 (선택)`)로 알린다 — 별표는 고령 사용자가 놓치기 쉽다(가입 폼과 같은 관례). native `required`는 `noValidate`라 브라우저 팝업 없이 `aria-required`만 부여한다.
   **접수 완료**: 제출 성공 시 폼을 접수 완료 패널로 교체한다(`{rounded.full}` 체크 플레이트 + 접수번호 `{typography.datetime}`, `role="status"` + 제목 포커스 이동) — 토스트만으로는 고령 사용자가 접수 사실을 놓친다. 카드 안이라 패널에 카드 크롬을 겹치지 않는다(중첩 카드 금지).
 - 검증 메시지는 입력 아래 `{typography.caption}`, 색은 semantic 토큰.

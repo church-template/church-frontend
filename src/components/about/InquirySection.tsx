@@ -25,7 +25,7 @@ type InquiryField = (typeof SERVER_FIELDS)[number];
 const isInquiryField = (f: string): f is InquiryField =>
   (SERVER_FIELDS as readonly string[]).includes(f);
 
-// 연락처 페이지의 세 번째 채널(전화·이메일 다음) — 회색 밴드 좌측 카드. 비로그인 방문자도 제출한다.
+// 연락처 페이지의 세 번째 채널(전화·이메일 다음) — 회색 밴드 우측 카드. 비로그인 방문자도 제출한다.
 export function InquirySection() {
   // 접수번호를 들고 있으면 완료 패널을 렌더한다 — 토스트만으로는 고령 사용자가 접수를 놓친다.
   const [ticketId, setTicketId] = useState<number | null>(null);
