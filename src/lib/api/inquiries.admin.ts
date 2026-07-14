@@ -10,7 +10,7 @@ export interface InquiryCardResponse {
   id: number;
   name: string;
   phone: string;
-  email: string;
+  email?: string; // @JsonInclude(NON_NULL) — 미입력 시 누락 가능
   completed: boolean;
   completedAt: string | null; // @JsonInclude(NON_NULL) — 미완료 시 누락 가능
   createdAt: string;

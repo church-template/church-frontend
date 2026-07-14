@@ -2,12 +2,12 @@
 import { useState, useEffect } from "react";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
 import { typo } from "@/constants/typography";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/Badge";
 import { DataTable, type Column } from "@/components/admin/DataTable";
 import { Pagination } from "@/components/common/Pagination";
+import { EmptyState } from "@/components/common/EmptyState";
 import { adminKeys } from "@/lib/admin/queryKeys";
 import { adminOnError } from "@/lib/admin/mutationHandlers";
 import { formatDate } from "@/lib/date";
@@ -101,23 +101,26 @@ export function InquiryManager() {
             </TabsTrigger>
           ))}
         </TabsList>
+
+        {/* aria-controls가 가리키는 패널 — 탭 트리거와 목록 영역의 연결을 스크린리더에 알린다. */}
+        <TabsContent value={filter}>
+          <div className="mt-base">
+            <DataTable
+              columns={columns}
+              rows={inquiries.data?.content ?? []}
+              rowKey={(q) => q.id}
+              loading={inquiries.isPending}
+              empty={<EmptyState message="접수된 문의가 없습니다." />}
+            />
+          </div>
+
+          {pageMeta && pageMeta.totalPages > 1 ? (
+            <div className="mt-xl">
+              <Pagination page={pageMeta} scroll={false} />
+            </div>
+          ) : null}
+        </TabsContent>
       </Tabs>
-
-      <div className="mt-base">
-        <DataTable
-          columns={columns}
-          rows={inquiries.data?.content ?? []}
-          rowKey={(q) => q.id}
-          loading={inquiries.isPending}
-          empty={<p className={cn(typo.bodyMd, "text-muted")}>접수된 문의가 없습니다.</p>}
-        />
-      </div>
-
-      {pageMeta && pageMeta.totalPages > 1 ? (
-        <div className="mt-xl">
-          <Pagination page={pageMeta} />
-        </div>
-      ) : null}
 
       <InquiryDetailDialog
         id={selected}

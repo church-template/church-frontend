@@ -31,6 +31,9 @@ export function InquiryDetailDialog({ id, open, onOpenChange }: Props) {
     queryFn: () => getInquiry(id as number),
     enabled: open && id != null,
     retry: false,
+    // 비회원 방문자의 이름·전화·이메일·문의 본문(PII) — 다이얼로그를 닫는 즉시 캐시에서 지운다.
+    staleTime: 0,
+    gcTime: 0,
   });
 
   // 조회 실패는 토스트로 알리고 닫는다(빈 상세와 혼동 방지). notify는 setState 아님.

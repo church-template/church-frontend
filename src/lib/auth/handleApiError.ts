@@ -56,8 +56,8 @@ export function handleApiError(error: ApiError, handlers: ApiErrorHandlers = {})
       notify.error("파일 용량이 한도를 초과했습니다. 더 작은 파일을 선택해 주세요.");
       break;
     case "RATE_LIMIT_EXCEEDED":
-      // 문의 등록 IP 제한(1시간 5건). 재시도 시점을 알려줘야 방문자가 막힌 줄 알고 이탈하지 않는다.
-      notify.error("문의가 너무 많이 접수되었습니다. 잠시 후 다시 시도해 주세요.");
+      // 전역 errorCode 스위치 공용 분기라 도메인 특정 문구를 쓰지 않는다(문의 외 로그인 등도 공유).
+      notify.error("요청이 너무 많습니다. 잠시 후 다시 시도해 주세요.");
       break;
     // FILE_STORAGE_ERROR·INTERNAL_ERROR는 default(서버 title ?? 일반)로 처리 — case 불필요
     default:

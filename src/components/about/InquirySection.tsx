@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Check } from "lucide-react";
@@ -30,6 +30,12 @@ const isInquiryField = (f: string): f is InquiryField =>
 export function InquirySection() {
   // 접수번호를 들고 있으면 완료 패널을 렌더한다 — 토스트만으로는 고령 사용자가 접수를 놓친다.
   const [ticketId, setTicketId] = useState<number | null>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+
+  // 제출 버튼이 사라지며 포커스가 body로 유실되는 것을 막는다 — 완료 제목으로 옮긴다(setState 아닌 ref 포커스).
+  useEffect(() => {
+    if (ticketId != null) headingRef.current?.focus();
+  }, [ticketId]);
 
   const {
     register,
@@ -85,11 +91,16 @@ export function InquirySection() {
         {/* 폼 읽기 컬럼 폭 — 마이페이지·계정 폼과 같은 토큰(t-shirt max-w-*는 spacing 토큰과 충돌해 금지). */}
         <div className="mt-xxl max-w-[var(--container-narrow)]">
           {ticketId != null ? (
-            <div className="flex flex-col items-start gap-base rounded-xl border border-hairline bg-surface-soft p-xl">
+            <div
+              role="status"
+              className="flex flex-col items-start gap-base rounded-xl border border-hairline bg-surface-soft p-xl"
+            >
               <span className="inline-flex size-12 items-center justify-center rounded-full bg-primary text-on-primary">
                 <Check size={24} aria-hidden />
               </span>
-              <h3 className={cn(typo.titleMd, "text-ink")}>문의가 접수되었습니다</h3>
+              <h3 ref={headingRef} tabIndex={-1} className={cn(typo.titleMd, "text-ink")}>
+                문의가 접수되었습니다
+              </h3>
               <p className={cn(typo.bodyMd, "text-body")}>
                 남겨주신 연락처로 담당자가 회신드립니다.
               </p>

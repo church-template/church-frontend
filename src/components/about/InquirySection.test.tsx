@@ -99,7 +99,7 @@ describe("InquirySection", () => {
     fireEvent.click(screen.getByRole("button", { name: "문의 남기기" }));
 
     await waitFor(() =>
-      expect(notifyError).toHaveBeenCalledWith("문의가 너무 많이 접수되었습니다. 잠시 후 다시 시도해 주세요."),
+      expect(notifyError).toHaveBeenCalledWith("요청이 너무 많습니다. 잠시 후 다시 시도해 주세요."),
     );
     // 실패 시 폼은 그대로 남는다(입력 유실 방지)
     expect(screen.getByRole("button", { name: "문의 남기기" })).toBeDefined();

@@ -203,10 +203,10 @@ describe("handleApiError", () => {
     expect(notify.error).toHaveBeenCalledWith("저장 실패");
   });
 
-  it("RATE_LIMIT_EXCEEDED: 과다 제출 안내 토스트", () => {
+  it("RATE_LIMIT_EXCEEDED: 과다 요청 안내 토스트(전역 공용 문구)", () => {
     handleApiError(err("RATE_LIMIT_EXCEEDED", { status: 429, title: "Too Many Requests" }));
     expect(notify.error).toHaveBeenCalledWith(
-      "문의가 너무 많이 접수되었습니다. 잠시 후 다시 시도해 주세요.",
+      "요청이 너무 많습니다. 잠시 후 다시 시도해 주세요.",
     );
   });
 });
