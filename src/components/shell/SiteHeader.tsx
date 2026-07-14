@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
 import { MobileNav } from "./MobileNav";
@@ -10,7 +11,7 @@ import { Container } from "./Container";
 import { NAV_PRIMARY, NAV_LOGIN, NAV_MYPAGE } from "@/constants/navigation";
 import { isActiveItem } from "@/lib/nav";
 import { useAuthStore } from "@/lib/auth/authStore";
-import { CHURCH_NAME } from "@/constants/church";
+import { CHURCH_NAME, CHURCH_LOGO } from "@/constants/church";
 import { typo } from "@/constants/typography";
 import { cn } from "@/lib/utils";
 
@@ -64,7 +65,9 @@ export function SiteHeader({ variant = "light", solid = false }: SiteHeaderProps
       }}
     >
       <Container className="flex h-nav items-center justify-between">
-        <Link href="/" className={cn(typo.titleMd, accentColor)}>
+        {/* 로고 + 교회명. 로고는 이름 옆 장식이라 alt=""(스크린리더가 이름을 두 번 읽지 않게). */}
+        <Link href="/" className={cn(typo.titleMd, accentColor, "flex items-center gap-base")}>
+          <Image src={CHURCH_LOGO.src} alt="" width={512} height={512} priority className="size-8 shrink-0" />
           {CHURCH_NAME}
         </Link>
 

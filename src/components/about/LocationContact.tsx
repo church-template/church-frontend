@@ -1,6 +1,8 @@
+import { Copy } from "lucide-react";
 import { Container } from "@/components/shell/Container";
 import { Reveal } from "@/components/main/Reveal";
 import { buttonVariants } from "@/components/ui/Button";
+import { CopyableField } from "./CopyableField";
 import { typo } from "@/constants/typography";
 import { cn } from "@/lib/utils";
 import {
@@ -22,29 +24,18 @@ export function LocationContact() {
         <p className={cn(typo.bodyLg, "mt-base text-body")}>{LOCATION.lead}</p>
 
         <div className="mt-xxl grid gap-xl lg:grid-cols-[5fr_7fr] lg:items-start">
-          {/* 좌 — 연락 정보 */}
-          <dl className="border-t border-hairline">
-            <div className="border-b border-hairline py-base">
-              <dt className={cn(typo.captionStrong, "text-muted")}>주소</dt>
-              <dd className={cn(typo.bodyLg, "mt-xs text-ink")}>{CHURCH_ADDRESS}</dd>
-            </div>
-            <div className="border-b border-hairline py-base">
-              <dt className={cn(typo.captionStrong, "text-muted")}>전화</dt>
-              <dd className={cn(typo.bodyLg, "mt-xs text-ink")}>
-                <a href={`tel:${CHURCH_PHONE}`} className="hover:text-primary">
-                  {CHURCH_PHONE}
-                </a>
-              </dd>
-            </div>
-            <div className="border-b border-hairline py-base">
-              <dt className={cn(typo.captionStrong, "text-muted")}>이메일</dt>
-              <dd className={cn(typo.bodyLg, "mt-xs break-all text-ink")}>
-                <a href={`mailto:${CHURCH_EMAIL}`} className="hover:text-primary">
-                  {CHURCH_EMAIL}
-                </a>
-              </dd>
-            </div>
-          </dl>
+          {/* 좌 — 연락 정보(각 항목은 복사 버튼·길게 누르기로 복사) */}
+          <div>
+            <p className={cn(typo.caption, "flex items-center gap-xs text-muted")}>
+              <Copy size={16} aria-hidden />
+              복사 버튼을 누르거나 항목을 길게 누르면 복사됩니다.
+            </p>
+            <dl className="mt-sm border-t border-hairline">
+              <CopyableField label="주소" value={CHURCH_ADDRESS} />
+              <CopyableField label="전화번호" value={CHURCH_PHONE} href={`tel:${CHURCH_PHONE}`} />
+              <CopyableField label="이메일 주소" value={CHURCH_EMAIL} href={`mailto:${CHURCH_EMAIL}`} />
+            </dl>
+          </div>
 
           {/* 우 — 약도(임베드 있으면 iframe, 없으면 약도 이미지 + 외부 지도 링크) */}
           <div>

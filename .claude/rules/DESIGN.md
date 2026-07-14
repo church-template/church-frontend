@@ -434,6 +434,8 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 ### 네비게이션
 - **`top-nav-light`**: 서브 페이지 기본. 흰 배경, ink 텍스트, 80px.
   로고 좌측 / 메뉴(교회안내·예배·설교·소식·교육부서 등) 중앙 또는 우측.
+  좌측 브랜드는 **로고 이미지(`CHURCH_LOGO`, 32px) + 교회명(`{typography.title-md}`)**을 `{spacing.base}`(16px) 간격으로 나란히 둔다.
+  로고는 이름 옆 장식이라 `alt=""`(스크린리더가 교회명을 두 번 읽지 않게). `top-nav-transparent`도 동일(색만 `{colors.on-dark}`).
 - **`top-nav-transparent`**: 히어로 위(메인·부서). `position: fixed; z-index: 10`, 투명 배경.
   메인(14A)은 어두운 덮개 위에 얹히므로 흰색 텍스트 또는 `mix-blend-mode: difference`로 가독성을 확보한다.
   부서(14B)는 카드가 풀스크린으로 전환된 뒤 진행도에 따라 텍스트를 `{colors.on-dark}`로
@@ -458,6 +460,10 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 - **`bulletin-row`**: 주보 행(notice-row 변형). 제목 `{typography.title-sm}` + 예배일
   `{typography.datetime}` `{colors.muted}` + 작성자 `{typography.body-sm}` `{colors.muted}`(없으면 줄 생략).
   행 전체가 새 탭 PDF 링크(`GET /api/media/{id}`), 1px 헤어라인 구분, hover 시 제목 primary 전이.
+- **`contact-copy-row`**: 연락처 행(`/about/location` 주소·전화번호·이메일 주소). 항목명 `{typography.caption-strong}` `{colors.muted}` +
+  값 `{typography.body-lg}`(전화·이메일은 `tel:`·`mailto:` 링크) + 우측 복사 버튼(lucide `Copy` 20px, 48px 터치 타깃, 복사 후 2초간 `Check` primary).
+  **길게 누르기(500ms)로도 복사**되지만 보이지 않는 제스처라 그것만으로는 알 수 없다 — 복사 버튼을 상시 노출하고 목록 위에 안내 한 줄(`{typography.caption}` + `Copy` 16px)을 둔다(고령 사용자).
+  복사 결과는 Toast(성공/실패 모두 — 클립보드 실패 시 "직접 선택해 복사" 안내, 침묵 금지). 길게 눌러 복사한 직후의 click(전화 앱 열림)은 1회 억제한다.
 - **`schedule-card`**: `{colors.surface-soft}` 배경. 예배명 `{typography.title-md}` +
   시간 `{typography.datetime}` + 장소 `{typography.body-sm}`.
 - **`event-card`**: 행사 카드. 날짜 배지(`badge-pill-primary`) + 제목 + 요약.
@@ -543,7 +549,8 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
   `{rounded.sm}`(8px)은 곡률이 과해 4px이 중첩 라디우스 비율(외부 ≈ 내부 ×2)에 부합한다.
   체크 시 `{colors.primary}` 채움 + on-primary lucide `Check`. 라벨 포함 행 전체가 클릭
   영역(행 높이 ≥ 48px — 고령 터치). 에러 메시지는 text-input과 동일(아래 caption, semantic 토큰).
-- **`inquiry-form`**: 공개 문의 접수 폼(`/about/location`). `text-input`·`Textarea`·`checkbox`(+`TermsDialog` 전문 보기) 조합에 48px `button-primary`. 비회원 제출이라 인증 없음.
+- **`inquiry-form`**: 공개 문의 접수 폼(`/about/location`). `text-input`·`Textarea`·`checkbox`(+옆에 바로 `TermsDialog` 전문 보기) 조합에 48px `button-primary`. 비회원 제출이라 인증 없음.
+  짧은 필드(이름·연락처)는 `sm:` 이상에서 2열 — 한 줄에 하나씩 쌓으면 카드가 옆 컬럼(`찾아오는 방법`)보다 과하게 길어진다.
   **배치**: 연락처(흰 섹션) 다음의 `{colors.surface-soft}` 밴드에서 **좌 `찾아오는 방법` : 우 문의 카드 = 5:7** 2컬럼(모바일 세로 스택). 문의가 이 페이지의 주 행동이라 폭을 더 준다. 문의 카드는 회색 밴드 위의 `{colors.canvas}` 카드(`{rounded.xl}` + hairline + `{spacing.xl}` 패딩) — 밴드 배경·컨테이너는 페이지가 소유한다.
   **필수 표기**: 필수/선택은 라벨 텍스트(`이름 (필수)`·`이메일 (선택)`)로 알린다 — 별표는 고령 사용자가 놓치기 쉽다(가입 폼과 같은 관례). native `required`는 `noValidate`라 브라우저 팝업 없이 `aria-required`만 부여한다.
   **접수 완료**: 제출 성공 시 폼을 접수 완료 패널로 교체한다(`{rounded.full}` 체크 플레이트 + 접수번호 `{typography.datetime}`, `role="status"` + 제목 포커스 이동) — 토스트만으로는 고령 사용자가 접수 사실을 놓친다. 카드 안이라 패널에 카드 크롬을 겹치지 않는다(중첩 카드 금지).

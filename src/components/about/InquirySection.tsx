@@ -110,28 +110,31 @@ export function InquirySection() {
             <form onSubmit={onSubmit} className="flex flex-col gap-base" noValidate>
               {/* 필수/선택은 라벨 텍스트로 표기한다(별표 아님 — 고령 사용자가 놓치기 쉽다). 가입 폼과 같은 관례.
                   native required는 noValidate라 브라우저 팝업을 띄우지 않고 aria-required만 부여한다(스크린리더용). */}
-              <div className="flex flex-col gap-xxs">
-                <label htmlFor="inquiry-name" className={cn(typo.bodySm, "text-ink")}>
-                  이름 (필수)
-                </label>
-                <Input id="inquiry-name" autoComplete="name" required error={errors.name?.message} {...register("name")} />
-              </div>
+              {/* 짧은 필드는 2열로 — 한 줄에 하나씩 쌓으면 카드가 옆 컬럼보다 과하게 길어진다. */}
+              <div className="grid gap-base sm:grid-cols-2">
+                <div className="flex flex-col gap-xxs">
+                  <label htmlFor="inquiry-name" className={cn(typo.bodySm, "text-ink")}>
+                    이름 (필수)
+                  </label>
+                  <Input id="inquiry-name" autoComplete="name" required error={errors.name?.message} {...register("name")} />
+                </div>
 
-              <div className="flex flex-col gap-xxs">
-                <label htmlFor="inquiry-phone" className={cn(typo.bodySm, "text-ink")}>
-                  연락처 (필수)
-                </label>
-                <Input
-                  id="inquiry-phone"
-                  type="tel"
-                  inputMode="numeric"
-                  autoComplete="tel"
-                  required
-                  error={errors.phone?.message}
-                  {...register("phone")}
-                  // 자동 하이픈 — 가입·로그인 폼과 동일한 입력 경험.
-                  onChange={(e) => setValue("phone", formatPhone(e.target.value))}
-                />
+                <div className="flex flex-col gap-xxs">
+                  <label htmlFor="inquiry-phone" className={cn(typo.bodySm, "text-ink")}>
+                    연락처 (필수)
+                  </label>
+                  <Input
+                    id="inquiry-phone"
+                    type="tel"
+                    inputMode="numeric"
+                    autoComplete="tel"
+                    required
+                    error={errors.phone?.message}
+                    {...register("phone")}
+                    // 자동 하이픈 — 가입·로그인 폼과 동일한 입력 경험.
+                    onChange={(e) => setValue("phone", formatPhone(e.target.value))}
+                  />
+                </div>
               </div>
 
               <div className="flex flex-col gap-xxs">
@@ -145,10 +148,11 @@ export function InquirySection() {
                 <label htmlFor="inquiry-content" className={cn(typo.bodySm, "text-ink")}>
                   문의 내용 (필수)
                 </label>
-                <Textarea id="inquiry-content" rows={8} required error={errors.content?.message} {...register("content")} />
+                <Textarea id="inquiry-content" rows={6} required error={errors.content?.message} {...register("content")} />
               </div>
 
-              <div className="flex items-start justify-between gap-sm">
+              {/* 동의 옆에 바로 전문 보기 — 넓은 카드에서 justify-between이면 링크가 반대편 끝으로 밀려 따로 논다. */}
+              <div className="flex flex-wrap items-center gap-sm">
                 <Checkbox
                   label="개인정보 수집·이용 동의 (필수)"
                   required
