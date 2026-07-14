@@ -18,7 +18,8 @@
   position: absolute; inset: 0; z-index: 1; will-change: clip-path;
   clip-path: inset(35% 24px 0 24px round 24px 24px 0 0); /* 첫 페인트 깜빡임 방지 근사값 */
 }
-.media video, .media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* 인물 사진이라 세로 크롭은 바닥부터 — 중앙 크롭이면 머리 위 여백이 먼저 잘린다 */
+.media video, .media img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 25%; display: block; }
 .caption {
   position: absolute; top: 50%; z-index: 3;
   left: max(24px, calc((100vw - 1200px) / 2 + 24px));
