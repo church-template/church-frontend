@@ -543,6 +543,7 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
   `{rounded.sm}`(8px)은 곡률이 과해 4px이 중첩 라디우스 비율(외부 ≈ 내부 ×2)에 부합한다.
   체크 시 `{colors.primary}` 채움 + on-primary lucide `Check`. 라벨 포함 행 전체가 클릭
   영역(행 높이 ≥ 48px — 고령 터치). 에러 메시지는 text-input과 동일(아래 caption, semantic 토큰).
+- **`inquiry-form`**: 공개 문의 접수 폼(`/about/location` 세 번째 섹션). `text-input`·`Textarea`·`checkbox`(+`TermsDialog` 전문 보기) 조합에 48px `button-primary`. 제출 성공 시 폼을 접수 완료 패널로 교체한다(`{rounded.xl}` + `{colors.surface-soft}` + `{rounded.full}` 체크 플레이트 + 접수번호 `{typography.datetime}`) — 토스트만으로는 고령 사용자가 접수 사실을 놓친다. 비회원 제출이라 인증 없음.
 - 검증 메시지는 입력 아래 `{typography.caption}`, 색은 semantic 토큰.
 
 ### 마이페이지
@@ -607,6 +608,8 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 - **`member-roles-section`**: 보유 역할 chips·회수(×) + 부여(native select, `getRoles` 재사용 필터, 트랙 07B). `canAssignRole`(strict)·자기 가드, `useHasPermission("ROLE_MANAGE")`로 상호작용/읽기전용 전환.
 - **`reset-password-section`**: 인라인 확인 → 임시 비밀번호 1회 표시(복사, 트랙 07B). 캐시 미저장, 다이얼로그 닫힘 시 언마운트로 휘발.
 <!-- admin:07 거버넌스 — role-permission-matrix · reset-password-reveal · agreement-reset-dialog -->
+- **`inquiry-manager`**: 문의 목록·처리 화면(`/mypage/manage/inquiries`). `Tabs`(전체·미처리·완료 → URL `?completed=`) + `DataTable`(이름·연락처·접수일·상태 `Badge`) + `Pagination`(URL 구동, 10건). 목록에 문의 내용이 없어 이름 셀 버튼으로 상세를 연다. 공개 소비자 없음 — ISR 무효화 불요, `["admin","inquiries",...]` 클라 쿼리만 무효화.
+- **`inquiry-detail-dialog`**: 문의 상세 Dialog. 상태 `Badge` + 연락처(`tel:`)·이메일(`mailto:`) + 본문(`whitespace-pre-wrap` — 방문자 평문이라 마크다운 변환 안 함) + 완료 처리/완료 취소 + `DeleteConfirmDialog` 삭제. `getInquiry` 시드(useQuery 파생), version 없음(낙관락 미적용 도메인).
 
 ## Do / Don't
 
