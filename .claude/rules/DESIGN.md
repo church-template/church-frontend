@@ -432,9 +432,9 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 ## 컴포넌트 (Components)
 
 ### 네비게이션
-- **`top-nav-light`**: 서브 페이지 기본. 흰 배경, ink 텍스트, 80px.
-  로고 좌측 / 메뉴(교회안내·예배·설교·소식·교육부서 등) 중앙 또는 우측.
-  좌측 브랜드는 **로고 이미지(`CHURCH_LOGO`, 32px) + 교회명(`{typography.title-md}`)**을 `{spacing.base}`(16px) 간격으로 나란히 둔다.
+- **`top-nav-light`**: 서브 페이지 기본. 흰 배경, ink 텍스트, 높이 96px(`--spacing-nav`).
+  로고 좌측 / 메뉴(교회안내·예배·설교·소식·교육부서 등) 중앙 또는 우측. 메뉴는 `{typography.nav-link}`(24px).
+  좌측 브랜드는 **로고 이미지(`CHURCH_LOGO`, 40px) + 교회명(`{typography.title-lg}`)**을 `{spacing.base}`(16px) 간격으로 나란히 둔다.
   로고는 이름 옆 장식이라 `alt=""`(스크린리더가 교회명을 두 번 읽지 않게). `top-nav-transparent`도 동일(색만 `{colors.on-dark}`).
 - **`top-nav-transparent`**: 히어로 위(메인·부서). `position: fixed; z-index: 10`, 투명 배경.
   메인(14A)은 어두운 덮개 위에 얹히므로 흰색 텍스트 또는 `mix-blend-mode: difference`로 가독성을 확보한다.

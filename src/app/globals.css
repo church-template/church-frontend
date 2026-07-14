@@ -102,7 +102,7 @@
   /* --- 레이아웃 --- */
   --container-max: 1200px;
   --container-padding: 24px;
-  --spacing-nav: 80px;             /* 타이포 확대에 맞춘 헤더 높이(고령 가독 강조) */
+  --spacing-nav: 96px;             /* 타이포 확대에 맞춘 헤더 높이(고령 가독 강조) */
 
   /* --- 타이포 (size + line-height + weight + letter-spacing) ---
    * 디스플레이는 clamp로 유동(모바일→데스크톱 자동 스케일), 본문은 고정.
@@ -186,7 +186,7 @@
   --text-button--line-height: 1.15;
   --text-button--font-weight: 600;
 
-  --text-nav-link: 21px;
+  --text-nav-link: 24px;
   --text-nav-link--line-height: 1.4;
   --text-nav-link--font-weight: 500;
 }

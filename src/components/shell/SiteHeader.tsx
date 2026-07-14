@@ -66,8 +66,8 @@ export function SiteHeader({ variant = "light", solid = false }: SiteHeaderProps
     >
       <Container className="flex h-nav items-center justify-between">
         {/* 로고 + 교회명. 로고는 이름 옆 장식이라 alt=""(스크린리더가 이름을 두 번 읽지 않게). */}
-        <Link href="/" className={cn(typo.titleMd, accentColor, "flex items-center gap-base")}>
-          <Image src={CHURCH_LOGO.src} alt="" width={512} height={512} priority className="size-8 shrink-0" />
+        <Link href="/" className={cn(typo.titleLg, accentColor, "flex items-center gap-base")}>
+          <Image src={CHURCH_LOGO.src} alt="" width={512} height={512} priority className="size-10 shrink-0" />
           {CHURCH_NAME}
         </Link>
 
@@ -109,7 +109,7 @@ export function SiteHeader({ variant = "light", solid = false }: SiteHeaderProps
           )}
           onClick={() => setMenuOpen(true)}
         >
-          <Menu size={24} aria-hidden />
+          <Menu size={28} aria-hidden />
         </button>
       </Container>
 
