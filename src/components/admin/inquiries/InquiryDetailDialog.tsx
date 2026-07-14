@@ -42,16 +42,13 @@ export function InquiryDetailDialog({ id, open, onOpenChange }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [detail.isError, detail.error]);
 
-  const invalidate = () => {
-    qc.invalidateQueries({ queryKey: adminKeys.listAll("inquiries") });
-    if (id != null) qc.invalidateQueries({ queryKey: adminKeys.detail("inquiries", id) });
-  };
-
   const toggle = useMutation({
     mutationFn: (completed: boolean) => completeInquiry(id as number, completed),
     onError: adminOnError(),
     onSuccess: (updated) => {
-      invalidate();
+      // 리소스가 남아있어 재조회가 정상 동작 — 목록·상세 모두 무효화(재조회)한다.
+      qc.invalidateQueries({ queryKey: adminKeys.listAll("inquiries") });
+      if (id != null) qc.invalidateQueries({ queryKey: adminKeys.detail("inquiries", id) });
       notify.success(updated.completed ? "완료 처리했습니다." : "완료를 취소했습니다.");
     },
   });
@@ -60,7 +57,10 @@ export function InquiryDetailDialog({ id, open, onOpenChange }: Props) {
     mutationFn: () => deleteInquiry(id as number),
     onError: adminOnError(),
     onSuccess: () => {
-      invalidate();
+      // 삭제된 리소스는 invalidateQueries로 재조회하면 안 된다(open=true인 채 동기 실행돼
+      // 방금 지운 상세를 다시 불러와 404 → 삭제 성공 직후 에러 토스트가 뜬다). 캐시만 제거한다.
+      qc.invalidateQueries({ queryKey: adminKeys.listAll("inquiries") });
+      if (id != null) qc.removeQueries({ queryKey: adminKeys.detail("inquiries", id) });
       notify.success("삭제했습니다.");
       setDeleteOpen(false);
       onOpenChange(false);
