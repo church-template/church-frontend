@@ -6,7 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { typo } from "@/constants/typography";
-import { Container } from "@/components/shell/Container";
 import { Reveal } from "@/components/main/Reveal";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -26,7 +25,7 @@ type InquiryField = (typeof SERVER_FIELDS)[number];
 const isInquiryField = (f: string): f is InquiryField =>
   (SERVER_FIELDS as readonly string[]).includes(f);
 
-// 흰 캔버스 — 연락처 페이지의 세 번째 채널(전화·이메일 다음). 비로그인 방문자도 제출한다.
+// 연락처 페이지의 세 번째 채널(전화·이메일 다음) — 회색 밴드 좌측 카드. 비로그인 방문자도 제출한다.
 export function InquirySection() {
   // 접수번호를 들고 있으면 완료 패널을 렌더한다 — 토스트만으로는 고령 사용자가 접수를 놓친다.
   const [ticketId, setTicketId] = useState<number | null>(null);
@@ -81,20 +80,18 @@ export function InquirySection() {
   };
 
   return (
-    <Container as="section" className="break-keep py-section">
+    // 회색 밴드 위의 흰 카드(폭은 부모 그리드 컬럼이 정한다 — 자체 폭 캡 없음).
+    <section className="break-keep rounded-xl border border-hairline bg-canvas p-xl">
       <Reveal>
-        <h2 className={cn(typo.displayMd, "text-ink")}>문의 남기기</h2>
-        <p className={cn(typo.bodyLg, "mt-base text-body")}>
+        <h2 className={cn(typo.titleLg, "text-ink")}>문의 남기기</h2>
+        <p className={cn(typo.bodyMd, "mt-xs text-body")}>
           궁금한 점을 남겨 주시면 담당자가 연락처로 회신드립니다.
         </p>
 
-        {/* 폼 읽기 컬럼 폭 — 마이페이지·계정 폼과 같은 토큰(t-shirt max-w-*는 spacing 토큰과 충돌해 금지). */}
-        <div className="mt-xxl max-w-[var(--container-narrow)]">
+        <div className="mt-xl">
           {ticketId != null ? (
-            <div
-              role="status"
-              className="flex flex-col items-start gap-base rounded-xl border border-hairline bg-surface-soft p-xl"
-            >
+            // 카드 안이라 별도 카드 크롬(보더·배경)을 겹치지 않는다 — 중첩 카드 금지(DESIGN 레이어링).
+            <div role="status" className="flex flex-col items-start gap-base">
               <span className="inline-flex size-12 items-center justify-center rounded-full bg-primary text-on-primary">
                 <Check size={24} aria-hidden />
               </span>
@@ -168,6 +165,6 @@ export function InquirySection() {
           )}
         </div>
       </Reveal>
-    </Container>
+    </section>
   );
 }

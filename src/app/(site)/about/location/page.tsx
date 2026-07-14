@@ -1,3 +1,4 @@
+import { Container } from "@/components/shell/Container";
 import { LocationContact } from "@/components/about/LocationContact";
 import { LocationDirections } from "@/components/about/LocationDirections";
 import { InquirySection } from "@/components/about/InquirySection";
@@ -8,8 +9,17 @@ export default function LocationPage() {
   return (
     <>
       <LocationContact />
-      <LocationDirections />
-      <InquirySection />
+
+      {/* 회색 밴드 — 흰 섹션(연락처) 다음의 교차 밴드. 좌 문의 카드 : 우 찾아오는 방법(7:5).
+          문의가 이 페이지의 주 행동이라 폭을 더 준다. 좁은 화면에서는 세로로 쌓인다. */}
+      <div className="bg-surface-soft py-section">
+        <Container>
+          <div className="grid gap-xl lg:grid-cols-[7fr_5fr] lg:items-start">
+            <InquirySection />
+            <LocationDirections />
+          </div>
+        </Container>
+      </div>
     </>
   );
 }
