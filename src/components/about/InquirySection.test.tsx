@@ -20,25 +20,34 @@ function renderSection() {
 
 // 유효한 폼을 채운다(이메일은 선택이라 생략 가능).
 function fillValidForm() {
-  fireEvent.change(screen.getByLabelText("이름"), { target: { value: "홍길동" } });
-  fireEvent.change(screen.getByLabelText("연락처"), { target: { value: "01012345678" } });
-  fireEvent.change(screen.getByLabelText("문의 내용"), { target: { value: "예배 시간이 궁금합니다." } });
+  fireEvent.change(screen.getByLabelText("이름 (필수)"), { target: { value: "홍길동" } });
+  fireEvent.change(screen.getByLabelText("연락처 (필수)"), { target: { value: "01012345678" } });
+  fireEvent.change(screen.getByLabelText("문의 내용 (필수)"), { target: { value: "예배 시간이 궁금합니다." } });
   fireEvent.click(screen.getByLabelText("개인정보 수집·이용 동의 (필수)"));
 }
 
 describe("InquirySection", () => {
+  it("필수 입력은 라벨에 (필수), 선택 입력은 (선택)으로 표기하고 aria-required를 부여한다", () => {
+    renderSection();
+    // 라벨 텍스트로 필수 여부를 알린다(별표는 고령 사용자가 놓치기 쉽다).
+    for (const label of ["이름 (필수)", "연락처 (필수)", "문의 내용 (필수)", "개인정보 수집·이용 동의 (필수)"]) {
+      expect(screen.getByLabelText(label).getAttribute("required")).not.toBeNull();
+    }
+    expect(screen.getByLabelText("이메일 (선택)").getAttribute("required")).toBeNull();
+  });
+
   it("연락처 입력은 자동 하이픈으로 표시된다", () => {
     renderSection();
-    const phone = screen.getByLabelText("연락처") as HTMLInputElement;
+    const phone = screen.getByLabelText("연락처 (필수)") as HTMLInputElement;
     fireEvent.change(phone, { target: { value: "01012345678" } });
     expect(phone.value).toBe("010-1234-5678");
   });
 
   it("문의 내용이 10자 미만이면 제출을 막고 안내한다", async () => {
     renderSection();
-    fireEvent.change(screen.getByLabelText("이름"), { target: { value: "홍길동" } });
-    fireEvent.change(screen.getByLabelText("연락처"), { target: { value: "01012345678" } });
-    fireEvent.change(screen.getByLabelText("문의 내용"), { target: { value: "짧아요" } });
+    fireEvent.change(screen.getByLabelText("이름 (필수)"), { target: { value: "홍길동" } });
+    fireEvent.change(screen.getByLabelText("연락처 (필수)"), { target: { value: "01012345678" } });
+    fireEvent.change(screen.getByLabelText("문의 내용 (필수)"), { target: { value: "짧아요" } });
     fireEvent.click(screen.getByLabelText("개인정보 수집·이용 동의 (필수)"));
     fireEvent.click(screen.getByRole("button", { name: "문의 남기기" }));
 
@@ -48,9 +57,9 @@ describe("InquirySection", () => {
 
   it("개인정보 미동의면 제출을 막는다", async () => {
     renderSection();
-    fireEvent.change(screen.getByLabelText("이름"), { target: { value: "홍길동" } });
-    fireEvent.change(screen.getByLabelText("연락처"), { target: { value: "01012345678" } });
-    fireEvent.change(screen.getByLabelText("문의 내용"), { target: { value: "예배 시간이 궁금합니다." } });
+    fireEvent.change(screen.getByLabelText("이름 (필수)"), { target: { value: "홍길동" } });
+    fireEvent.change(screen.getByLabelText("연락처 (필수)"), { target: { value: "01012345678" } });
+    fireEvent.change(screen.getByLabelText("문의 내용 (필수)"), { target: { value: "예배 시간이 궁금합니다." } });
     fireEvent.click(screen.getByRole("button", { name: "문의 남기기" }));
 
     await waitFor(() => expect(screen.getByText("개인정보 수집·이용에 동의해 주세요.")).toBeDefined());
@@ -87,7 +96,7 @@ describe("InquirySection", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "다시 문의하기" }));
 
-    const name = screen.getByLabelText("이름") as HTMLInputElement;
+    const name = screen.getByLabelText("이름 (필수)") as HTMLInputElement;
     expect(name.value).toBe("");
   });
 
