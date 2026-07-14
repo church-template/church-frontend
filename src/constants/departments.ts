@@ -1,6 +1,6 @@
 // 공개 "사역(부서) 소개" 단일 출처 — 메인 페이지처럼 프론트 상수로 주입한다(하드코딩 금지, 가이드 12장).
 // 백엔드 `department`(교인 정보관리·어드민)와 별개. 공개 인트로 페이지는 이 상수만으로 자립 동작한다.
-// 히어로 미디어는 /public/dept/{slug}.jpg 관례의 placeholder(배포 시 교체) — 메인의 /hero.mp4와 동일.
+// 히어로 미디어는 /public/dept/{slug}.webp 관례를 따른다 — 메인의 /hero.mp4와 동일.
 import type { HeroMedia } from "@/hero/types";
 
 export interface DeptFeature {
@@ -42,12 +42,12 @@ export interface Department {
   invite?: { heading: string; body: string };
 }
 
-const FALLBACK_THUMB = "/dept/default.jpg";
+const FALLBACK_THUMB = "/dept/default.webp";
 
-// placeholder는 색상 jpg 타일(public/dept/{slug}.jpg, 1600×900) — 배포 시 실제 사진으로 교체.
+// 히어로는 풀스크린이라 2000px, 갤러리(public/dept/{slug}/{n}.webp)는 1600px WebP로 압축해 둔다.
 const img = (slug: string, name: string): HeroMedia => ({
   type: "image",
-  src: `/dept/${slug}.jpg`,
+  src: `/dept/${slug}.webp`,
   alt: name,
 });
 
@@ -90,10 +90,10 @@ export const DEPARTMENTS: Department[] = [
       { name: "배드민턴 프로그램", desc: "학생 예배 후에 하는 재밌는 배드민턴 운동" },
     ],
     gallery: [
-      { src: "/dept/student/1.jpg", alt: "학생부 활동 사진 1" },
-      { src: "/dept/student/2.jpg", alt: "학생부 활동 사진 2" },
-      { src: "/dept/student/3.jpg", alt: "학생부 활동 사진 3" },
-      { src: "/dept/student/4.jpg", alt: "학생부 활동 사진 4" },
+      { src: "/dept/student/1.webp", alt: "학생부 활동 사진 1" },
+      { src: "/dept/student/2.webp", alt: "학생부 활동 사진 2" },
+      { src: "/dept/student/3.webp", alt: "학생부 활동 사진 3" },
+      { src: "/dept/student/4.webp", alt: "학생부 활동 사진 4" },
     ],
     invite: {
       heading: "학생부에서 함께해요",
@@ -135,10 +135,10 @@ export const DEPARTMENTS: Department[] = [
       { name: "청년 찬양의 밤", desc: "찬양으로 마음을 모아 하나님께 드리는 예배" },
     ],
     gallery: [
-      { src: "/dept/youth/1.jpg", alt: "청년부 활동 사진 1" },
-      { src: "/dept/youth/2.jpg", alt: "청년부 활동 사진 2" },
-      { src: "/dept/youth/3.jpg", alt: "청년부 활동 사진 3" },
-      { src: "/dept/youth/4.jpg", alt: "청년부 활동 사진 4" },
+      { src: "/dept/youth/1.webp", alt: "청년부 활동 사진 1" },
+      { src: "/dept/youth/2.webp", alt: "청년부 활동 사진 2" },
+      { src: "/dept/youth/3.webp", alt: "청년부 활동 사진 3" },
+      { src: "/dept/youth/4.webp", alt: "청년부 활동 사진 4" },
     ],
     invite: {
       heading: "청년부에서 함께해요",
@@ -180,10 +180,10 @@ export const DEPARTMENTS: Department[] = [
       { name: "신입 팀원 훈련", desc: "새로 섬기는 지체를 위한 기초 훈련" },
     ],
     gallery: [
-      { src: "/dept/praise/1.jpg", alt: "예배부 활동 사진 1" },
-      { src: "/dept/praise/2.jpg", alt: "예배부 활동 사진 2" },
-      { src: "/dept/praise/3.jpg", alt: "예배부 활동 사진 3" },
-      { src: "/dept/praise/4.jpg", alt: "예배부 활동 사진 4" },
+      { src: "/dept/praise/1.webp", alt: "예배부 활동 사진 1" },
+      { src: "/dept/praise/2.webp", alt: "예배부 활동 사진 2" },
+      { src: "/dept/praise/3.webp", alt: "예배부 활동 사진 3" },
+      { src: "/dept/praise/4.webp", alt: "예배부 활동 사진 4" },
     ],
     invite: {
       heading: "예배부에서 함께 섬겨요",
@@ -225,10 +225,10 @@ export const DEPARTMENTS: Department[] = [
       { name: "전도 축제", desc: "이웃에게 복음을 전하는 특별한 날" },
     ],
     gallery: [
-      { src: "/dept/men/1.jpg", alt: "남선교회 활동 사진 1" },
-      { src: "/dept/men/2.jpg", alt: "남선교회 활동 사진 2" },
-      { src: "/dept/men/3.jpg", alt: "남선교회 활동 사진 3" },
-      { src: "/dept/men/4.jpg", alt: "남선교회 활동 사진 4" },
+      { src: "/dept/men/1.webp", alt: "남선교회 활동 사진 1" },
+      { src: "/dept/men/2.webp", alt: "남선교회 활동 사진 2" },
+      { src: "/dept/men/3.webp", alt: "남선교회 활동 사진 3" },
+      { src: "/dept/men/4.webp", alt: "남선교회 활동 사진 4" },
     ],
     invite: {
       heading: "남선교회와 함께 세워가요",
@@ -270,10 +270,10 @@ export const DEPARTMENTS: Department[] = [
       { name: "어머니 학교", desc: "믿음의 어머니로 세워지는 과정" },
     ],
     gallery: [
-      { src: "/dept/women/1.jpg", alt: "여선교회 활동 사진 1" },
-      { src: "/dept/women/2.jpg", alt: "여선교회 활동 사진 2" },
-      { src: "/dept/women/3.jpg", alt: "여선교회 활동 사진 3" },
-      { src: "/dept/women/4.jpg", alt: "여선교회 활동 사진 4" },
+      { src: "/dept/women/1.webp", alt: "여선교회 활동 사진 1" },
+      { src: "/dept/women/2.webp", alt: "여선교회 활동 사진 2" },
+      { src: "/dept/women/3.webp", alt: "여선교회 활동 사진 3" },
+      { src: "/dept/women/4.webp", alt: "여선교회 활동 사진 4" },
     ],
     invite: {
       heading: "여선교회와 함께해요",

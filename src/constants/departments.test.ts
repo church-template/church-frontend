@@ -59,7 +59,7 @@ describe("사역 부서 상수", () => {
   it("thumbnailOf: image는 src, video는 poster, poster 없으면 기본", () => {
     expect(thumbnailOf({ type: "image", src: "/dept/youth.jpg" })).toBe("/dept/youth.jpg");
     expect(thumbnailOf({ type: "video", src: "/v.mp4", poster: "/p.jpg" })).toBe("/p.jpg");
-    expect(thumbnailOf({ type: "video", src: "/v.mp4" })).toBe("/dept/default.jpg");
+    expect(thumbnailOf({ type: "video", src: "/v.mp4" })).toBe("/dept/default.webp");
   });
 
   it("페이지 카피 상수를 노출한다(하드코딩 0)", () => {
