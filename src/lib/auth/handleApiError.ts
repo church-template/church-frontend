@@ -55,6 +55,10 @@ export function handleApiError(error: ApiError, handlers: ApiErrorHandlers = {})
     case "FILE_SIZE_EXCEEDED":
       notify.error("파일 용량이 한도를 초과했습니다. 더 작은 파일을 선택해 주세요.");
       break;
+    case "RATE_LIMIT_EXCEEDED":
+      // 전역 errorCode 스위치 공용 분기라 도메인 특정 문구를 쓰지 않는다(문의 외 로그인 등도 공유).
+      notify.error("요청이 너무 많습니다. 잠시 후 다시 시도해 주세요.");
+      break;
     // FILE_STORAGE_ERROR·INTERNAL_ERROR는 default(서버 title ?? 일반)로 처리 — case 불필요
     default:
       notify.error(error.title ?? "오류가 발생했습니다.");

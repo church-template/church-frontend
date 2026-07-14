@@ -1,0 +1,81 @@
+/* 리딩 스포트라이트 — 스크롤 진행에 따라 문장이 하나씩 켜진다(색·크기·굵기 동시).
+   폴백(스크롤 타임라인 미지원·reduced-motion): 전 문장 body 색 평문 + 고정 없음. */
+.sentence {
+  color: var(--color-body);
+}
+
+/* 줄 높이는 큰 글자 기준으로 고정 — 문장이 커질 때 줄 간격까지 벌어지면 본문 전체가 출렁인다.
+   (줄바꿈이 밀리는 것 자체는 글자 크기가 변하는 이상 불가피하다.) */
+.reading {
+  line-height: calc(var(--text-body-xl) * 1.5);
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* 강조 밖 문장은 지우지 않고 흐리게만 둔다 — 되돌아가 다시 읽을 수 있게. */
+    .sentence {
+      color: var(--color-muted-soft);
+      /* fill-mode none이 핵심 — 자기 구간(animation-range) 밖에서는 애니메이션이 적용되지 않아
+         기본색(흐림)으로 돌아간다. 구간 안에서만 ink로 켜지므로 "한 문장씩"이 성립한다. */
+      animation: pastor-read-on linear;
+      animation-timeline: view();
+      /* 비고정(모바일·짧은 뷰포트): 문장이 화면 중앙대를 지나는 동안 켜진다.
+         구간을 좁히면 문장 사이에 아무것도 안 켜지는 빈 구간이 생긴다. */
+      animation-range: cover 35% cover 70%;
+    }
+
+    /* 데스크톱: 섹션을 화면에 고정(pin)하고, 고정 구간을 문장 수(--sentences)로 등분해
+       스크롤이 한 칸 진행할 때마다 다음 문장이 켜진다. 마지막 문장이 끝나면 고정이 풀린다.
+       - view-timeline의 contain 구간 = sticky가 붙어 있는 구간이라 별도 계산이 없다.
+       - 문장당 스크롤 길이 20vh(--sentences에 비례) → 본문이 길어지면 고정도 그만큼 길어진다.
+       - 뷰포트가 낮으면 고정하지 않는다: 콘텐츠가 화면보다 크면 잘린 채 멈춘다.
+         임계 48rem(768px)은 실측 콘텐츠 높이(초상·본문 = 약 700px) 기준 — 본문·초상을 키우면
+         이 값도 함께 올려야 한다. */
+    @media (min-width: 64rem) and (min-height: 48rem) {
+      .stage {
+        height: calc(100vh + var(--sentences) * 20vh);
+        view-timeline-name: --pastor-read;
+      }
+
+      .pinned {
+        position: sticky;
+        top: 0;
+        display: flex;
+        min-height: 100vh;
+        align-items: center;
+      }
+
+      /* 고정 구간에서 세로 중앙 정렬하므로 섹션 패딩은 접는다(py-section 유틸 덮어쓰기). */
+      .frame {
+        padding-block: 0;
+      }
+
+      .sentence {
+        animation-timeline: --pastor-read;
+        animation-range: contain calc(var(--i) * 100% / var(--sentences)) contain
+          calc((var(--i) + 1) * 100% / var(--sentences));
+      }
+    }
+  }
+}
+
+/* 켜진 문장만 커지고 굵어진다(기본 body-lg 24px/400 → body-xl 32px/600).
+   앞뒤 6%는 페이드 — 툭 끊기진 않되 문장 경계에서 둘 다 흐린 틈이 길어지지 않게. */
+@keyframes pastor-read-on {
+  0% {
+    color: var(--color-muted-soft);
+    font-size: var(--text-body-lg);
+    font-weight: var(--text-body-lg--font-weight);
+  }
+  6%,
+  94% {
+    color: var(--color-ink);
+    font-size: var(--text-body-xl);
+    font-weight: var(--text-body-xl--font-weight);
+  }
+  100% {
+    color: var(--color-muted-soft);
+    font-size: var(--text-body-lg);
+    font-weight: var(--text-body-lg--font-weight);
+  }
+}

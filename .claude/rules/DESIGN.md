@@ -371,6 +371,7 @@ components:
 | `{typography.title-sm}` | 20px | 600 | 목록 행 제목 (notice-row·bulletin-row) |
 | `{typography.body-md}` | 20px | 400 | 기본 본문 (행간 1.7) |
 | `{typography.body-lg}` | 24px | 400 | 읽는 본문 강조 (소망·이야기 등 장문, 행간 1.7) |
+| `{typography.body-xl}` | 32px | 600 | **지금 읽는 문장** — `reading-spotlight`에서 켜진 문장만 body-lg(24px/400)에서 여기까지 부푼다 |
 | `{typography.body-lg-strong}` | 28px | 700 | 읽는 본문 내 의미 구절 인라인 강조 (소망 4색 구절, 행간 1.45로 body-lg 줄높이 유지) |
 | `{typography.body-sm}` | 18px | 400 | 보조 본문, 푸터 |
 | `{typography.datetime}` | 18px | 500 | 날짜·시간 (tnum) |
@@ -431,8 +432,10 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 ## 컴포넌트 (Components)
 
 ### 네비게이션
-- **`top-nav-light`**: 서브 페이지 기본. 흰 배경, ink 텍스트, 80px.
-  로고 좌측 / 메뉴(교회안내·예배·설교·소식·교육부서 등) 중앙 또는 우측.
+- **`top-nav-light`**: 서브 페이지 기본. 흰 배경, ink 텍스트, 높이 96px(`--spacing-nav`).
+  로고 좌측 / 메뉴(교회안내·예배·설교·소식·교육부서 등) 중앙 또는 우측. 메뉴는 `{typography.nav-link}`(24px).
+  좌측 브랜드는 **로고 이미지(`CHURCH_LOGO`, 40px) + 교회명(`{typography.title-lg}`)**을 `{spacing.base}`(16px) 간격으로 나란히 둔다.
+  로고는 이름 옆 장식이라 `alt=""`(스크린리더가 교회명을 두 번 읽지 않게). `top-nav-transparent`도 동일(색만 `{colors.on-dark}`).
 - **`top-nav-transparent`**: 히어로 위(메인·부서). `position: fixed; z-index: 10`, 투명 배경.
   메인(14A)은 어두운 덮개 위에 얹히므로 흰색 텍스트 또는 `mix-blend-mode: difference`로 가독성을 확보한다.
   부서(14B)는 카드가 풀스크린으로 전환된 뒤 진행도에 따라 텍스트를 `{colors.on-dark}`로
@@ -457,6 +460,10 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 - **`bulletin-row`**: 주보 행(notice-row 변형). 제목 `{typography.title-sm}` + 예배일
   `{typography.datetime}` `{colors.muted}` + 작성자 `{typography.body-sm}` `{colors.muted}`(없으면 줄 생략).
   행 전체가 새 탭 PDF 링크(`GET /api/media/{id}`), 1px 헤어라인 구분, hover 시 제목 primary 전이.
+- **`contact-copy-row`**: 연락처 행(`/about/location` 주소·전화번호·이메일 주소). 항목명 `{typography.caption-strong}` `{colors.muted}` +
+  값 `{typography.body-lg}`(전화·이메일은 `tel:`·`mailto:` 링크) + 우측 복사 버튼(lucide `Copy` 20px, 48px 터치 타깃, 복사 후 2초간 `Check` primary).
+  **길게 누르기(500ms)로도 복사**되지만 보이지 않는 제스처라 그것만으로는 알 수 없다 — 복사 버튼을 상시 노출하고 목록 위에 안내 한 줄(`{typography.caption}` + `Copy` 16px)을 둔다(고령 사용자).
+  복사 결과는 Toast(성공/실패 모두 — 클립보드 실패 시 "직접 선택해 복사" 안내, 침묵 금지). 길게 눌러 복사한 직후의 click(전화 앱 열림)은 1회 억제한다.
 - **`schedule-card`**: `{colors.surface-soft}` 배경. 예배명 `{typography.title-md}` +
   시간 `{typography.datetime}` + 장소 `{typography.body-sm}`.
 - **`event-card`**: 행사 카드. 날짜 배지(`badge-pill-primary`) + 제목 + 요약.
@@ -466,11 +473,42 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
   CTA 2개(primary + outline-on-dark). 상하 96px.
 
 ### 연출
-- **`media-collage`**: 메인 히어로(14A) 직후의 스크럽 섹션. 풀스크린 미디어(히어로와 동일)가
-  `clip-path: inset(... round {rounded.xl})`로 중앙 카드로 축소되고, 주변 타일(데스크톱 4·
-  모바일 2, `{rounded.xl}` + hairline)이 가장자리에서 슬라이드 인해 캔버스 위 콜라주를 만든다.
-  transform/clip-path/opacity만 사용(reflow 금지), reduced-motion은 완성 콜라주 정적 표시.
-  슬롯 기하·구간 수치는 스펙(docs/superpowers/specs/2026-06-11-media-collage-design.md §4)이 단일 진실.
+- **`media-collage`**: 메인 히어로(14A)와 한 몸인 스크럽 구간(`HeroReveal`). 풀스크린 영상이
+  **풀스크린을 유지한 채** 포스터로 크로스페이드되고(축소 없음), 그 포스터가 흰 캔버스로 페이드
+  아웃하면서 사진 4장이 좌·우 2컬럼 격자(`{rounded.xl}` + hairline)로 흘러 들어온다 — 좌 컬럼은
+  아래에서, 우 컬럼은 위에서. 가장자리에서 날아오는 방식이 아니다.
+  **히어로 미디어는 카드로 남지 않는다**: 창으로 들여다보는 축소 카드는 포스터 면적의 일부만
+  보여주면서 컨테이너 폭의 절반을 먹어 사진을 작게 만들었다. 풀스크린에서 제 몫을 다 보여준 뒤
+  비켜주고, 그 폭 전부를 사진이 가져간다.
+  **슬롯에 사진을 맞추지 않고 사진 비율에 슬롯을 맞춘다**: 컬럼 폭을 사진 비율에서 역산해 좌·우
+  컬럼 높이를 일치시키므로 크롭 0이다(두 컬럼 폭이 서로 다른 비대칭이 그 대가 — 의도된 결과).
+  콜라주 폭은 `{layout.container-max}`에 캡되고(콘텐츠 규칙 — 히어로 미디어만 풀블리드), 헤더
+  아래 남는 높이에도 캡된다(짧은 뷰포트에서 상단 타일이 헤더에 잘리지 않게).
+  transform/opacity만 사용(reflow 금지).
+  **좁은 폭(<640)은 격자 대신 장면 단위로 넘긴다**: 2컬럼이면 사진이 화면 폭의 절반으로 쪼그라들어
+  콜라주의 목적(사진이 주인공)을 잃는다. 장면 = 헤더 아래 중앙의 세로 컬럼 하나(컨테이너 폭 가득),
+  다음 장면이 아래에서 올라오고 앞 장면은 빠지는 크로스페이드 — 비율이 제각각이라 겹쳐 덮으면
+  앞 장면이 삐져나온다. **장면 분할은 사진 비율이 정한다**: 세로가 긴 1번은 혼자, 가로가 긴 2·3·4는
+  한 화면에 세로로 쌓아 한 번에(가로 사진은 높이가 낮아 세 장이 한 화면에 들어간다).
+  스크럽 길이는 500vh(데스크톱 400vh) — 장면이 커진 만큼 스크롤 민감도를 낮춰 천천히 밟는다.
+  타일 라운드는 `{rounded.lg}`(16px) — 화면 폭 카드에서 24px은 곡률이 과하다.
+  히어로 미디어도 이 폭에선 영상 대신 포스터(`<video poster>`가 아닌 포스터 `<img>` — object-fit 보장)가
+  풀스크린 crop-cover로 스크럽을 탄다.
+  reduced-motion은 폭 무관하게 정적 세로 스택(카피 → 포스터 카드 → 사진 4장) — 최종 프레임만 남기면
+  포스터를 아예 못 보기 때문이다(이때만 포스터 카드가 원본 비율로 선다).
+  레이아웃 대수·구간 수치는 스펙(docs/superpowers/specs/2026-07-13-collage-column-grid-design.md)이 단일 진실.
+- **`reading-spotlight`**: 목회자 인사말(`/about/pastor`) 본문의 리딩 강조. 본문을 **문장 span으로 쪼개** 스크롤에
+  따라 **한 문장씩** 켠다 — 켜진 문장만 `{colors.ink}` + `{typography.body-xl}`(32px/600)로 부풀고, 나머지는
+  `{typography.body-lg}`(24px/400) + `{colors.muted-soft}`로 흐리다(형광펜 배경 없음 — 단일 액센트·문서 톤 유지).
+  줄 높이는 큰 글자 기준으로 고정해(`calc(--text-body-xl * 1.5)`) 문장이 부풀어도 본문이 출렁이지 않게 한다.
+  CSS 스크롤 타임라인만 쓴다(JS 0줄).
+  **데스크톱(≥64rem 폭·≥48rem 높이)은 섹션을 화면에 고정(sticky)한 채** 강조가 문장을 하나씩 밟고 내려가고, 마지막
+  문장이 끝나면 고정이 풀리며 다음 섹션으로 넘어간다 — `view-timeline`의 `contain` 구간이 곧 고정 구간이라
+  별도 계산이 없다. 고정 길이 = `100vh + 문장수 × 20vh`(본문이 길면 그만큼 길어진다). 좁거나 낮은 뷰포트는
+  고정하지 않고(콘텐츠가 화면보다 커 잘린 채 멈추므로) 문장이 화면 중앙대를 지날 때 켜진다. **강조 밖 문장을
+  지우지 않는다**(고령 가독성 > 몰입). 켜짐은 `animation-fill-mode: none` + 문장별 `animation-range` 등분으로
+  성립. 미지원 브라우저·reduced-motion은 평문(`{colors.body}`)·고정 없음.
+  대수·노브는 스펙(docs/superpowers/specs/2026-07-13-pastor-reading-spotlight-design.md).
 - **`history-band`**: 연혁 카드 시퀀스(참조: 우리은행 Dream). 연도 배지 + 헤드라인 + 설명의
   풀폭 라운드 밴드(`{rounded.xl}`)가 세로로 이어지고, 배경은 surface-dark·primary-soft·
   surface-soft 토큰 교차(브랜드 3색 직역 금지 — 단일 액센트 원칙). 뷰포트 진입 시 1회
@@ -511,6 +549,11 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
   `{rounded.sm}`(8px)은 곡률이 과해 4px이 중첩 라디우스 비율(외부 ≈ 내부 ×2)에 부합한다.
   체크 시 `{colors.primary}` 채움 + on-primary lucide `Check`. 라벨 포함 행 전체가 클릭
   영역(행 높이 ≥ 48px — 고령 터치). 에러 메시지는 text-input과 동일(아래 caption, semantic 토큰).
+- **`inquiry-form`**: 공개 문의 접수 폼(`/about/location`). `text-input`·`Textarea`·`checkbox`(+옆에 바로 `TermsDialog` 전문 보기) 조합에 48px `button-primary`. 비회원 제출이라 인증 없음.
+  짧은 필드(이름·연락처)는 `sm:` 이상에서 2열 — 한 줄에 하나씩 쌓으면 카드가 옆 컬럼(`찾아오는 방법`)보다 과하게 길어진다.
+  **배치**: 연락처(흰 섹션) 다음의 `{colors.surface-soft}` 밴드에서 **좌 `찾아오는 방법` : 우 문의 카드 = 5:7** 2컬럼(모바일 세로 스택). 문의가 이 페이지의 주 행동이라 폭을 더 준다. 문의 카드는 회색 밴드 위의 `{colors.canvas}` 카드(`{rounded.xl}` + hairline + `{spacing.xl}` 패딩) — 밴드 배경·컨테이너는 페이지가 소유한다.
+  **필수 표기**: 필수/선택은 라벨 텍스트(`이름 (필수)`·`이메일 (선택)`)로 알린다 — 별표는 고령 사용자가 놓치기 쉽다(가입 폼과 같은 관례). native `required`는 `noValidate`라 브라우저 팝업 없이 `aria-required`만 부여한다.
+  **접수 완료**: 제출 성공 시 폼을 접수 완료 패널로 교체한다(`{rounded.full}` 체크 플레이트 + 접수번호 `{typography.datetime}`, `role="status"` + 제목 포커스 이동) — 토스트만으로는 고령 사용자가 접수 사실을 놓친다. 카드 안이라 패널에 카드 크롬을 겹치지 않는다(중첩 카드 금지).
 - 검증 메시지는 입력 아래 `{typography.caption}`, 색은 semantic 토큰.
 
 ### 마이페이지
@@ -575,6 +618,8 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 - **`member-roles-section`**: 보유 역할 chips·회수(×) + 부여(native select, `getRoles` 재사용 필터, 트랙 07B). `canAssignRole`(strict)·자기 가드, `useHasPermission("ROLE_MANAGE")`로 상호작용/읽기전용 전환.
 - **`reset-password-section`**: 인라인 확인 → 임시 비밀번호 1회 표시(복사, 트랙 07B). 캐시 미저장, 다이얼로그 닫힘 시 언마운트로 휘발.
 <!-- admin:07 거버넌스 — role-permission-matrix · reset-password-reveal · agreement-reset-dialog -->
+- **`inquiry-manager`**: 문의 목록·처리 화면(`/mypage/manage/inquiries`). `Tabs`(전체·미처리·완료 → URL `?completed=`) + `DataTable`(이름·연락처·접수일·상태 `Badge`) + `Pagination`(URL 구동, 10건). 목록에 문의 내용이 없어 이름 셀 버튼으로 상세를 연다. 공개 소비자 없음 — ISR 무효화 불요, `["admin","inquiries",...]` 클라 쿼리만 무효화.
+- **`inquiry-detail-dialog`**: 문의 상세 Dialog. 상태 `Badge` + 연락처(`tel:`)·이메일(`mailto:`) + 본문(`whitespace-pre-wrap` — 방문자 평문이라 마크다운 변환 안 함) + 완료 처리/완료 취소 + `DeleteConfirmDialog` 삭제. `getInquiry` 시드(useQuery 파생), version 없음(낙관락 미적용 도메인).
 
 ## Do / Don't
 

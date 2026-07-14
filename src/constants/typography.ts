@@ -15,6 +15,7 @@ export const typo = {
   titleSm: "text-title-sm",
   bodyMd: "text-body-md",
   bodyLg: "text-body-lg", // 읽는 본문 강조(소망·이야기 등) — 고령 가독
+  bodyXl: "text-body-xl", // 스크롤로 한 문장씩 읽히는 본문(목회자 인사말 reading-spotlight)
   bodyLgStrong: "text-body-lg-strong", // bodyLg 크기 + 강한 굵기(소망 4색 구절 등 인라인 강조)
   bodyStrong: "text-body-strong",
   bodySm: "text-body-sm",

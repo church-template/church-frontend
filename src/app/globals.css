@@ -102,7 +102,7 @@
   /* --- 레이아웃 --- */
   --container-max: 1200px;
   --container-padding: 24px;
-  --spacing-nav: 80px;             /* 타이포 확대에 맞춘 헤더 높이(고령 가독 강조) */
+  --spacing-nav: 96px;             /* 타이포 확대에 맞춘 헤더 높이(고령 가독 강조) */
 
   /* --- 타이포 (size + line-height + weight + letter-spacing) ---
    * 디스플레이는 clamp로 유동(모바일→데스크톱 자동 스케일), 본문은 고정.
@@ -153,6 +153,10 @@
   --text-body-lg--line-height: 1.7;
   --text-body-lg--font-weight: 400;
 
+  --text-body-xl: 32px;               /* 지금 읽는 문장(목회자 인사말 reading-spotlight의 켜진 문장) — bodyLg에서 부풀어 오른다 */
+  --text-body-xl--line-height: 1.5;
+  --text-body-xl--font-weight: 600;
+
   --text-body-lg-strong: 28px;        /* 읽는 본문 내 의미 구절 강조(소망 4색) — body-lg보다 키우고 행간 낮춰 줄높이 유지 */
   --text-body-lg-strong--line-height: 1.45;
   --text-body-lg-strong--font-weight: 700;
@@ -182,7 +186,7 @@
   --text-button--line-height: 1.15;
   --text-button--font-weight: 600;
 
-  --text-nav-link: 21px;
+  --text-nav-link: 24px;
   --text-nav-link--line-height: 1.4;
   --text-nav-link--font-weight: 500;
 }

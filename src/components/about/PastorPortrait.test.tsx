@@ -5,7 +5,9 @@ import { PastorPortrait } from "./PastorPortrait";
 describe("PastorPortrait", () => {
   it("image가 있으면 alt·src를 가진 img를 렌더한다", () => {
     const { container } = render(
-      <PastorPortrait image={{ src: "/about/pastor.jpg", alt: "홍성균 담임목사" }} />,
+      <PastorPortrait
+        image={{ src: "/about/pastor.jpg", alt: "홍성균 담임목사", aspect: 0.75 }}
+      />,
     );
     const img = container.querySelector("img");
     expect(img).not.toBeNull();

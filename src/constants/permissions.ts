@@ -10,6 +10,7 @@ export const PERMISSION_LABELS: Record<string, string> = {
   MEDIA_MANAGE: "미디어 관리",
   TAG_MANAGE: "태그 관리",
   POSITION_MANAGE: "직분 관리",
+  INQUIRY_MANAGE: "문의 관리",
   MEMBER_MANAGE: "회원 관리",
   ROLE_MANAGE: "역할·권한 관리",
   CHALLENGE_MANAGE: "통독 챌린지 관리",

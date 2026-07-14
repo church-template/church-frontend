@@ -94,9 +94,9 @@ describe("Home (메인)", () => {
       "/sermons/1",
     );
     // 콜라주 타일이 히어로와 예배시간 사이에 합성된다(MediaCollage 스펙 §5)
-    expect(container.querySelector('img[src="/collage-1.jpg"]')).not.toBeNull();
+    expect(container.querySelector('img[src="/collage-1.jpeg"]')).not.toBeNull();
     // 연혁·사역 섹션이 콜라주 뒤에 합성된다(스펙 H1)
-    const collageImg = container.querySelector('img[src="/collage-1.jpg"]')!;
+    const collageImg = container.querySelector('img[src="/collage-1.jpeg"]')!;
     const historyHead = screen.getByText(HISTORY.items[0].text);
     expect(
       collageImg.compareDocumentPosition(historyHead) & Node.DOCUMENT_POSITION_FOLLOWING,
