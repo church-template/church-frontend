@@ -63,7 +63,8 @@ export function InquirySection() {
           },
         });
       } else {
-        handleApiError(new ApiError(0, undefined, "네트워크 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."));
+        // detail이 아니라 title에 실어야 handleApiError의 default 분기(error.title)가 문구를 읽는다.
+        handleApiError(new ApiError(0, undefined, undefined, "네트워크 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."));
       }
     }
   });

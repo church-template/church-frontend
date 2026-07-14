@@ -104,4 +104,15 @@ describe("InquirySection", () => {
     // 실패 시 폼은 그대로 남는다(입력 유실 방지)
     expect(screen.getByRole("button", { name: "문의 남기기" })).toBeDefined();
   });
+
+  it("네트워크 오류(순수 Error reject)는 안내 문구를 토스트로 띄운다", async () => {
+    createMock.mockRejectedValue(new TypeError("Failed to fetch"));
+    renderSection();
+    fillValidForm();
+    fireEvent.click(screen.getByRole("button", { name: "문의 남기기" }));
+
+    await waitFor(() =>
+      expect(notifyError).toHaveBeenCalledWith("네트워크 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."),
+    );
+  });
 });
