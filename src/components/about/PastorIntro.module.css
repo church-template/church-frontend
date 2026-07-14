@@ -18,22 +18,35 @@
       /* fill-mode none이 핵심 — 자기 구간(animation-range) 밖에서는 애니메이션이 적용되지 않아
          기본색(흐림)으로 돌아간다. 구간 안에서만 ink로 켜지므로 "한 문장씩"이 성립한다. */
       animation: pastor-read-on linear;
-      animation-timeline: view();
-      /* 비고정(모바일·짧은 뷰포트): 문장이 화면 중앙대를 지나는 동안 켜진다.
-         구간을 좁히면 문장 사이에 아무것도 안 켜지는 빈 구간이 생긴다. */
-      animation-range: cover 35% cover 70%;
+    }
+
+    /* 비고정(모바일·짧은 뷰포트): 본문 블록 하나를 타임라인으로 삼아 문장 수만큼 등분한다.
+       문장마다 자기 view()를 주면 안 된다 — 켜지는 구간 폭이 문장 간격보다 넓고(문장 높이가
+       제각각) 한 줄을 두 문장이 나눠 쓰면 박스까지 겹쳐, 두 문장이 함께 켜진다.
+       인덱스 등분은 구간이 서로 배타적이라 겹침이 원천 차단된다(데스크톱과 같은 원리).
+       구간 = 뷰포트 중앙이 문장 i의 띠를 지나는 동안. cover 진행 px 기준으로
+       [50vh + i × 본문높이/n, 50vh + (i+1) × 본문높이/n],
+       본문높이 = cover 전체(100% = 본문 + 뷰포트) − 100vh — 실측 없이 CSS만으로 성립한다. */
+    .reading {
+      view-timeline-name: --pastor-read-flow;
+    }
+
+    .sentence {
+      animation-timeline: --pastor-read-flow;
+      animation-range: cover calc(50vh + var(--i) * (100% - 100vh) / var(--sentences)) cover
+        calc(50vh + (var(--i) + 1) * (100% - 100vh) / var(--sentences));
     }
 
     /* 데스크톱: 섹션을 화면에 고정(pin)하고, 고정 구간을 문장 수(--sentences)로 등분해
        스크롤이 한 칸 진행할 때마다 다음 문장이 켜진다. 마지막 문장이 끝나면 고정이 풀린다.
        - view-timeline의 contain 구간 = sticky가 붙어 있는 구간이라 별도 계산이 없다.
-       - 문장당 스크롤 길이 20vh(--sentences에 비례) → 본문이 길어지면 고정도 그만큼 길어진다.
+       - 문장당 스크롤 길이 35vh(--sentences에 비례) → 본문이 길어지면 고정도 그만큼 길어진다.
        - 뷰포트가 낮으면 고정하지 않는다: 콘텐츠가 화면보다 크면 잘린 채 멈춘다.
          임계 48rem(768px)은 실측 콘텐츠 높이(초상·본문 = 약 700px) 기준 — 본문·초상을 키우면
          이 값도 함께 올려야 한다. */
     @media (min-width: 64rem) and (min-height: 48rem) {
       .stage {
-        height: calc(100vh + var(--sentences) * 20vh);
+        height: calc(100vh + var(--sentences) * 35vh);
         view-timeline-name: --pastor-read;
       }
 

@@ -504,10 +504,12 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
   CSS 스크롤 타임라인만 쓴다(JS 0줄).
   **데스크톱(≥64rem 폭·≥48rem 높이)은 섹션을 화면에 고정(sticky)한 채** 강조가 문장을 하나씩 밟고 내려가고, 마지막
   문장이 끝나면 고정이 풀리며 다음 섹션으로 넘어간다 — `view-timeline`의 `contain` 구간이 곧 고정 구간이라
-  별도 계산이 없다. 고정 길이 = `100vh + 문장수 × 20vh`(본문이 길면 그만큼 길어진다). 좁거나 낮은 뷰포트는
-  고정하지 않고(콘텐츠가 화면보다 커 잘린 채 멈추므로) 문장이 화면 중앙대를 지날 때 켜진다. **강조 밖 문장을
-  지우지 않는다**(고령 가독성 > 몰입). 켜짐은 `animation-fill-mode: none` + 문장별 `animation-range` 등분으로
-  성립. 미지원 브라우저·reduced-motion은 평문(`{colors.body}`)·고정 없음.
+  별도 계산이 없다. 고정 길이 = `100vh + 문장수 × 35vh`(본문이 길면 그만큼 길어진다). 좁거나 낮은 뷰포트는
+  고정하지 않고(콘텐츠가 화면보다 커 잘린 채 멈추므로) **본문 블록을 타임라인으로** 삼아 뷰포트 중앙이 문장의 띠를
+  지날 때 켜진다 — 문장마다 자기 `view()`를 주면 켜짐 구간이 문장 간격보다 넓어 **두 문장이 함께 켜진다**(금지).
+  **강조 밖 문장을
+  지우지 않는다**(고령 가독성 > 몰입). 켜짐은 `animation-fill-mode: none` + **인덱스 등분** `animation-range`(고정·비고정
+  공통)로 성립 — 구간이 배타적이라 겹침이 원천 차단된다. 미지원 브라우저·reduced-motion은 평문(`{colors.body}`)·고정 없음.
   대수·노브는 스펙(docs/superpowers/specs/2026-07-13-pastor-reading-spotlight-design.md).
 - **`history-band`**: 연혁 카드 시퀀스(참조: 우리은행 Dream). 연도 배지 + 헤드라인 + 설명의
   풀폭 라운드 밴드(`{rounded.xl}`)가 세로로 이어지고, 배경은 surface-dark·primary-soft·
