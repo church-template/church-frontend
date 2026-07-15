@@ -23,7 +23,7 @@ export function LocationContact() {
         <h1 className={cn(typo.displayMd, "text-ink")}>{LOCATION.title}</h1>
         <p className={cn(typo.bodyLg, "mt-base text-body")}>{LOCATION.lead}</p>
 
-        <div className="mt-xxl grid gap-xl lg:grid-cols-[5fr_7fr] lg:items-start">
+        <div className="mt-xxl grid gap-xl lg:grid-cols-[5fr_7fr] lg:items-center">
           {/* 좌 — 연락 정보(각 항목은 복사 버튼·길게 누르기로 복사) */}
           <div>
             <p className={cn(typo.caption, "flex items-center gap-xs text-muted")}>
@@ -53,7 +53,7 @@ export function LocationContact() {
                   src={LOCATION.map.src}
                   alt={LOCATION.map.alt}
                   loading="lazy"
-                  className="aspect-video w-full rounded-xl border border-hairline object-cover"
+                  className="h-auto w-full rounded-xl border border-hairline"
                 />
                 {/* 외부 지도 폴백 — 카카오·네이버 둘 다 주소 검색(실제 경로 길찾기는 각 앱에서). */}
                 <div className="grid gap-sm sm:grid-cols-2">
