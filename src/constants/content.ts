@@ -299,7 +299,7 @@ export const LOCATION = {
   title: "오시는 길",
   lead: "은샘교회를 찾아오시는 길을 안내합니다.",
   // 약도(그림 지도). 실제 약도 이미지를 public/location/ 에 넣고 src만 교체하면 된다(단일 교체점).
-  map: { src: "/location/map-placeholder.svg", alt: "은샘교회 약도" },
+  map: { src: "/location/map-location.png", alt: "은샘교회 약도" },
   directionsHeading: "찾아오는 방법",
   directions: [
     {
