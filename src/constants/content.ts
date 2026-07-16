@@ -470,4 +470,6 @@ export const MAIN_SECTIONS = {
   sermons: { title: "최신 설교", empty: "등록된 설교가 없습니다" },
   notices: { title: "공지", empty: "등록된 공지가 없습니다" },
   events: { title: "다가오는 일정", empty: "등록된 일정이 없습니다" },
+  // 소식 섹션(설교·공지·일정)만 불러오기 실패했을 때 그 자리에 표시하는 문구. 페이지 나머지는 정상.
+  error: "지금은 교회 소식을 불러올 수 없어요. 잠시 후 다시 시도해 주세요.",
 } as const;

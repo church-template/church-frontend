@@ -4,6 +4,7 @@ import { WorshipSection } from "@/components/main/WorshipSection";
 import { SermonSection } from "@/components/main/SermonSection";
 import { NoticeSection } from "@/components/main/NoticeSection";
 import { EventSection } from "@/components/main/EventSection";
+import { MainFeedsError } from "@/components/main/MainFeedsError";
 import { CtaBand } from "@/components/shell/CtaBand";
 import { SiteFooter } from "@/components/shell/SiteFooter";
 import { getMain } from "@/lib/api/main";
@@ -21,7 +22,11 @@ export default async function Home() {
   // CI가 백엔드 없이 build하므로 prerender(= 빌드 시 /api/main 호출)를 요청 시점으로 미룬다(스펙 D8).
   // force-dynamic과 달리 fetch 데이터 캐시(revalidate 60)는 그대로 동작 — 백엔드 부하는 60s 캐시가 흡수.
   await connection();
-  const main = await getMain();
+  // 소식 fetch만 격리: 실패해도 여기서 null로 흡수해 Hero·연혁·사역·예배시간·CTA·푸터는 그대로 산다.
+  const main = await getMain().catch((error: unknown) => {
+    console.error(error); // 서버 로깅 지점, 화면 비노출(app/error.tsx 관례와 동일)
+    return null;
+  });
 
   // 줄 단위 카피 배열 → block span 합성(가이드 13.3의 "\n" 이슈 원천 차단, 줄별 텍스트 노드 유지)
   const caption = HERO_CAPTION.map((line, i) => (
@@ -41,9 +46,16 @@ export default async function Home() {
         <HistoryBand />
         <MinistryCards />
         <WorshipSection />
-        <SermonSection sermons={main.sermons} />
-        <NoticeSection notices={main.notices} />
-        <EventSection events={main.upcomingEvents} />
+        {/* 소식(설교·공지·일정)만 장애 격리 — 로드 실패 시 이 자리에만 폴백 */}
+        {main ? (
+          <>
+            <SermonSection sermons={main.sermons} />
+            <NoticeSection notices={main.notices} />
+            <EventSection events={main.upcomingEvents} />
+          </>
+        ) : (
+          <MainFeedsError />
+        )}
       </HeroHeaderSync>
       <CtaBand />
       <SiteFooter />

@@ -13,7 +13,7 @@ vi.mock("next/link", () => ({
   ),
 }));
 vi.mock("@/lib/api/main", () => ({
-  getMain: async () => ({
+  getMain: vi.fn(async () => ({
     sermons: [
       {
         id: 1,
@@ -47,10 +47,11 @@ vi.mock("@/lib/api/main", () => ({
         tags: [],
       },
     ],
-  }),
+  })),
 }));
 
 import Home from "./page";
+import { getMain } from "@/lib/api/main";
 
 function stubBrowserApis() {
   // jsdom 미구현 API — CrossHero(matchMedia)·HeroHeaderSync(IO)가 사용.
@@ -111,5 +112,20 @@ describe("Home (메인)", () => {
     for (const line of HERO_CAPTION) {
       expect(screen.getByText(line)).toBeDefined();
     }
+  });
+
+  it("소식 로드 실패 시 그 자리에만 폴백이 뜨고 나머지 섹션은 살아남는다(장애 격리)", async () => {
+    stubBrowserApis();
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    vi.mocked(getMain).mockRejectedValueOnce(new Error("backend down"));
+    render(await Home());
+    // 소식 자리엔 폴백 문구
+    expect(screen.getByText(MAIN_SECTIONS.error)).toBeDefined();
+    // 페이지 나머지(예배·CTA·푸터)는 정상 렌더
+    expect(screen.getByRole("heading", { name: WORSHIP.title })).toBeDefined();
+    expect(screen.getByText(CTA_BAND.heading)).toBeDefined();
+    expect(screen.getByRole("contentinfo")).toBeDefined();
+    // 설교 데이터는 노출되지 않는다
+    expect(screen.queryByText("부활의 증인")).toBeNull();
   });
 });
