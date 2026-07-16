@@ -1,14 +1,35 @@
 {
   "metadata": {
-    "lastUpdated": "2026-07-16T04:30:57Z",
-    "currentVersion": "0.1.60",
+    "lastUpdated": "2026-07-16T15:07:33Z",
+    "currentVersion": "0.1.61",
     "projectType": "next",
     "projectTypes": [
       "next"
     ],
-    "totalReleases": 2
+    "totalReleases": 3
   },
   "releases": [
+    {
+      "version": "0.1.61",
+      "project_type": "next",
+      "project_types": [
+        "next"
+      ],
+      "date": "2026-07-16",
+      "pr_number": 94,
+      "raw_summary": "## Summary by CodeRabbit\n\n* **Chores**\n  * 앱 버전을 **0.1.61**로 업데이트했습니다.\n  * 빌드 번호를 **62**로 갱신했습니다.\n  * 최신 업데이트 시간이 반영되었습니다.",
+      "parsed_changes": {
+        "chores": {
+          "title": "Chores",
+          "items": [
+            "앱 버전을 **0.1.61**로 업데이트했습니다.",
+            "빌드 번호를 **62**로 갱신했습니다.",
+            "최신 업데이트 시간이 반영되었습니다."
+          ]
+        }
+      },
+      "parse_method": "markdown"
+    },
     {
       "version": "0.1.60",
       "project_type": "next",
