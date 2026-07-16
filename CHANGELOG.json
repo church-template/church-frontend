@@ -1,14 +1,56 @@
 {
   "metadata": {
-    "lastUpdated": "2026-07-16T04:18:08Z",
+    "lastUpdated": "2026-07-16T04:30:57Z",
     "currentVersion": "0.1.60",
     "projectType": "next",
     "projectTypes": [
       "next"
     ],
-    "totalReleases": 1
+    "totalReleases": 2
   },
   "releases": [
+    {
+      "version": "0.1.60",
+      "project_type": "next",
+      "project_types": [
+        "next"
+      ],
+      "date": "2026-07-16",
+      "pr_number": 93,
+      "raw_summary": "## Summary by CodeRabbit\n\n## 릴리스 노트\n\n* **기타**\n\n  * church-frontend 버전 관리 : docs : v0.1.60 릴리즈 문서 업데이트 (PR #92)\n  * fix : 백엔드 장애 시 홈 전체가 죽던 문제를 소식 영역만 격리\n  * feat : 검색엔진 최적화 SEO·OG 메타데이터 설정\n  * ci : Vercel 프로덕션 배포 워크플로 추가\n  * style : 오시는 길 지도 원본 비율 표시·연락 정보 세로 중앙 정렬\n  * Merge branch 'main' of https://github.com/church-template/church-frontend\n  * chore : 은샘교회 약도 추가\n  * perf : 부서 사진 WebP 변환·리사이즈로 46MB → 5.5MB\n  * chore : 부서 소개 사진 실사진으로 교체\n  * style : 부서 히어로 인물 사진 크롭 기준을 상단으로 조정\n  * fix : 목회자 인사말 리딩 강조 비고정 구간 문장 겹침 수정\n  * Merge pull request #91 from church-template/20260714_#90_문의_접수_폼_및_문의_관리_화면_연동\n  * docs : 리포트 문서 작성 #90\n  * feat : 헤더 높이·로고·메뉴 텍스트 확대 #90\n  * feat : 연락처 항목 복사 기능과 문의 폼 레이아웃 개선, 헤더 로고 추가 #90\n  * feat : 연락처 페이지 문의 카드 우측 배치로 좌우 교체 #90\n  * feat : 연락처 페이지 문의 카드와 찾아오는 방법 2컬럼 분할 #90\n  * feat : 문의 폼 필수 입력 항목 표기 추가 #90\n  * fix : 문의 목록 탭과 표 사이 여백 중복 제거 #90\n  * fix : 문의 화면 접근성·개인정보 캐시·공용 컴포넌트 재사용 보강 #90\n  * docs : 문의 폼·문의 관리 컴포넌트 디자인 시스템 등록 #90\n  * feat : 어드민 문의 관리 화면(목록·필터·페이지네이션) 추가 #90\n  * fix : 문의 삭제 후 삭제된 상세 재조회 방지 #90\n  * feat : 어드민 문의 상세 다이얼로그(완료 처리·삭제) 추가 #90\n\n> 💡 더 정확한 릴리스 노트를 원한다면 Claude Code에서 `/github` 스킬로 PR 릴리스 노트를 업데이트할 수 있습니다.",
+      "parsed_changes": {
+        "기타": {
+          "title": "기타",
+          "items": [
+            "church-frontend 버전 관리 : docs : v0.1.60 릴리즈 문서 업데이트 (PR #92)",
+            "fix : 백엔드 장애 시 홈 전체가 죽던 문제를 소식 영역만 격리",
+            "feat : 검색엔진 최적화 SEO·OG 메타데이터 설정",
+            "ci : Vercel 프로덕션 배포 워크플로 추가",
+            "style : 오시는 길 지도 원본 비율 표시·연락 정보 세로 중앙 정렬",
+            "Merge branch 'main' of https://github.com/church-template/church-frontend",
+            "chore : 은샘교회 약도 추가",
+            "perf : 부서 사진 WebP 변환·리사이즈로 46MB → 5.5MB",
+            "chore : 부서 소개 사진 실사진으로 교체",
+            "style : 부서 히어로 인물 사진 크롭 기준을 상단으로 조정",
+            "fix : 목회자 인사말 리딩 강조 비고정 구간 문장 겹침 수정",
+            "Merge pull request #91 from church-template/20260714_#90_문의_접수_폼_및_문의_관리_화면_연동",
+            "docs : 리포트 문서 작성 #90",
+            "feat : 헤더 높이·로고·메뉴 텍스트 확대 #90",
+            "feat : 연락처 항목 복사 기능과 문의 폼 레이아웃 개선, 헤더 로고 추가 #90",
+            "feat : 연락처 페이지 문의 카드 우측 배치로 좌우 교체 #90",
+            "feat : 연락처 페이지 문의 카드와 찾아오는 방법 2컬럼 분할 #90",
+            "feat : 문의 폼 필수 입력 항목 표기 추가 #90",
+            "fix : 문의 목록 탭과 표 사이 여백 중복 제거 #90",
+            "fix : 문의 화면 접근성·개인정보 캐시·공용 컴포넌트 재사용 보강 #90",
+            "docs : 문의 폼·문의 관리 컴포넌트 디자인 시스템 등록 #90",
+            "feat : 어드민 문의 관리 화면(목록·필터·페이지네이션) 추가 #90",
+            "fix : 문의 삭제 후 삭제된 상세 재조회 방지 #90",
+            "feat : 어드민 문의 상세 다이얼로그(완료 처리·삭제) 추가 #90"
+          ]
+        }
+      },
+      "parse_method": "markdown"
+    },
     {
       "version": "0.1.60",
       "project_type": "next",
