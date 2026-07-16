@@ -10,6 +10,13 @@ export const CHURCH_NAME_FULL = "기독교 한국침례회 은샘교회";
 // (실제 DNS 연결은 별개 — 추후 SEO 메타 도입 시 그대로 사용).
 export const CHURCH_DOMAIN = "eunsaem.com";
 
+// 사이트 정본 URL — metadataBase·robots·sitemap·JSON-LD가 공유하는 절대 URL의 단일 출처.
+export const CHURCH_URL = `https://${CHURCH_DOMAIN}`;
+
+// 검색결과·소셜 공유(OG)에 노출되는 대표 소개문. 위치·핵심 콘텐츠 키워드를 담아 지역 SEO를 돕는다.
+export const CHURCH_DESCRIPTION =
+  "충청남도 예산군 삽교읍에 위치한 기독교 한국침례회 은샘교회입니다. 예배 시간, 설교 말씀, 교회 소식과 오시는 길을 안내합니다.";
+
 // 교회 로고 이미지 — 소개 히어로 등에서 소비. 교회별 자산이라 상수로 둔다.
 // alt는 약칭 CHURCH_NAME 기준(DESIGN.md: 로고 표기는 약칭 사용).
 export const CHURCH_LOGO = {
