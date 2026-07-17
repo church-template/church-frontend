@@ -1,6 +1,7 @@
 // src/components/admin/media/MediaLibrary.tsx
 "use client";
 import { useState } from "react";
+import Image from "next/image";
 import { useQuery, useMutation, useQueryClient, keepPreviousData } from "@tanstack/react-query";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -83,8 +84,8 @@ export function MediaLibrary() {
       cell: (m) => (
         <span className="flex items-center gap-sm">
           {m.mimeType.startsWith("image/") ? (
-            // eslint-disable-next-line @next/next/no-img-element -- 프레젠테이션 셸(썸네일)
-            <img src={apiUrl(`/api/media/${m.id}`)} alt="" className="size-10 shrink-0 rounded-sm object-cover" />
+            // 40px 고정 썸네일 — 원본 대신 40px 변환본만 받는다(목록 전송량 절감 최대 지점).
+            <Image src={apiUrl(`/api/media/${m.id}`)} alt="" width={40} height={40} className="size-10 shrink-0 rounded-sm object-cover" />
           ) : null}
           <span className="truncate">{m.filename}</span>
         </span>

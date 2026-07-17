@@ -1,6 +1,7 @@
 // src/components/admin/MediaPicker.tsx
 "use client";
 import { useState } from "react";
+import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
 import { cn } from "@/lib/utils";
 import { typo } from "@/constants/typography";
@@ -82,8 +83,10 @@ export function MediaPicker({ open, onOpenChange, accept, multiple = false, onCo
                     )}
                   >
                     {accept === "image" ? (
-                      // eslint-disable-next-line @next/next/no-img-element -- 프레젠테이션 셸
-                      <img src={apiUrl(`/api/media/${m.id}`)} alt={m.filename} className="aspect-square w-full rounded-md object-cover" />
+                      // fill 모드는 부모 relative 필수(next/image 규약). 다이얼로그 셀 폭 근사 sizes=200px.
+                      <span className="relative block aspect-square w-full overflow-hidden rounded-md">
+                        <Image src={apiUrl(`/api/media/${m.id}`)} alt={m.filename} fill sizes="200px" className="object-cover" />
+                      </span>
                     ) : (
                       <span className={cn(typo.bodySm, "block truncate p-sm text-ink")}>{m.filename}</span>
                     )}

@@ -1,6 +1,7 @@
 // src/components/gallery/PhotoGrid.tsx
 "use client";
 import { useState } from "react";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { apiUrl } from "@/lib/auth/apiBase";
 import { EmptyState } from "@/components/common/EmptyState";
@@ -39,12 +40,14 @@ export function PhotoGrid({
                 aria-label={`${i + 1}번째 사진 크게 보기`}
                 className={cn("block w-full", focusRing)}
               >
-                <span className="block aspect-square overflow-hidden rounded-md">
-                  {/* eslint-disable-next-line @next/next/no-img-element -- 프레젠테이션 셸 */}
-                  <img
+                {/* fill 모드는 부모 relative 필수(next/image 규약) */}
+                <span className="relative block aspect-square overflow-hidden rounded-md">
+                  <Image
                     src={apiUrl(`/api/media/${p.mediaId}`)}
                     alt={p.caption ?? ""}
-                    className="h-full w-full object-cover transition-transform duration-300 ease-out hover:scale-[1.03]"
+                    fill
+                    sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+                    className="object-cover transition-transform duration-300 ease-out hover:scale-[1.03]"
                   />
                 </span>
               </button>
