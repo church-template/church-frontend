@@ -1,7 +1,20 @@
 # Changelog
 
-**현재 버전:** 0.1.64  
-**마지막 업데이트:** 2026-07-17T06:31:36Z  
+**현재 버전:** 0.1.65  
+**마지막 업데이트:** 2026-07-17T07:30:49Z  
+
+---
+
+## [0.1.65] - 2026-07-17
+
+**PR:** #100  
+
+**기타**
+- Merge branch 'main' of https://github.com/church-template/church-frontend
+- docs : 리포트 문서 작성 #98
+- Merge pull request #99 from church-template/20260717_#98_백엔드_미디어_이미지_최적화_캐싱_적용
+- feat : 백엔드 미디어 이미지 next/image 최적화 전환 #98
+- docs : 미디어 이미지 최적화 이슈 문서 추가 #98
 
 ---
 
