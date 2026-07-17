@@ -1,14 +1,45 @@
 {
   "metadata": {
-    "lastUpdated": "2026-07-17T07:30:49Z",
-    "currentVersion": "0.1.65",
+    "lastUpdated": "2026-07-17T07:39:04Z",
+    "currentVersion": "0.1.67",
     "projectType": "next",
     "projectTypes": [
       "next"
     ],
-    "totalReleases": 6
+    "totalReleases": 7
   },
   "releases": [
+    {
+      "version": "0.1.67",
+      "project_type": "next",
+      "project_types": [
+        "next"
+      ],
+      "date": "2026-07-17",
+      "pr_number": 101,
+      "raw_summary": "## Summary by CodeRabbit\n\n* **개선 사항**\n  * 버튼 라벨이 좁은 공간에서도 줄바꿈되지 않아 가독성이 향상되었습니다.\n\n* **문서**\n  * 최신 버전 정보가 v0.1.66으로 갱신되었습니다.\n\n* **릴리스**\n  * 앱 버전이 v0.1.67로 업데이트되었습니다.",
+      "parsed_changes": {
+        "개선_사항": {
+          "title": "개선 사항",
+          "items": [
+            "버튼 라벨이 좁은 공간에서도 줄바꿈되지 않아 가독성이 향상되었습니다."
+          ]
+        },
+        "문서": {
+          "title": "문서",
+          "items": [
+            "최신 버전 정보가 v0.1.66으로 갱신되었습니다."
+          ]
+        },
+        "릴리스": {
+          "title": "릴리스",
+          "items": [
+            "앱 버전이 v0.1.67로 업데이트되었습니다."
+          ]
+        }
+      },
+      "parse_method": "markdown"
+    },
     {
       "version": "0.1.65",
       "project_type": "next",
