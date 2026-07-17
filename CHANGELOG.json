@@ -1,14 +1,42 @@
 {
   "metadata": {
-    "lastUpdated": "2026-07-16T23:51:47Z",
-    "currentVersion": "0.1.62",
+    "lastUpdated": "2026-07-17T06:31:36Z",
+    "currentVersion": "0.1.64",
     "projectType": "next",
     "projectTypes": [
       "next"
     ],
-    "totalReleases": 4
+    "totalReleases": 5
   },
   "releases": [
+    {
+      "version": "0.1.64",
+      "project_type": "next",
+      "project_types": [
+        "next"
+      ],
+      "date": "2026-07-17",
+      "pr_number": 97,
+      "raw_summary": "## Summary by CodeRabbit\n\n* **새로운 기능**\n  * 공지, 주보, 일정, 설교 페이지로 이동할 때 로딩 스켈레톤을 표시해 콘텐츠가 준비되는 동안 더 자연스러운 화면 전환을 제공합니다.\n  * 화면 형태에 맞춘 목록, 카드, 상세 콘텐츠용 로딩 UI를 지원합니다.\n  * 반응형 레이아웃과 접근성을 고려해 로딩 중 화면 흔들림을 줄였습니다.\n\n* **업데이트**\n  * 프로젝트 버전이 0.1.64로 업데이트되었습니다.\n  * 최신 버전 및 빌드 정보가 갱신되었습니다.",
+      "parsed_changes": {
+        "새로운_기능": {
+          "title": "새로운 기능",
+          "items": [
+            "공지, 주보, 일정, 설교 페이지로 이동할 때 로딩 스켈레톤을 표시해 콘텐츠가 준비되는 동안 더 자연스러운 화면 전환을 제공합니다.",
+            "화면 형태에 맞춘 목록, 카드, 상세 콘텐츠용 로딩 UI를 지원합니다.",
+            "반응형 레이아웃과 접근성을 고려해 로딩 중 화면 흔들림을 줄였습니다."
+          ]
+        },
+        "업데이트": {
+          "title": "업데이트",
+          "items": [
+            "프로젝트 버전이 0.1.64로 업데이트되었습니다.",
+            "최신 버전 및 빌드 정보가 갱신되었습니다."
+          ]
+        }
+      },
+      "parse_method": "markdown"
+    },
     {
       "version": "0.1.62",
       "project_type": "next",
