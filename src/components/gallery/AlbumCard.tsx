@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ImageOff } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
@@ -16,13 +17,15 @@ export function AlbumCard({ album }: { album: GalleryAlbumCardResponse }) {
   return (
     <Link href={`/gallery/albums/${album.id}`} className={cn("block", focusRing)}>
       <Card bordered interactive className="group h-full">
-        <div className="aspect-video overflow-hidden">
+        {/* fill 모드는 부모 relative 필수(next/image 규약) */}
+        <div className="relative aspect-video overflow-hidden">
           {album.thumbnailMediaId != null ? (
-            // eslint-disable-next-line @next/next/no-img-element -- 프레젠테이션 셸; next/image 교체는 후속
-            <img
+            <Image
               src={apiUrl(`/api/media/${album.thumbnailMediaId}`)}
               alt=""
-              className="h-full w-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.03]"
+              fill
+              sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+              className="object-cover transition-transform duration-300 ease-out group-hover:scale-[1.03]"
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center bg-surface-strong">
