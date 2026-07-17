@@ -587,7 +587,7 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 
 <!-- admin:02 콘텐츠(설교·공지) — markdown-editor · tag-multiselect · admin-inline-action -->
 - **`markdown-editor`**: 어드민 본문 작성/미리보기 탭 에디터. `Tabs`(작성·미리보기) + `Textarea` + `MarkdownContent`(미리보기 재사용). 미리보기는 탭 활성 시에만 변환. 토큰 공유(가독성 우선 단순 변형).
-- **`tag-multiselect`**: 기존 태그 다중선택. `Popover` + `Checkbox` 목록 + 선택 `Badge` 칩. 옵션은 `getTags`. 신규 생성 없음(06 소관).
+- **`tag-multiselect`**: 기존 태그 다중선택. 인라인 칩 토글 — 태그 전체를 폼 안에 항상 펼쳐 렌더(`aria-pressed` 버튼), 선택=primary 채움+lucide `Check`, 비선택=surface-strong. 플로팅(Popover) 미사용 — 모달(Dialog) 안에서도 레이어 문제 없음. 옵션은 `getTags`. 신규 생성 없음(06 소관).
 - **`admin-inline-action`**: 공개 RSC 페이지 위 client island(목록 toolbar 등록 버튼·상세 수정/삭제·공지 고정 토글). `RequirePermission` 게이트, 카드 내부 중첩 `<a>` 금지(목록 액션은 카드 밖).
 <!-- admin:03 일정 — datetime-picker · event-form-modal -->
 - **`datetime-picker`**: 일정 시작·종료 입력. 네이티브 `<input type="datetime-local">`(종일이면 `date`) 래퍼, 라이브러리 없이. `Input` 토큰·error 배선 상속. 직렬화는 `toServerDateTime`(offset 없는 LocalDateTime).
