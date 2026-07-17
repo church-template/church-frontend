@@ -22,10 +22,12 @@ const base: GalleryAlbumCardResponse = {
 };
 
 describe("AlbumCard", () => {
-  it("상세 링크와 썸네일 URL을 렌더한다", () => {
+  it("상세 링크와 최적화 경유 썸네일 URL을 렌더한다", () => {
     const { container } = render(<AlbumCard album={base} />);
     expect(screen.getByRole("link").getAttribute("href")).toBe("/gallery/albums/3");
-    expect(container.querySelector("img")?.getAttribute("src")).toBe("/api/media/42");
+    // next/image 최적화 프록시(/_next/image?url=…)를 경유해야 리사이즈·CDN 캐싱이 적용된다.
+    const src = container.querySelector("img")?.getAttribute("src") ?? "";
+    expect(src).toContain(encodeURIComponent("/api/media/42"));
   });
 
   it("thumbnailMediaId가 null이면 이미지 대신 플레이스홀더를 렌더한다", () => {
