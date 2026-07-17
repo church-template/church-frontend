@@ -69,9 +69,10 @@ const variantClass: Record<ButtonVariant, string> = {
 
 // outline-hidden: 링을 못 그리는 forced-colors(고대비) 모드에서만 아웃라인이 살아나도록.
 // disabled:pointer-events-none: 비활성 버튼에 hover/active 스타일이 걸리는 것을 차단.
+// whitespace-nowrap: flex 행에서 눌려도 라벨이 줄바꿈되지 않게(min-content가 라벨 전체 폭이 되어 shrink도 차단).
 const baseClass = cn(
   typo.button,
-  "inline-flex items-center justify-center gap-xs select-none",
+  "inline-flex items-center justify-center gap-xs whitespace-nowrap select-none",
   "transition duration-150 ease-out",
   "outline-hidden",
   "disabled:pointer-events-none disabled:cursor-not-allowed",

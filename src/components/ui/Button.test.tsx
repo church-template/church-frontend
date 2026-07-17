@@ -17,3 +17,11 @@ describe("Button iconOnly", () => {
     expect(cls.includes("size-9")).toBe(false);
   });
 });
+
+describe("Button 텍스트 줄바꿈 방지", () => {
+  it("flex 행에서 눌려도 라벨이 줄바꿈되지 않도록 whitespace-nowrap을 적용한다", () => {
+    const { getByRole } = render(<Button>새 앨범</Button>);
+    const cls = getByRole("button").getAttribute("class") ?? "";
+    expect(cls.includes("whitespace-nowrap")).toBe(true);
+  });
+});
