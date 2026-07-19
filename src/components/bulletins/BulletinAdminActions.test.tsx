@@ -2,18 +2,22 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import type { ReactNode } from "react";
 
 const { deleteMock, refreshMock, notifySuccess, revalidateMock } = vi.hoisted(() => ({
   deleteMock: vi.fn(), refreshMock: vi.fn(), notifySuccess: vi.fn(), revalidateMock: vi.fn(),
 }));
 vi.mock("@/lib/api/bulletins.admin", () => ({ deleteBulletin: deleteMock }));
 vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh: refreshMock, push: vi.fn() }) }));
+vi.mock("next/link", () => ({
+  default: ({ href, children, ...rest }: { href: string; children: ReactNode }) => (
+    <a href={href} {...rest}>{children}</a>
+  ),
+}));
 vi.mock("@/lib/notify", () => ({ notify: { success: notifySuccess, error: vi.fn() } }));
 vi.mock("@/lib/admin/revalidate", () => ({ revalidateBulletins: revalidateMock }));
 // 권한 게이트는 통과로 고정(useMe 미목 시 children 미렌더 방지)
 vi.mock("@/components/admin/RequirePermission", () => ({ RequirePermission: ({ children }: { children: React.ReactNode }) => <>{children}</> }));
-// FormDialog는 별도 테스트 — 무력화
-vi.mock("./BulletinFormDialog", () => ({ BulletinFormDialog: () => null }));
 
 import { BulletinRowActions } from "./BulletinAdminActions";
 
@@ -30,9 +34,8 @@ describe("BulletinRowActions", () => {
     await waitFor(() => expect(revalidateMock).toHaveBeenCalled());
   });
 
-  it("수정 트리거는 aria-label='주보 수정'으로 접근 가능하다", () => {
-    // FormDialog가 mock(null)이라 열림 상태는 검증 불가; 트리거 존재·접근성만 확인
+  it("수정은 전용 수정 페이지 링크다(다이얼로그 아님)", () => {
     renderQc(<BulletinRowActions b={{ id: 7, title: "주보", serviceDate: "2026-06-07", mediaId: 1, createdAt: "2026-06-07T00:00:00" }} />);
-    expect(screen.getByRole("button", { name: "주보 수정" })).toBeDefined();
+    expect(screen.getByRole("link", { name: "주보 수정" }).getAttribute("href")).toBe("/bulletins/7/edit");
   });
 });
