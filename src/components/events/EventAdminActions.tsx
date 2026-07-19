@@ -2,40 +2,37 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { RequirePermission } from "@/components/admin/RequirePermission";
 import { DeleteConfirmDialog } from "@/components/admin/DeleteConfirmDialog";
-import { Button } from "@/components/ui/Button";
+import { Button, buttonVariants } from "@/components/ui/Button";
 import { ACTION, CREATE_ICON } from "@/constants/actionButton";
-import { EventFormDialog } from "./EventFormDialog";
 import { deleteEvent } from "@/lib/api/events.admin";
 import { adminOnError } from "@/lib/admin/mutationHandlers";
 import { notify } from "@/lib/notify";
 import { revalidateEvents } from "@/lib/admin/revalidate";
 import type { EventDetailResponse } from "@/lib/api/types";
 
-// ISR 공개 페이지 위 client island — 일정 목록 toolbar의 "새 일정" 버튼.
+// ISR 공개 페이지 위 client island — 일정 목록 toolbar의 "새 일정" 진입 링크.
 // RequirePermission이 EVENT_WRITE 미보유 시 null 반환(UX 게이트).
 export function EventListAction() {
-  const [open, setOpen] = useState(false);
   return (
     <RequirePermission permission="EVENT_WRITE">
-      <Button type="button" variant="primary" onClick={() => setOpen(true)}>
+      <Link href="/events/new" className={buttonVariants("primary")}>
         <CREATE_ICON size={18} aria-hidden />
         새 일정
-      </Button>
-      <EventFormDialog open={open} onOpenChange={setOpen} mode="create" />
+      </Link>
     </RequirePermission>
   );
 }
 
 // 일정 상세(캘린더 모달·딥링크 페이지) 위 수정/삭제 액션 island.
-// event: EventDetailResponse — RSC 레이어에서 받은 상세 응답을 그대로 전달한다.
-// onClose: 수정·삭제 성공 후 호출하는 콜백 — 캘린더 모달 닫기 등 부모 정리에 쓴다(수정 시 모달에 옛 데이터가 남지 않도록).
+// 수정은 전용 페이지(/events/[id]/edit) 링크 — 라우트 전환으로 부모 모달이 자연 해소된다.
+// onClose: 삭제 성공 후 호출하는 콜백 — 캘린더 모달 닫기 등 부모 정리에 쓴다.
 export function EventDetailActions({ event, onClose }: { event: EventDetailResponse; onClose?: () => void }) {
   const router = useRouter();
-  const [editOpen, setEditOpen] = useState(false);
   const [delOpen, setDelOpen] = useState(false);
 
   const remove = useMutation({
@@ -54,16 +51,15 @@ export function EventDetailActions({ event, onClose }: { event: EventDetailRespo
   return (
     <RequirePermission permission="EVENT_WRITE">
       <div className="flex gap-sm">
-        <Button type="button" variant="tertiary" aria-label="일정 수정" onClick={() => setEditOpen(true)}>
+        <Link href={`/events/${event.id}/edit`} aria-label="일정 수정" className={buttonVariants("tertiary")}>
           <ACTION.edit.Icon size={18} aria-hidden />
           <span className="hidden lg:inline">{ACTION.edit.label}</span>
-        </Button>
+        </Link>
         <Button type="button" variant="tertiary" aria-label="일정 삭제" onClick={() => setDelOpen(true)}>
           <ACTION.delete.Icon size={18} aria-hidden />
           <span className="hidden lg:inline">{ACTION.delete.label}</span>
         </Button>
       </div>
-      <EventFormDialog open={editOpen} onOpenChange={setEditOpen} mode="edit" initial={event} onSaved={onClose} />
       <DeleteConfirmDialog
         open={delOpen}
         onOpenChange={setDelOpen}

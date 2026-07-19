@@ -2,20 +2,24 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, fireEvent, waitFor, within } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import type { ReactNode } from "react";
 
-const { useMeMock, deleteEventMock, updateEventMock, refreshMock, pushMock, revalidateEventsMock } = vi.hoisted(() => ({
+const { useMeMock, deleteEventMock, refreshMock, pushMock, revalidateEventsMock } = vi.hoisted(() => ({
   useMeMock: vi.fn(),
   deleteEventMock: vi.fn(),
-  updateEventMock: vi.fn(),
   refreshMock: vi.fn(),
   pushMock: vi.fn(),
   revalidateEventsMock: vi.fn(),
 }));
 vi.mock("@/lib/auth/useMe", () => ({ useMe: useMeMock }));
-vi.mock("@/lib/api/events.admin", () => ({ deleteEvent: deleteEventMock, updateEvent: updateEventMock }));
+vi.mock("@/lib/api/events.admin", () => ({ deleteEvent: deleteEventMock }));
 vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh: refreshMock, push: pushMock }) }));
+vi.mock("next/link", () => ({
+  default: ({ href, children, ...rest }: { href: string; children: ReactNode }) => (
+    <a href={href} {...rest}>{children}</a>
+  ),
+}));
 vi.mock("@/lib/notify", () => ({ notify: { success: vi.fn(), error: vi.fn() } }));
-vi.mock("@/lib/api/tags", () => ({ getTags: vi.fn().mockResolvedValue([]) }));
 vi.mock("@/lib/admin/revalidate", () => ({ revalidateEvents: revalidateEventsMock }));
 
 import { EventListAction, EventDetailActions } from "./EventAdminActions";
@@ -38,14 +42,14 @@ function renderWithQc(ui: React.ReactNode) {
 }
 
 describe("EventListAction", () => {
-  it("EVENT_WRITE 보유 시 '새 일정' 버튼을 노출한다", () => {
+  it("EVENT_WRITE 보유 시 '새 일정' 등록 페이지 링크를 노출한다", () => {
     renderWithQc(<EventListAction />);
-    expect(screen.getByRole("button", { name: "새 일정" })).toBeDefined();
+    expect(screen.getByRole("link", { name: "새 일정" }).getAttribute("href")).toBe("/events/new");
   });
   it("권한 미보유 시 렌더하지 않는다", () => {
     useMeMock.mockReturnValue({ data: { permissions: [] }, isLoading: false });
     renderWithQc(<EventListAction />);
-    expect(screen.queryByRole("button", { name: "새 일정" })).toBeNull();
+    expect(screen.queryByRole("link", { name: "새 일정" })).toBeNull();
   });
 });
 
@@ -61,14 +65,8 @@ describe("EventDetailActions", () => {
     expect(onCloseMock).toHaveBeenCalled();
   });
 
-  it("수정 성공 시 onClose로 부모 모달을 닫는다(옛 데이터 잔존 방지)", async () => {
-    updateEventMock.mockResolvedValue({ id: 7 });
+  it("수정은 전용 수정 페이지 링크다(다이얼로그 아님)", () => {
     renderWithQc(<EventDetailActions event={event} onClose={onCloseMock} />);
-    // 행 수정 트리거는 aria-label="일정 수정"으로 찾는다.
-    fireEvent.click(screen.getByRole("button", { name: "일정 수정" }));
-    // 수정 Dialog가 열리면 그 안의 저장 버튼을 눌러 제출(폼은 event로 프리필되어 유효)
-    fireEvent.click(within(screen.getByRole("dialog")).getByRole("button", { name: "저장" }));
-    await waitFor(() => expect(updateEventMock).toHaveBeenCalled());
-    await waitFor(() => expect(onCloseMock).toHaveBeenCalled());
+    expect(screen.getByRole("link", { name: "일정 수정" }).getAttribute("href")).toBe("/events/7/edit");
   });
 });
