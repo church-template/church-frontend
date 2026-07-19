@@ -17,6 +17,17 @@ describe("MarkdownContent", () => {
     expect(container.querySelector("script")).toBeNull();
   });
 
+  it("단독 문단 유튜브 링크는 링크 대신 임베드(썸네일 facade)로 렌더한다", () => {
+    const { container } = render(
+      <MarkdownContent source={"본문\n\nhttps://youtube.com/live/wYgQwHYvxEo?feature=share"} />,
+    );
+    expect(
+      container.querySelector('img[src*="img.youtube.com/vi/wYgQwHYvxEo"]'),
+    ).not.toBeNull();
+    expect(container.querySelector('a[href*="youtube"]')).toBeNull();
+    expect(container.textContent).toContain("본문");
+  });
+
   it("className prop을 prose-church와 병합한다", () => {
     const { container } = render(<MarkdownContent source="본문" className="mt-4" />);
     const root = container.firstChild as HTMLElement;
