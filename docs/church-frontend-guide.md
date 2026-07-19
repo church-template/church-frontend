@@ -39,7 +39,7 @@
 
 1. `POST /api/auth/signup`(공개, **201**) — 응답에 **토큰 없음**. `SignupResponse`(uuid·name·phone·roles)만. 가입 직후 로그인 상태가 아니므로 **프론트가 별도로 `login`을 호출**해야 한다.
 2. 가입 시 자동으로 `USER` 역할(권한 0)만 부여된다. 갤러리 등 회원 전용 기능은 아직 차단.
-3. 관리자가 `MEMBER` 역할을 부여하면(9장 아님, 7장 회원 관리) **교인 승인** 완료 → `GALLERY_VIEW` 획득.
+3. 관리자가 `MEMBER` 역할을 부여하면(9장 아님, 7장 회원 관리) **교인 승인** 완료 → `GALLERY_VIEW`·`SERMON_VIEW` 획득.
 
 **가입 폼에서 프론트가 미리 막아야 매끄러운 검증**: password ≥ 8자, `termsAgreed`·`privacyAgreed` **둘 다 true**(아니면 400), email은 선택(형식 검증), phone 중복은 서버가 **409 `DUPLICATE_RESOURCE`**.
 
@@ -133,6 +133,7 @@ async function authFetch(url: string, init: RequestInit = {}): Promise<Response>
 | `DEPT_WRITE` | 부서 작성/수정/삭제 | `/api/admin/departments` |
 | `GALLERY_WRITE` | 앨범·사진 생성/수정/삭제 | `/api/admin/gallery/**` |
 | `GALLERY_VIEW` | **갤러리 조회 자체**(회원 전용) | `/api/gallery/**` |
+| `SERMON_VIEW` | **설교 조회 자체**(회원 전용) | `GET /api/sermons`·`GET /api/sermons/{id}` |
 | `BULLETIN_WRITE` | 주보 업로드/수정/삭제 | `/api/admin/bulletins` |
 | `MEDIA_MANAGE` | 미디어 라이브러리(업로드/목록/삭제) | `/api/admin/media` |
 | `TAG_MANAGE` | 태그 추가/수정/삭제 | `/api/admin/tags` |
@@ -148,9 +149,10 @@ async function authFetch(url: string, init: RequestInit = {}): Promise<Response>
 |---|---|---|
 | `/api/admin/**` | **로그인만**(경로) + **메서드 `@PreAuthorize`**(권한) 2단 방어 | 로그인했어도 권한 없으면 403; 토큰 없이 호출 시 401 `INVALID_TOKEN` |
 | `/api/gallery/**` | **`GALLERY_VIEW` 필요**(회원 전용, 비공개) | 비로그인·`USER`만 보유 사용자는 차단 |
+| `GET /api/sermons`·`GET /api/sermons/{id}` | **`SERMON_VIEW` 필요**(회원 전용, 비공개) | 비로그인·`USER`만 보유 사용자는 차단 |
 | 그 외 `/api/**` 읽기 | 공개 | 비로그인 노출 가능 |
 
-**갤러리 회원전용 차단 UX**: 갤러리 진입 시 토큰/`/members/me`에 `GALLERY_VIEW`가 없으면, 호출하지 말고 "교인 승인 후 이용 가능" 안내를 띄운다. 그대로 호출하면 비로그인은 401 `INVALID_TOKEN`, 로그인+권한없음은 403 `ACCESS_DENIED`.
+**갤러리·설교 회원전용 차단 UX**: 갤러리·설교 진입 시 토큰/`/members/me`에 `GALLERY_VIEW`/`SERMON_VIEW`가 없으면, 호출하지 말고 "교인 승인 후 이용 가능" 안내를 띄운다(공용 `MemberGate`). 그대로 호출하면 비로그인은 401 `INVALID_TOKEN`, 로그인+권한없음은 403 `ACCESS_DENIED`.
 
 ### 2.4 인가 거부 → 401 vs 403
 
@@ -413,7 +415,7 @@ async function saveWithRetry(id: number, edit: (cur: Detail) => UpdateReq) {
 | **role** | `priority,desc`(비페이징 평배열) | 없음 | id·name·priority·isSystem·description·permissions | — | `ROLE_MANAGE` | — |
 | **permission** | `name,asc`(비페이징 평배열) | 없음 | id·name(영문)·description(한글) | — | `ROLE_MANAGE` | — |
 | **tag** | `name,asc`(비페이징 평배열) | 없음 | id·name(한글) | — | **목록 공개**, 쓰기 `TAG_MANAGE` | — |
-| **sermon** | `preachedAt,desc` | `preacher`·`series`(완전일치)·`from`/`to`·`q`·`tagId` | id·title·preacher·series·scripture·preachedAt·viewCount·tags·author | O(create/update/patch) | 조회 공개, 쓰기 `SERMON_WRITE` | `content` (+videoUrl·audioUrl 외부링크) |
+| **sermon** | `preachedAt,desc` | `preacher`·`series`(완전일치)·`from`/`to`·`q`·`tagId` | id·title·preacher·series·scripture·preachedAt·viewCount·tags·author | O(create/update/patch) | 조회 `SERMON_VIEW`(회원전용), 쓰기 `SERMON_WRITE` | `content` (+videoUrl·audioUrl 외부링크) |
 | **notice** | `isPinned,desc` + `createdAt,desc` | `q`(**제목만**)·`tagId` | id·title·isPinned·viewCount·createdAt·tags·author | O | 조회 공개, 쓰기 `NOTICE_WRITE` | `content` |
 | **event** | `startAt,asc` | `year`+`month` **또는** `startDate`+`endDate`(쌍 필수)·`tagId` | id·title·location·startAt·endAt·allDay·tags (**author·viewCount 없음**) | O(태그만 수정 시 version 불변) | 조회 공개, 쓰기 `EVENT_WRITE` | `description` |
 | **department** | `sortOrder,id`(**비페이징 평배열**) | 없음 | id·name·leader·parentId·sortOrder (**author·tags·viewCount 없음**) | **X**(태그 없음) | 조회 공개, 쓰기 `DEPT_WRITE` | `description` |
