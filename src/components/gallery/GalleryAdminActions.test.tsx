@@ -2,13 +2,18 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import type { ReactNode } from "react";
 
 const { deleteMock, pushMock, notifySuccess } = vi.hoisted(() => ({ deleteMock: vi.fn(), pushMock: vi.fn(), notifySuccess: vi.fn() }));
 vi.mock("@/lib/api/gallery.admin", () => ({ deleteAlbum: deleteMock }));
 vi.mock("next/navigation", () => ({ useRouter: () => ({ push: pushMock, refresh: vi.fn() }) }));
 vi.mock("@/lib/notify", () => ({ notify: { success: notifySuccess, error: vi.fn() } }));
 vi.mock("@/components/admin/RequirePermission", () => ({ RequirePermission: ({ children }: { children: React.ReactNode }) => <>{children}</> }));
-vi.mock("./AlbumFormDialog", () => ({ AlbumFormDialog: () => null }));
+vi.mock("next/link", () => ({
+  default: ({ href, children, ...rest }: { href: string; children: ReactNode }) => (
+    <a href={href} {...rest}>{children}</a>
+  ),
+}));
 
 import { AlbumDetailActions } from "./GalleryAdminActions";
 

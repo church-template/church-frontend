@@ -1,9 +1,10 @@
 // src/components/gallery/GalleryAdminActions.tsx
 "use client";
 import { useState } from "react";
+import Link from "next/link";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/Button";
+import { Button, buttonVariants } from "@/components/ui/Button";
 import { RequirePermission } from "@/components/admin/RequirePermission";
 import { DeleteConfirmDialog } from "@/components/admin/DeleteConfirmDialog";
 import { adminOnError } from "@/lib/admin/mutationHandlers";
@@ -11,27 +12,23 @@ import { notify } from "@/lib/notify";
 import { deleteAlbum } from "@/lib/api/gallery.admin";
 import type { GalleryAlbumDetailResponse } from "@/lib/api/types";
 import { ACTION, CREATE_ICON } from "@/constants/actionButton";
-import { AlbumFormDialog } from "./AlbumFormDialog";
 
-// 목록 toolbar 등록 버튼.
+// 목록 toolbar 등록 진입 링크(전용 페이지).
 export function AlbumListAction() {
-  const [open, setOpen] = useState(false);
   return (
     <RequirePermission permission="GALLERY_WRITE">
-      <Button type="button" variant="primary" onClick={() => setOpen(true)}>
+      <Link href="/gallery/albums/new" className={buttonVariants("primary")}>
         <CREATE_ICON size={18} aria-hidden />
         새 앨범
-      </Button>
-      <AlbumFormDialog open={open} onOpenChange={setOpen} mode="create" />
+      </Link>
     </RequirePermission>
   );
 }
 
-// 상세 수정/삭제. 삭제 성공 시 목록으로 이동 + 캐시 무효화.
+// 상세 수정/삭제. 수정=전용 페이지 링크, 삭제 성공 시 목록으로 이동 + 캐시 무효화.
 export function AlbumDetailActions({ album }: { album: GalleryAlbumDetailResponse }) {
   const router = useRouter();
   const qc = useQueryClient();
-  const [editOpen, setEditOpen] = useState(false);
   const [delOpen, setDelOpen] = useState(false);
   const remove = useMutation({
     mutationFn: () => deleteAlbum(album.id),
@@ -46,16 +43,15 @@ export function AlbumDetailActions({ album }: { album: GalleryAlbumDetailRespons
   return (
     <RequirePermission permission="GALLERY_WRITE">
       <div className="mt-base flex gap-xs">
-        <Button type="button" variant="tertiary" aria-label="앨범 수정" onClick={() => setEditOpen(true)}>
+        <Link href={`/gallery/albums/${album.id}/edit`} aria-label="앨범 수정" className={buttonVariants("tertiary")}>
           <ACTION.edit.Icon size={18} aria-hidden />
           <span className="hidden lg:inline">{ACTION.edit.label}</span>
-        </Button>
+        </Link>
         <Button type="button" variant="tertiary" aria-label="앨범 삭제" onClick={() => setDelOpen(true)}>
           <ACTION.delete.Icon size={18} aria-hidden />
           <span className="hidden lg:inline">{ACTION.delete.label}</span>
         </Button>
       </div>
-      <AlbumFormDialog open={editOpen} onOpenChange={setEditOpen} mode="edit" initial={album} />
       <DeleteConfirmDialog
         open={delOpen}
         onOpenChange={setDelOpen}
