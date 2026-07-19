@@ -27,8 +27,11 @@ function TagFilterPills({ tags }: { tags: Tag[] }) {
 
   const pill = (active: boolean) =>
     cn(
-      typo.navLink,
-      "inline-flex items-center rounded-pill px-4 py-2 whitespace-nowrap",
+      // 모바일은 알약이 과대해 bodySm(18px)+좁은 패딩, sm+는 navLink(21px)+기존 패딩.
+      // py-2는 유지 — 고령 사용자 터치 타깃을 줄이지 않는다.
+      typo.bodySm,
+      "sm:text-nav-link",
+      "inline-flex items-center rounded-pill px-3 py-2 whitespace-nowrap sm:px-4",
       active ? "bg-primary text-on-primary" : "bg-surface-strong text-ink hover:bg-hairline",
     );
 

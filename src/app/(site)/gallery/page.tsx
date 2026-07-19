@@ -5,6 +5,7 @@ import { typo } from "@/constants/typography";
 import { cn } from "@/lib/utils";
 import { GalleryGate } from "@/components/gallery/GalleryGate";
 import { AlbumList } from "@/components/gallery/AlbumList";
+import { AlbumListAction } from "@/components/gallery/GalleryAdminActions";
 
 export const metadata: Metadata = { title: "갤러리" };
 
@@ -13,7 +14,11 @@ export const metadata: Metadata = { title: "갤러리" };
 export default function GalleryPage() {
   return (
     <Container as="section" className="py-section">
-      <h1 className={cn(typo.displayMd, "text-ink")}>갤러리</h1>
+      {/* 등록 버튼은 공지·일정처럼 제목 행에 — 필터 행에 두면 알약이 폭을 나눠 써 일찍 줄바꿈된다. */}
+      <div className="flex items-center justify-between gap-base">
+        <h1 className={cn(typo.displayMd, "text-ink")}>갤러리</h1>
+        <AlbumListAction />
+      </div>
       <Suspense fallback={null}>
         <GalleryGate>
           <AlbumList />

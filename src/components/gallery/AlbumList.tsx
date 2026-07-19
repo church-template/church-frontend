@@ -10,7 +10,6 @@ import { GALLERY_PAGE_SIZE } from "@/lib/api/gallery";
 import { useAlbums, useGalleryTags } from "./queries";
 import { AlbumCard } from "./AlbumCard";
 import { AlbumCardSkeleton } from "./AlbumCardSkeleton";
-import { AlbumListAction } from "./GalleryAdminActions";
 
 function toNum(v: string | null): number | undefined {
   if (v == null) return undefined;
@@ -29,10 +28,7 @@ export function AlbumList() {
 
   return (
     <div className="mt-lg flex flex-col gap-base">
-      <div className="flex items-center justify-between gap-base">
-        <TagFilter tags={tags.data ?? []} />
-        <AlbumListAction />
-      </div>
+      <TagFilter tags={tags.data ?? []} />
 
       {albums.isPending ? (
         <div className="grid gap-base sm:grid-cols-2 lg:grid-cols-3">

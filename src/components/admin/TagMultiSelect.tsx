@@ -38,8 +38,10 @@ export function TagMultiSelect({ value, onChange }: TagMultiSelectProps) {
               aria-pressed={selected}
               onClick={() => toggle(t.id)}
               className={cn(
-                typo.bodySm,
-                "inline-flex items-center gap-xxs rounded-sm px-sm py-xs whitespace-nowrap",
+                // 모바일은 칩이 과대해 caption(16px)+좁은 패딩, sm+는 bodySm(18px)+기존 패딩.
+                typo.caption,
+                "sm:text-body-sm",
+                "inline-flex items-center gap-xxs rounded-sm px-xs py-xs whitespace-nowrap sm:px-sm",
                 "transition duration-150 ease-out",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-canvas",
                 selected ? "bg-primary text-on-primary" : "bg-surface-strong text-ink",

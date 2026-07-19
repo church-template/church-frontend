@@ -46,7 +46,10 @@ export function EventCalendar({ model, tagId }: { model: CalendarModel; tagId?: 
           <Link href={hrefFor(prev.y, prev.m)} aria-label="이전 달" className={navIcon}>
             <ChevronLeft size={20} aria-hidden />
           </Link>
-          <h2 className={cn(typo.titleLg, "text-ink")}>{`${year}년 ${month}월`}</h2>
+          {/* 모바일은 30px가 행 폭을 넘겨 "7\n월"로 꺾인다 — titleMd(22px)로 낮추고 nowrap. */}
+          <h2 className={cn(typo.titleMd, "sm:text-title-lg", "whitespace-nowrap text-ink")}>
+            {`${year}년 ${month}월`}
+          </h2>
           <Link href={hrefFor(next.y, next.m)} aria-label="다음 달" className={navIcon}>
             <ChevronRight size={20} aria-hidden />
           </Link>
@@ -55,7 +58,7 @@ export function EventCalendar({ model, tagId }: { model: CalendarModel; tagId?: 
           href={hrefFor(today.y, today.m)}
           className={cn(
             typo.button,
-            "inline-flex h-10 items-center rounded-lg bg-surface-strong px-4 text-ink hover:bg-hairline",
+            "inline-flex h-10 items-center rounded-lg bg-surface-strong px-4 text-ink hover:bg-hairline whitespace-nowrap",
             "focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-canvas",
           )}
         >

@@ -35,6 +35,8 @@ describe("EventCalendar", () => {
     expect(screen.getByLabelText("이전 달").getAttribute("href")).toBe("/events?year=2026&month=5&tagId=3");
     expect(screen.getByLabelText("다음 달").getAttribute("href")).toBe("/events?year=2026&month=7&tagId=3");
     expect(screen.getByRole("link", { name: "오늘" }).getAttribute("href")).toBe("/events?year=2026&month=6&tagId=3");
+    // 좁은 폭 flex 행에서 라벨이 "오\n늘"로 꺾이지 않게(Button 1e71fbe와 동일 보장)
+    expect(screen.getByRole("link", { name: "오늘" }).getAttribute("class")).toContain("whitespace-nowrap");
   });
 
   it("그리드: 셀당 칩 최대 3 + '+2', 오늘 마커(primary-soft)", () => {
