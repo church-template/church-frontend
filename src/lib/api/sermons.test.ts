@@ -1,15 +1,11 @@
-import { describe, it, expect, vi, afterEach, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 
 const authFetchMock = vi.hoisted(() => vi.fn());
 vi.mock("@/lib/auth/authFetch", () => ({ authFetch: authFetchMock }));
 
-import { buildSermonQuery, getSermons, getSermon, fetchSermons, fetchSermon } from "./sermons";
+import { buildSermonQuery, fetchSermons, fetchSermon } from "./sermons";
 
-afterEach(() => vi.unstubAllGlobals());
 beforeEach(() => authFetchMock.mockReset());
-
-const okResponse = (body: unknown) =>
-  ({ ok: true, status: 200, json: async () => body }) as Response;
 
 describe("buildSermonQuery", () => {
   it("빈 파라미터는 빈 문자열", () => {
@@ -24,38 +20,6 @@ describe("buildSermonQuery", () => {
     expect(buildSermonQuery({ sort: "preachedAt,desc" })).toBe(
       "?sort=preachedAt%2Cdesc",
     );
-  });
-});
-
-describe("getSermons", () => {
-  it("'/api/sermons'+쿼리를 revalidate 60으로 호출", async () => {
-    const spy = vi.fn(async () => okResponse({ content: [], page: {} }));
-    vi.stubGlobal("fetch", spy);
-    await getSermons({ tagId: 3 });
-    expect(spy).toHaveBeenCalledWith("/api/sermons?tagId=3", {
-      next: { revalidate: 60, tags: ["sermons"] },
-    });
-  });
-  it("비 200이면 throw", async () => {
-    vi.stubGlobal("fetch", vi.fn(async () => ({ ok: false, status: 500 }) as Response));
-    await expect(getSermons({})).rejects.toThrow("GET /api/sermons 실패: 500");
-  });
-});
-
-describe("getSermon", () => {
-  it("'/api/sermons/{id}'를 no-store로 호출", async () => {
-    const spy = vi.fn(async () => okResponse({ id: 7 }));
-    vi.stubGlobal("fetch", spy);
-    await getSermon(7);
-    expect(spy).toHaveBeenCalledWith("/api/sermons/7", { cache: "no-store" });
-  });
-  it("404는 null 반환", async () => {
-    vi.stubGlobal("fetch", vi.fn(async () => ({ ok: false, status: 404 }) as Response));
-    expect(await getSermon(99)).toBeNull();
-  });
-  it("그 외 에러는 throw", async () => {
-    vi.stubGlobal("fetch", vi.fn(async () => ({ ok: false, status: 503 }) as Response));
-    await expect(getSermon(7)).rejects.toThrow("GET /api/sermons/7 실패: 503");
   });
 });
 

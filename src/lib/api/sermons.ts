@@ -1,8 +1,10 @@
-import { apiUrl } from "@/lib/auth/apiBase";
 import { authFetch } from "@/lib/auth/authFetch";
 import { parseJson } from "@/lib/auth/apiError";
 import type { Page } from "@/lib/page";
 import type { SermonCardResponse, SermonDetailResponse } from "./types";
+
+// 설교 조회는 회원전용(SERMON_VIEW, 가이드 2.3) — authFetch를 쓰므로 클라이언트 전용 모듈.
+// 서버 컴포넌트에서 import 금지(authFetch·authStore 체인이 서버 번들에 포함되어 오류).
 
 // 설교 목록 필터(가이드 10장). 공유 buildListQuery는 q/preacher/series/from/to를 안 다루므로 전용 빌더.
 export interface SermonListParams {
@@ -32,30 +34,7 @@ export function buildSermonQuery(p: SermonListParams): string {
   return s ? `?${s}` : "";
 }
 
-// 목록(공개) — 캐시 가능(revalidate 60). tags 부착으로 updateTag("sermons") 즉시 무효화 연결.
-export async function getSermons(
-  p: SermonListParams = {},
-): Promise<Page<SermonCardResponse>> {
-  const res = await fetch(apiUrl(`/api/sermons${buildSermonQuery(p)}`), {
-    next: { revalidate: 60, tags: ["sermons"] },
-  });
-  if (!res.ok) throw new Error(`GET /api/sermons 실패: ${res.status}`);
-  return (await res.json()) as Page<SermonCardResponse>;
-}
-
-// 상세(공개) — GET마다 조회수+1(부수효과) → no-store. 404는 null(호출부가 notFound).
-export async function getSermon(
-  id: number,
-): Promise<SermonDetailResponse | null> {
-  const res = await fetch(apiUrl(`/api/sermons/${id}`), { cache: "no-store" });
-  if (res.status === 404) return null;
-  if (!res.ok) throw new Error(`GET /api/sermons/${id} 실패: ${res.status}`);
-  return (await res.json()) as SermonDetailResponse;
-}
-
-// ── 회원전용 클라 조회(SERMON_VIEW, 가이드 2.3) — 게이트(MemberGate) 통과 후 TanStack Query에서 호출. ──
-
-// 목록(회원전용). /api/sermons는 토큰 필요 → authFetch.
+// 목록(회원전용). /api/sermons는 토큰 필요 → authFetch. 게이트(MemberGate) 통과 후 TanStack Query에서 호출.
 export async function fetchSermons(
   p: SermonListParams = {},
 ): Promise<Page<SermonCardResponse>> {
@@ -69,9 +48,7 @@ export async function fetchSermon(id: number): Promise<SermonDetailResponse> {
   return parseJson<SermonDetailResponse>(res);
 }
 
-// 어드민 쓰기(createSermon·updateSermon·patchSermon·deleteSermon + 타입)는
-// sermons.admin.ts에서 제공. 서버 컴포넌트가 이 파일을 import할 때
-// authFetch·authStore(useSyncExternalStore) 체인이 서버 번들에 포함되지 않도록 분리.
+// 어드민 쓰기(createSermon·updateSermon·patchSermon·deleteSermon + 타입)는 sermons.admin.ts에서 제공.
 export type {
   SermonCreateRequest,
   SermonUpdateRequest,
