@@ -7,6 +7,7 @@ describe("parseYouTubeId", () => {
     ["https://youtu.be/dQw4w9WgXcQ", "dQw4w9WgXcQ"],
     ["https://www.youtube.com/embed/dQw4w9WgXcQ", "dQw4w9WgXcQ"],
     ["https://www.youtube.com/watch?list=PL1&v=dQw4w9WgXcQ&t=30s", "dQw4w9WgXcQ"],
+    ["https://youtube.com/live/wYgQwHYvxEo?feature=share", "wYgQwHYvxEo"],
   ])("%s → %s", (url, id) => {
     expect(parseYouTubeId(url)).toBe(id);
   });

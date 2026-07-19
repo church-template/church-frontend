@@ -3,6 +3,7 @@ const PATTERNS = [
   /youtube\.com\/watch\?(?:.*&)?v=([\w-]{11})/,
   /youtu\.be\/([\w-]{11})/,
   /youtube\.com\/embed\/([\w-]{11})/,
+  /youtube\.com\/live\/([\w-]{11})/, // 라이브 송출 공유 링크(실서비스 설교 영상이 이 형식)
 ];
 
 export function parseYouTubeId(url: string): string | null {

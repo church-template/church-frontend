@@ -23,6 +23,11 @@ describe("renderMarkdown", () => {
     expect(html).toContain('src="/api/media/42"');
   });
 
+  it("본문 null·빈 문자열은 빈 HTML을 반환한다(서버 content null 500 방어)", () => {
+    expect(renderMarkdown(null)).toBe("");
+    expect(renderMarkdown("")).toBe("");
+  });
+
   it("media:420이 media:42로 오탐되지 않는다(경계)", () => {
     // media:420은 전체가 매칭돼 /api/media/420이 되고, /api/media/42 + 잔여 "0"으로 쪼개지지 않아야 한다.
     const html = renderMarkdown("[링크](media:420)");

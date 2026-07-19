@@ -24,10 +24,12 @@ jobs:
         with:
           version: 10
 
+      # 22.x 고정: jsdom 의존(html-encoding-sniffer→@exodus/bytes ESM)이 require(ESM)을 써서
+      # Node 22.12+ 필요 — 런타임(engines)과 빌드 환경을 일치시킨다.
       - name: 🟢 Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: pnpm
 
       - name: ☁️ Install Vercel CLI

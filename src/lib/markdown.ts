@@ -13,7 +13,8 @@ const ALLOWED_TAGS = [
 ];
 const ALLOWED_ATTR = ["href", "title", "src", "alt"];
 
-export function renderMarkdown(raw: string): string {
+export function renderMarkdown(raw: string | null | undefined): string {
+  if (!raw) return ""; // 서버가 본문 없음을 null로 내려준다(설교 content 등) — replace 크래시 방어
   const withUrls = raw.replace(MEDIA_REF, (_, id) => `/api/media/${id}`); // 1) media:{id} → 공개 URL
   const html = marked.parse(withUrls, { async: false }) as string;        // 2) MD → HTML
   return DOMPurify.sanitize(html, { ALLOWED_TAGS, ALLOWED_ATTR });        // 3) 마크다운 태그만 허용(raw HTML 제거)

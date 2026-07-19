@@ -76,7 +76,7 @@ export interface DepartmentNode extends DepartmentCardResponse {
 export interface NoticeDetailResponse {
   id: number;
   title: string;
-  content: string; // raw 마크다운
+  content: string | null; // raw 마크다운(본문 없으면 null — 실서버 응답 기준)
   isPinned: boolean;
   viewCount: number;
   createdAt: string; // LocalDateTime
@@ -93,7 +93,7 @@ export interface SermonDetailResponse {
   preacher: string;
   series?: string | null;
   scripture?: string | null;
-  content: string; // raw 마크다운
+  content: string | null; // raw 마크다운(본문 없으면 null — 실서버 응답 기준)
   videoUrl?: string | null;
   audioUrl?: string | null;
   preachedAt: string; // date (yyyy-MM-dd)

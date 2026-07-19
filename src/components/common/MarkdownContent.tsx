@@ -1,8 +1,8 @@
 import { renderMarkdown } from "@/lib/markdown";
 
 export interface MarkdownContentProps {
-  /** raw 마크다운 본문(sermon.content 등). renderMarkdown이 변환·새니타이즈한다. */
-  source: string;
+  /** raw 마크다운 본문(sermon.content 등, 서버가 없으면 null). renderMarkdown이 변환·새니타이즈한다. */
+  source: string | null;
   className?: string;
 }
 
