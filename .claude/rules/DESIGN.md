@@ -588,18 +588,18 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 <!-- admin:02 콘텐츠(설교·공지) — markdown-editor · tag-multiselect · admin-inline-action -->
 - **`markdown-editor`**: 어드민 본문 작성/미리보기 탭 에디터. `Tabs`(작성·미리보기) + `Textarea` + `MarkdownContent`(미리보기 재사용). 미리보기는 탭 활성 시에만 변환. 토큰 공유(가독성 우선 단순 변형).
 - **`tag-multiselect`**: 기존 태그 다중선택. 인라인 칩 토글 — 태그 전체를 폼 안에 항상 펼쳐 렌더(`aria-pressed` 버튼), 선택=primary 채움+lucide `Check`, 비선택=surface-strong. 플로팅(Popover) 미사용 — 모달(Dialog) 안에서도 레이어 문제 없음. 옵션은 `getTags`. 신규 생성 없음(06 소관).
-- **`admin-inline-action`**: 공개 RSC 페이지 위 client island(목록 toolbar 등록 버튼·상세 수정/삭제·공지 고정 토글). `RequirePermission` 게이트, 카드 내부 중첩 `<a>` 금지(목록 액션은 카드 밖).
-<!-- admin:03 일정 — datetime-picker · event-form-modal -->
+- **`admin-inline-action`**: 공개 RSC 페이지 위 client island(목록 toolbar 등록 진입·상세 수정/삭제·공지 고정 토글). 등록·수정 진입은 전용 페이지 Link(`buttonVariants`), 삭제는 확인 Dialog. `RequirePermission` 게이트, 카드 내부 중첩 `<a>` 금지(목록 액션은 카드 밖).
+<!-- admin:03 일정 — datetime-picker · event-form-page -->
 - **`datetime-picker`**: 일정 시작·종료 입력. 네이티브 `<input type="datetime-local">`(종일이면 `date`) 래퍼, 라이브러리 없이. `Input` 토큰·error 배선 상속. 직렬화는 `toServerDateTime`(offset 없는 LocalDateTime).
-- **`event-form-modal`**: 일정 등록·수정 팝업 Dialog 폼. DateTimePicker·MarkdownEditor·TagMultiSelect·Checkbox(종일) 조합. 종료>시작 검증, 낙관락 version.
+- **`event-form-page`**: 일정 등록·수정 전용 페이지(`/events/new`·`/events/[id]/edit`, 공지·설교 폼 페이지와 동형). DateTimePicker·MarkdownEditor·TagMultiSelect·Checkbox(종일) 조합. 종료>시작 검증, 낙관락 version. edit는 RSC `getEvent` 시드.
 <!-- admin:04 부서 — admin-department-tree -->
-<!-- admin:05 미디어 — admin-data-table · media-uploader · media-picker · media-references-list · bulletin-form-modal · album-form-modal · gallery-photo-manager (크로스도메인 공유는 admin-data-table·media-uploader만, 나머지는 05 전용) -->
+<!-- admin:05 미디어 — admin-data-table · media-uploader · media-picker · media-references-list · bulletin-form-page · album-form-page · gallery-photo-manager (크로스도메인 공유는 admin-data-table·media-uploader만, 나머지는 05 전용) -->
 - **`admin-data-table`**: 어드민 목록 공용 테이블(단일 생산, 06·07 소비). `Column<T>`(key·header·cell·className) + rows + rowKey + actions(후행 셀) + empty/loading. 정렬·선택·페이지네이션 미내장(페이지는 `common/Pagination` 조합). 헤어라인 행 구분, `typo.*`.
 - **`media-uploader`**: 미디어 업로드 위젯(단일 생산). 네이티브 파일 선택 + 클라 사전검증(accept별 MIME·10MB) + `POST /api/admin/media`. `accept`(image|pdf|all, all=라이브러리 전용), `multiple`. 가독성 우선 단순 변형.
 - **`media-picker`**: 미디어 선택 허브(Dialog+Tabs). "라이브러리"(기존 그리드·type 필터·선택) / "새 업로드"(media-uploader). `onConfirm(mediaIds)`. 갤러리(image·multi)·주보(pdf·single) 공용.
 - **`media-references-list`**: 차단형 삭제 안내 Dialog. 참조 type/title 목록 표시, 삭제 버튼 없음(편집 유도).
-- **`bulletin-form-modal`**: 주보 등록·수정 Dialog. Input(제목)·DateTimePicker(예배일)·MediaPicker(pdf·single). 낙관락 version(query), 수정은 getBulletin(no-store) 시드.
-- **`album-form-modal`**: 갤러리 앨범 등록·수정 Dialog. Input(제목)·MarkdownEditor(설명)·TagMultiSelect. 낙관락 version(body).
+- **`bulletin-form-page`**: 주보 등록·수정 전용 페이지(`/bulletins/new`·`/bulletins/[id]/edit`). Input(제목)·DateTimePicker(예배일)·MediaPicker(pdf·single). edit는 RSC `getBulletin`(no-store) 시드 + 낙관락 version.
+- **`album-form-page`**: 갤러리 앨범 등록·수정 전용 페이지(`/gallery/albums/new`·`/gallery/albums/[id]/edit`, 회원 영역 GalleryGate). Input(제목)·MarkdownEditor(설명)·TagMultiSelect. edit는 클라 `useAlbum` 시드(keyed 마운트) + 낙관락 version.
 - **`gallery-photo-manager`**: 앨범 상세 사진 관리. "사진 추가"(MediaPicker image·multi → addPhotos) + 사진별 제거(라이트박스 버튼 밖 오버레이 → removePhoto).
 <!-- admin:04 부서 -->
 - **`department-admin-manager`**: 어드민 부서 계층 관리 화면(트랙 04). 공개 `GET /api/departments`(no-store)를 `buildDepartmentTree`로 조립해 **접이식 단일 트리**(`department-tree`)로 표시. 페이지 Container 폭 그대로 사용(공지·미디어와 동일, 별도 폭 캡 없음) + 전체 펼치기/접기 + 안내 배너(lucide `Info`). 접힘 상태 `Set`(effect 미사용). 공개 격리라 ISR revalidate 미사용·어드민 쿼리 캐시만 무효화.
