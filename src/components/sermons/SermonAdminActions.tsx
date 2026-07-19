@@ -4,13 +4,12 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { RequirePermission } from "@/components/admin/RequirePermission";
 import { DeleteConfirmDialog } from "@/components/admin/DeleteConfirmDialog";
 import { Button, buttonVariants } from "@/components/ui/Button";
 import { ACTION, CREATE_ICON } from "@/constants/actionButton";
 import { deleteSermon } from "@/lib/api/sermons.admin";
-import { revalidateSermons } from "@/lib/admin/revalidate";
 import { adminOnError } from "@/lib/admin/mutationHandlers";
 import { notify } from "@/lib/notify";
 
@@ -31,13 +30,14 @@ export function SermonListAction() {
 // 삭제는 DELETE라 낙관락 version 불필요(YAGNI). 공지 고정 토글만 PATCH + version 필요(Task 12).
 export function SermonDetailActions({ id }: { id: number }) {
   const router = useRouter();
+  const qc = useQueryClient();
   const [open, setOpen] = useState(false);
   const remove = useMutation({
     mutationFn: () => deleteSermon(id),
     onError: adminOnError(),
-    onSuccess: async () => {
-      // 삭제 즉시 sermons 태그 캐시 무효화 → 다음 공개 목록 요청이 fresh 데이터를 받음.
-      await revalidateSermons();
+    onSuccess: () => {
+      // 삭제 즉시 회원 쿼리 캐시 무효화 → 목록이 fresh 데이터를 받음(회원전용 전환으로 ISR 태그 아님).
+      qc.invalidateQueries({ queryKey: ["sermons"] });
       notify.success("삭제했습니다.");
       setOpen(false);
       router.push("/sermons");
