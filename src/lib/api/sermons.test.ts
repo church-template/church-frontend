@@ -1,7 +1,12 @@
-import { describe, it, expect, vi, afterEach } from "vitest";
-import { buildSermonQuery, getSermons, getSermon } from "./sermons";
+import { describe, it, expect, vi, afterEach, beforeEach } from "vitest";
+
+const authFetchMock = vi.hoisted(() => vi.fn());
+vi.mock("@/lib/auth/authFetch", () => ({ authFetch: authFetchMock }));
+
+import { buildSermonQuery, getSermons, getSermon, fetchSermons, fetchSermon } from "./sermons";
 
 afterEach(() => vi.unstubAllGlobals());
+beforeEach(() => authFetchMock.mockReset());
 
 const okResponse = (body: unknown) =>
   ({ ok: true, status: 200, json: async () => body }) as Response;
@@ -51,5 +56,32 @@ describe("getSermon", () => {
   it("그 외 에러는 throw", async () => {
     vi.stubGlobal("fetch", vi.fn(async () => ({ ok: false, status: 503 }) as Response));
     await expect(getSermon(7)).rejects.toThrow("GET /api/sermons/7 실패: 503");
+  });
+});
+
+function jsonRes(data: unknown) {
+  return new Response(JSON.stringify(data), {
+    status: 200,
+    headers: { "content-type": "application/json" },
+  });
+}
+
+describe("fetchSermons", () => {
+  it("authFetch로 '/api/sermons'+쿼리를 호출하고 봉투를 파싱한다", async () => {
+    authFetchMock.mockResolvedValue(
+      jsonRes({ content: [{ id: 1, title: "A" }], page: { size: 12, number: 0, totalElements: 1, totalPages: 1 } }),
+    );
+    const data = await fetchSermons({ tagId: 3, q: "grace" });
+    expect(authFetchMock).toHaveBeenCalledWith("/api/sermons?tagId=3&q=grace");
+    expect(data.content[0].id).toBe(1);
+  });
+});
+
+describe("fetchSermon", () => {
+  it("authFetch로 '/api/sermons/{id}'를 호출하고 상세를 반환한다", async () => {
+    authFetchMock.mockResolvedValue(jsonRes({ id: 7, title: "T" }));
+    const s = await fetchSermon(7);
+    expect(authFetchMock).toHaveBeenCalledWith("/api/sermons/7");
+    expect(s.id).toBe(7);
   });
 });

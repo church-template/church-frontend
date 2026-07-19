@@ -1,4 +1,6 @@
 import { apiUrl } from "@/lib/auth/apiBase";
+import { authFetch } from "@/lib/auth/authFetch";
+import { parseJson } from "@/lib/auth/apiError";
 import type { Page } from "@/lib/page";
 import type { SermonCardResponse, SermonDetailResponse } from "./types";
 
@@ -49,6 +51,22 @@ export async function getSermon(
   if (res.status === 404) return null;
   if (!res.ok) throw new Error(`GET /api/sermons/${id} 실패: ${res.status}`);
   return (await res.json()) as SermonDetailResponse;
+}
+
+// ── 회원전용 클라 조회(SERMON_VIEW, 가이드 2.3) — 게이트(MemberGate) 통과 후 TanStack Query에서 호출. ──
+
+// 목록(회원전용). /api/sermons는 토큰 필요 → authFetch.
+export async function fetchSermons(
+  p: SermonListParams = {},
+): Promise<Page<SermonCardResponse>> {
+  const res = await authFetch(`/api/sermons${buildSermonQuery(p)}`);
+  return parseJson<Page<SermonCardResponse>>(res);
+}
+
+// 상세(회원전용). GET마다 조회수+1(부수효과). 404 특수 처리 없음 — 클라에서 에러 안내(갤러리 관례).
+export async function fetchSermon(id: number): Promise<SermonDetailResponse> {
+  const res = await authFetch(`/api/sermons/${id}`);
+  return parseJson<SermonDetailResponse>(res);
 }
 
 // 어드민 쓰기(createSermon·updateSermon·patchSermon·deleteSermon + 타입)는
