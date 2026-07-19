@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/shell/Container";
-import { GalleryGate } from "@/components/gallery/GalleryGate";
+import { MemberGate } from "@/components/common/MemberGate";
 import { AlbumDetail } from "@/components/gallery/AlbumDetail";
 
 export const metadata: Metadata = { title: "갤러리" };
@@ -13,9 +13,9 @@ export default async function AlbumDetailPage({ params }: { params: Promise<{ id
 
   return (
     <Container as="section" className="py-section">
-      <GalleryGate>
+      <MemberGate permission="GALLERY_VIEW" domainLabel="갤러리">
         <AlbumDetail id={numId} />
-      </GalleryGate>
+      </MemberGate>
     </Container>
   );
 }
