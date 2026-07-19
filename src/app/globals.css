@@ -191,6 +191,14 @@
   --text-nav-link--font-weight: 500;
 }
 
+/* 모바일 헤더 높이 축소 — h-nav와 히어로 오프셋(HeroReveal이 --spacing-nav를 런타임 참조)이
+ * 이 한 곳으로 일관되게 줄어든다. 로고 40 + 여백 기준 64px. */
+@media (max-width: 767px) {
+  :root {
+    --spacing-nav: 64px;
+  }
+}
+
 /* 폰트는 next/font가 런타임에 주입하는 --font-pretendard를 참조하므로 inline 매핑 */
 @theme inline {
   --font-sans: var(--font-pretendard), -apple-system, system-ui,

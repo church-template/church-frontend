@@ -66,8 +66,8 @@ export function SiteHeader({ variant = "light", solid = false }: SiteHeaderProps
     >
       <Container className="flex h-nav items-center justify-between">
         {/* 로고 + 교회명. 로고는 이름 옆 장식이라 alt=""(스크린리더가 이름을 두 번 읽지 않게). */}
-        <Link href="/" className={cn(typo.titleLg, accentColor, "flex items-center gap-base")}>
-          <Image src={CHURCH_LOGO.src} alt="" width={512} height={512} priority className="size-10 shrink-0" />
+        <Link href="/" className={cn(typo.titleMd, "md:text-title-lg", accentColor, "flex items-center gap-sm md:gap-base")}>
+          <Image src={CHURCH_LOGO.src} alt="" width={512} height={512} priority className="size-7 shrink-0 md:size-10" />
           {CHURCH_NAME}
         </Link>
 
@@ -103,13 +103,13 @@ export function SiteHeader({ variant = "light", solid = false }: SiteHeaderProps
           aria-label={menuOpen ? "메뉴 닫기" : "메뉴 열기"}
           aria-expanded={menuOpen}
           className={cn(
-            "p-xs md:hidden", // 아이콘 24 + 패딩 8×2 = 40px 터치 타깃
+            "p-sm md:hidden", // 아이콘 20 + 패딩 12×2 = 44px 터치 타깃(고령 접근성)
             "rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-canvas",
             linkColor,
           )}
           onClick={() => setMenuOpen(true)}
         >
-          <Menu size={28} aria-hidden />
+          <Menu size={20} aria-hidden />
         </button>
       </Container>
 
