@@ -53,3 +53,49 @@ describe("MarkdownToolbar — 기본 서식", () => {
     expect(textarea().value).toBe("본문\n\n---");
   });
 });
+
+describe("MarkdownToolbar — 링크·유튜브", () => {
+  it("주소가 http로 시작하지 않으면 에러를 보인다", () => {
+    render(<Editor />);
+    fireEvent.click(screen.getByRole("button", { name: "링크" }));
+    fireEvent.change(screen.getByLabelText("주소"), { target: { value: "example.com" } });
+    fireEvent.click(screen.getByRole("button", { name: "넣기" }));
+    expect(screen.getByText("https:// 로 시작하는 주소를 입력해 주세요.")).toBeDefined();
+  });
+
+  it("문구와 주소로 링크를 넣는다", () => {
+    render(<Editor />);
+    fireEvent.click(screen.getByRole("button", { name: "링크" }));
+    fireEvent.change(screen.getByLabelText("표시할 문구 (선택)"), { target: { value: "교회 소개" } });
+    fireEvent.change(screen.getByLabelText("주소"), { target: { value: "https://example.com" } });
+    fireEvent.click(screen.getByRole("button", { name: "넣기" }));
+    expect(textarea().value).toBe("[교회 소개](https://example.com)");
+  });
+
+  it("문구가 비면 주소를 문구로 쓴다", () => {
+    render(<Editor />);
+    fireEvent.click(screen.getByRole("button", { name: "링크" }));
+    fireEvent.change(screen.getByLabelText("주소"), { target: { value: "https://example.com" } });
+    fireEvent.click(screen.getByRole("button", { name: "넣기" }));
+    expect(textarea().value).toBe("[https://example.com](https://example.com)");
+  });
+
+  it("유튜브 주소가 아니면 에러를 보인다", () => {
+    render(<Editor />);
+    fireEvent.click(screen.getByRole("button", { name: "유튜브" }));
+    fireEvent.change(screen.getByLabelText("유튜브 주소"), { target: { value: "https://example.com" } });
+    fireEvent.click(screen.getByRole("button", { name: "넣기" }));
+    expect(screen.getByText("유튜브 주소가 아닙니다.")).toBeDefined();
+  });
+
+  it("유튜브 주소를 단독 문단으로 넣는다", () => {
+    render(<Editor initial="안녕" />);
+    textarea().setSelectionRange(2, 2);
+    fireEvent.click(screen.getByRole("button", { name: "유튜브" }));
+    fireEvent.change(screen.getByLabelText("유튜브 주소"), {
+      target: { value: "https://youtu.be/dQw4w9WgXcQ" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "넣기" }));
+    expect(textarea().value).toBe("안녕\n\nhttps://youtu.be/dQw4w9WgXcQ");
+  });
+});

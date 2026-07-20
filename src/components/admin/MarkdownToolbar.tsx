@@ -1,16 +1,18 @@
 "use client";
 
-import { Fragment, type RefObject } from "react";
+import { Fragment, useRef, useState, type RefObject } from "react";
 import {
   Bold,
   Heading1,
   Heading2,
   Heading3,
   Italic,
+  Link,
   List,
   ListOrdered,
   Minus,
   Quote,
+  SquarePlay,
   Strikethrough,
   Table,
   type LucideIcon,
@@ -20,10 +22,12 @@ import {
   applyInline,
   applyLine,
   insertBlock,
+  insertInline,
   type EditResult,
   type InlineAction,
   type LineAction,
 } from "@/lib/markdownEditing";
+import { LinkInsertDialog, YoutubeInsertDialog } from "./MarkdownInsertDialogs";
 
 export interface MarkdownToolbarProps {
   /** 삽입 대상 textarea — 선택 범위를 읽고, 적용 후 포커스·커서를 복원한다. */
@@ -37,6 +41,8 @@ interface ToolButton {
   Icon: LucideIcon;
   run: () => void;
 }
+
+type DialogKind = "link" | "youtube" | "image" | "help" | null;
 
 const TABLE_TEMPLATE = "| 항목 | 값 |\n| --- | --- |\n|  |  |";
 
@@ -60,6 +66,10 @@ function tryNativeInsert(ta: HTMLTextAreaElement, text: string): boolean {
 }
 
 export function MarkdownToolbar({ textareaRef, value, onChange }: MarkdownToolbarProps) {
+  const [dialog, setDialog] = useState<DialogKind>(null);
+  // Dialog가 열려 있는 동안 textarea 선택이 바뀔 수 있어, 여는 순간의 선택을 고정한다.
+  const savedSel = useRef({ start: 0, end: 0 });
+
   function selection() {
     const ta = textareaRef.current;
     return { start: ta?.selectionStart ?? value.length, end: ta?.selectionEnd ?? value.length };
@@ -93,6 +103,16 @@ export function MarkdownToolbar({ textareaRef, value, onChange }: MarkdownToolba
     commit(insertBlock(value, start, end, block));
   };
 
+  const openDialog = (kind: DialogKind) => {
+    savedSel.current = selection();
+    setDialog(kind);
+  };
+  const insertFromDialog = (snippet: string, asBlock: boolean) => {
+    const { start, end } = savedSel.current;
+    commit(asBlock ? insertBlock(value, start, end, snippet) : insertInline(value, start, end, snippet));
+    setDialog(null);
+  };
+
   const groups: ToolButton[][] = [
     [
       { label: "큰 제목", Icon: Heading1, run: () => runLine("h1") },
@@ -111,31 +131,55 @@ export function MarkdownToolbar({ textareaRef, value, onChange }: MarkdownToolba
       { label: "구분선", Icon: Minus, run: () => runBlock("---") },
       { label: "표", Icon: Table, run: () => runBlock(TABLE_TEMPLATE) },
     ],
+    [
+      { label: "링크", Icon: Link, run: () => openDialog("link") },
+      { label: "유튜브", Icon: SquarePlay, run: () => openDialog("youtube") },
+    ],
   ];
 
   return (
-    <div
-      role="toolbar"
-      aria-label="서식 도구"
-      className="flex flex-wrap items-center gap-xxs rounded-md border border-hairline bg-surface-soft px-xs py-xxs"
-    >
-      {groups.map((group, gi) => (
-        <Fragment key={gi}>
-          {gi > 0 ? <span aria-hidden className="mx-xxs h-6 w-px bg-hairline" /> : null}
-          {group.map(({ label, Icon, run }) => (
-            <button
-              key={label}
-              type="button"
-              aria-label={label}
-              title={label}
-              onClick={run}
-              className={toolButtonClass}
-            >
-              <Icon size={20} aria-hidden />
-            </button>
-          ))}
-        </Fragment>
-      ))}
-    </div>
+    <>
+      <div
+        role="toolbar"
+        aria-label="서식 도구"
+        className="flex flex-wrap items-center gap-xxs rounded-md border border-hairline bg-surface-soft px-xs py-xxs"
+      >
+        {groups.map((group, gi) => (
+          <Fragment key={gi}>
+            {gi > 0 ? <span aria-hidden className="mx-xxs h-6 w-px bg-hairline" /> : null}
+            {group.map(({ label, Icon, run }) => (
+              <button
+                key={label}
+                type="button"
+                aria-label={label}
+                title={label}
+                onClick={run}
+                className={toolButtonClass}
+              >
+                <Icon size={20} aria-hidden />
+              </button>
+            ))}
+          </Fragment>
+        ))}
+      </div>
+      {dialog === "link" ? (
+        <LinkInsertDialog
+          open
+          onOpenChange={(v) => {
+            if (!v) setDialog(null);
+          }}
+          onInsert={(md) => insertFromDialog(md, false)}
+        />
+      ) : null}
+      {dialog === "youtube" ? (
+        <YoutubeInsertDialog
+          open
+          onOpenChange={(v) => {
+            if (!v) setDialog(null);
+          }}
+          onInsert={(url) => insertFromDialog(url, true)}
+        />
+      ) : null}
+    </>
   );
 }
