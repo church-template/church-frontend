@@ -372,7 +372,8 @@ describe("MarkdownToolbar — 기본 서식", () => {
   });
 
   it("글머리 목록 버튼이 여러 줄에 접두를 붙인다", () => {
-    render(<Editor initial="가\n나" />);
+    // JSX 문자열 attribute는 \n을 해석하지 않는다 — 개행은 반드시 JS 표현식으로
+    render(<Editor initial={"가\n나"} />);
     textarea().setSelectionRange(0, 3);
     fireEvent.click(screen.getByRole("button", { name: "글머리 목록" }));
     expect(textarea().value).toBe("- 가\n- 나");
