@@ -586,7 +586,8 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 > 최초 등록·구현하고 나머지 도메인은 재사용만 한다. (조율 기준: `docs/superpowers/specs/2026-06-14-admin-track-parallelization.md`)
 
 <!-- admin:02 콘텐츠(설교·공지) — markdown-editor · tag-multiselect · admin-inline-action -->
-- **`markdown-editor`**: 어드민 본문 작성/미리보기 탭 에디터. `Tabs`(작성·미리보기) + `Textarea` + `MarkdownContent`(미리보기 재사용). 미리보기는 탭 활성 시에만 변환. 토큰 공유(가독성 우선 단순 변형).
+- **`markdown-editor`**: 어드민 본문 작성/미리보기 탭 에디터. `Tabs`(작성·미리보기) + `Textarea` + `MarkdownContent`(미리보기 재사용). 미리보기는 탭 활성 시에만 변환. 작성 탭 상단에 `markdown-toolbar` 장착 — 마크다운을 몰라도 버튼으로 서식 적용. 토큰 공유(가독성 우선 단순 변형).
+- **`markdown-toolbar`**: 서식 버튼줄(`role="toolbar"`, lucide 아이콘 + `aria-label`·`title`). 제목 3단계·굵게·기울임·취소선·목록·번호목록·인용·구분선·표는 선택 영역 토글(순수 로직 `lib/markdownEditing`), 링크·유튜브는 주소 입력 Dialog(검증 실패 인라인 에러), 이미지는 `media-picker`(image·multi) 재사용 → `media:{id}` 단독 문단 자동 삽입. `CircleHelp` 버튼 → 치트시트 Dialog("이렇게 쓰면 → 이렇게 보입니다", `MarkdownContent` 재사용 + 문단·유튜브·이미지 규칙 안내). 삽입은 execCommand 우선(Ctrl+Z 보존)·상태 교체 폴백.
 - **`tag-multiselect`**: 기존 태그 다중선택. 인라인 칩 토글 — 태그 전체를 폼 안에 항상 펼쳐 렌더(`aria-pressed` 버튼), 선택=primary 채움+lucide `Check`, 비선택=surface-strong. 플로팅(Popover) 미사용 — 모달(Dialog) 안에서도 레이어 문제 없음. 옵션은 `getTags`. 신규 생성 없음(06 소관).
 - **`admin-inline-action`**: 공개 RSC 페이지 위 client island(목록 toolbar 등록 진입·상세 수정/삭제·공지 고정 토글). 등록·수정 진입은 전용 페이지 Link(`buttonVariants`), 삭제는 확인 Dialog. `RequirePermission` 게이트, 카드 내부 중첩 `<a>` 금지(목록 액션은 카드 밖).
 <!-- admin:03 일정 — datetime-picker · event-form-page -->
