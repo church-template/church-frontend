@@ -36,15 +36,47 @@ export interface MarkdownToolbarProps {
   onChange: (value: string) => void;
 }
 
+type DialogKind = "link" | "youtube" | "image" | "help" | null;
+
+// 버튼 정의는 순수 데이터(모듈 상수) — 렌더 중 ref를 읽는 클로저 배열을 만들면
+// react-hooks/refs가 렌더 중 ref 접근으로 판정한다(실행은 핸들러에서만 일어나도).
+type ToolAction =
+  | { kind: "inline"; action: InlineAction }
+  | { kind: "line"; action: LineAction }
+  | { kind: "block"; block: string }
+  | { kind: "dialog"; dialog: Exclude<DialogKind, null> };
+
 interface ToolButton {
   label: string;
   Icon: LucideIcon;
-  run: () => void;
+  act: ToolAction;
 }
 
-type DialogKind = "link" | "youtube" | "image" | "help" | null;
-
 const TABLE_TEMPLATE = "| 항목 | 값 |\n| --- | --- |\n|  |  |";
+
+const GROUPS: ToolButton[][] = [
+  [
+    { label: "큰 제목", Icon: Heading1, act: { kind: "line", action: "h1" } },
+    { label: "중간 제목", Icon: Heading2, act: { kind: "line", action: "h2" } },
+    { label: "작은 제목", Icon: Heading3, act: { kind: "line", action: "h3" } },
+  ],
+  [
+    { label: "굵게", Icon: Bold, act: { kind: "inline", action: "bold" } },
+    { label: "기울임", Icon: Italic, act: { kind: "inline", action: "italic" } },
+    { label: "취소선", Icon: Strikethrough, act: { kind: "inline", action: "strike" } },
+  ],
+  [
+    { label: "글머리 목록", Icon: List, act: { kind: "line", action: "ul" } },
+    { label: "번호 목록", Icon: ListOrdered, act: { kind: "line", action: "ol" } },
+    { label: "인용", Icon: Quote, act: { kind: "line", action: "quote" } },
+    { label: "구분선", Icon: Minus, act: { kind: "block", block: "---" } },
+    { label: "표", Icon: Table, act: { kind: "block", block: TABLE_TEMPLATE } },
+  ],
+  [
+    { label: "링크", Icon: Link, act: { kind: "dialog", dialog: "link" } },
+    { label: "유튜브", Icon: SquarePlay, act: { kind: "dialog", dialog: "youtube" } },
+  ],
+];
 
 const toolButtonClass = cn(
   "inline-flex size-9 items-center justify-center rounded-sm text-body",
@@ -90,52 +122,23 @@ export function MarkdownToolbar({ textareaRef, value, onChange }: MarkdownToolba
     });
   }
 
-  const runInline = (action: InlineAction) => {
+  function runAction(act: ToolAction) {
+    if (act.kind === "dialog") {
+      savedSel.current = selection();
+      setDialog(act.dialog);
+      return;
+    }
     const { start, end } = selection();
-    commit(applyInline(value, start, end, action));
-  };
-  const runLine = (action: LineAction) => {
-    const { start, end } = selection();
-    commit(applyLine(value, start, end, action));
-  };
-  const runBlock = (block: string) => {
-    const { start, end } = selection();
-    commit(insertBlock(value, start, end, block));
-  };
+    if (act.kind === "inline") commit(applyInline(value, start, end, act.action));
+    else if (act.kind === "line") commit(applyLine(value, start, end, act.action));
+    else commit(insertBlock(value, start, end, act.block));
+  }
 
-  const openDialog = (kind: DialogKind) => {
-    savedSel.current = selection();
-    setDialog(kind);
-  };
   const insertFromDialog = (snippet: string, asBlock: boolean) => {
     const { start, end } = savedSel.current;
     commit(asBlock ? insertBlock(value, start, end, snippet) : insertInline(value, start, end, snippet));
     setDialog(null);
   };
-
-  const groups: ToolButton[][] = [
-    [
-      { label: "큰 제목", Icon: Heading1, run: () => runLine("h1") },
-      { label: "중간 제목", Icon: Heading2, run: () => runLine("h2") },
-      { label: "작은 제목", Icon: Heading3, run: () => runLine("h3") },
-    ],
-    [
-      { label: "굵게", Icon: Bold, run: () => runInline("bold") },
-      { label: "기울임", Icon: Italic, run: () => runInline("italic") },
-      { label: "취소선", Icon: Strikethrough, run: () => runInline("strike") },
-    ],
-    [
-      { label: "글머리 목록", Icon: List, run: () => runLine("ul") },
-      { label: "번호 목록", Icon: ListOrdered, run: () => runLine("ol") },
-      { label: "인용", Icon: Quote, run: () => runLine("quote") },
-      { label: "구분선", Icon: Minus, run: () => runBlock("---") },
-      { label: "표", Icon: Table, run: () => runBlock(TABLE_TEMPLATE) },
-    ],
-    [
-      { label: "링크", Icon: Link, run: () => openDialog("link") },
-      { label: "유튜브", Icon: SquarePlay, run: () => openDialog("youtube") },
-    ],
-  ];
 
   return (
     <>
@@ -144,16 +147,16 @@ export function MarkdownToolbar({ textareaRef, value, onChange }: MarkdownToolba
         aria-label="서식 도구"
         className="flex flex-wrap items-center gap-xxs rounded-md border border-hairline bg-surface-soft px-xs py-xxs"
       >
-        {groups.map((group, gi) => (
+        {GROUPS.map((group, gi) => (
           <Fragment key={gi}>
             {gi > 0 ? <span aria-hidden className="mx-xxs h-6 w-px bg-hairline" /> : null}
-            {group.map(({ label, Icon, run }) => (
+            {group.map(({ label, Icon, act }) => (
               <button
                 key={label}
                 type="button"
                 aria-label={label}
                 title={label}
-                onClick={run}
+                onClick={() => runAction(act)}
                 className={toolButtonClass}
               >
                 <Icon size={20} aria-hidden />
