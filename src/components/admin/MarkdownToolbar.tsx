@@ -113,10 +113,10 @@ export function MarkdownToolbar({ textareaRef, value, onChange }: MarkdownToolba
     return { start: ta?.selectionStart ?? value.length, end: ta?.selectionEnd ?? value.length };
   }
 
-  function commit(result: EditResult) {
+  function commit(result: EditResult, useNative = true) {
     const ta = textareaRef.current;
     const scrollTop = ta?.scrollTop ?? 0; // 전체 교체 삽입은 캐럿을 끝으로 보내며 스크롤을 튕긴다 — 복원용 저장
-    if (!ta || !tryNativeInsert(ta, result.text)) {
+    if (!ta || !useNative || !tryNativeInsert(ta, result.text)) {
       // ponytail: 폴백은 Ctrl+Z 미보존 — 불편 제기 시 자체 히스토리 스택으로 승격
       onChange(result.text);
     }
@@ -144,7 +144,12 @@ export function MarkdownToolbar({ textareaRef, value, onChange }: MarkdownToolba
 
   const insertFromDialog = (snippet: string, asBlock: boolean) => {
     const { start, end } = savedSel.current;
-    commit(asBlock ? insertBlock(value, start, end, snippet) : insertInline(value, start, end, snippet));
+    // Dialog가 아직 열린 채라 포커스 트랩이 focus()를 되가져간다 — execCommand가 다이얼로그 입력에
+    // 꽂히고 true를 반환해 폴백까지 막히므로(본문 무변화 버그), 상태 교체로 직행한다.
+    commit(
+      asBlock ? insertBlock(value, start, end, snippet) : insertInline(value, start, end, snippet),
+      false,
+    );
     setDialog(null);
   };
 

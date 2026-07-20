@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, afterEach } from "vitest";
 import { useState } from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { MarkdownEditor } from "./MarkdownEditor";
@@ -117,6 +117,34 @@ describe("MarkdownToolbar — 이미지", () => {
     fireEvent.click(screen.getByRole("button", { name: "이미지" }));
     fireEvent.click(screen.getByRole("button", { name: "미디어 선택 확정" }));
     expect(textarea().value).toBe("본문\n\nmedia:3\n\nmedia:7");
+  });
+});
+
+// jsdom엔 execCommand가 없어 평소엔 폴백만 검증된다 — 실브라우저처럼 execCommand가 존재하는 상황을 모사한다.
+describe("MarkdownToolbar — 실브라우저 execCommand 경로", () => {
+  afterEach(() => {
+    delete (document as { execCommand?: unknown }).execCommand;
+  });
+
+  it("직접 버튼은 네이티브 삽입에 결과 텍스트를 전달한다", () => {
+    const exec = vi.fn(() => true);
+    document.execCommand = exec;
+    render(<Editor initial="안녕" />);
+    textarea().setSelectionRange(0, 2);
+    fireEvent.click(screen.getByRole("button", { name: "굵게" }));
+    expect(exec).toHaveBeenCalledWith("insertText", false, "**안녕**");
+  });
+
+  it("Dialog 삽입은 네이티브를 우회해 본문을 갱신한다(포커스 트랩 회귀)", () => {
+    // 실브라우저: Dialog가 열린 채라 포커스 트랩이 focus()를 되가져가 execCommand가 엉뚱한 입력에 꽂히고 true를 반환한다
+    const exec = vi.fn(() => true);
+    document.execCommand = exec;
+    render(<Editor />);
+    fireEvent.click(screen.getByRole("button", { name: "링크" }));
+    fireEvent.change(screen.getByLabelText("주소"), { target: { value: "https://example.com" } });
+    fireEvent.click(screen.getByRole("button", { name: "넣기" }));
+    expect(exec).not.toHaveBeenCalled();
+    expect(textarea().value).toBe("[https://example.com](https://example.com)");
   });
 });
 
