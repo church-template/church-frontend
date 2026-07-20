@@ -34,12 +34,12 @@
 # - 버전은 항상 높은 버전으로 자동 동기화됩니다
 # ===================================================================
 
-version: "0.1.71"
-version_code: 72 # app build number
+version: "0.1.72"
+version_code: 73 # app build number
 project_types: ["next"] # 멀티타입 배열 — 첫 항목이 primary, 직접 편집 가능
 project_type: "next" # project_types[0] 자동 미러 — 직접 수정 금지 (spring, flutter, next, react, react-native, react-native-expo, node, python, basic)
 metadata:
-  last_updated: "2026-07-20 07:07:44"
+  last_updated: "2026-07-20 09:01:25"
   last_updated_by: "EM-H20"
   default_branch: "main"
   integrated_from: "SUH-DEVOPS-TEMPLATE"
