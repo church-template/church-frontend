@@ -26,4 +26,9 @@ describe("MarkdownEditor", () => {
     const { container } = render(<MarkdownEditor value="" onChange={() => {}} rows={5} />);
     expect(container.querySelector("textarea")?.getAttribute("rows")).toBe("5");
   });
+
+  it("작성 탭에 서식 툴바를 보인다", () => {
+    render(<MarkdownEditor value="" onChange={() => {}} />);
+    expect(screen.getByRole("toolbar", { name: "서식 도구" })).toBeDefined();
+  });
 });

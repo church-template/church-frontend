@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/Textarea";
 import { MarkdownContent } from "@/components/common/MarkdownContent";
+import { MarkdownToolbar } from "./MarkdownToolbar";
 import { cn } from "@/lib/utils";
 import { typo } from "@/constants/typography";
 
@@ -21,6 +22,7 @@ export interface MarkdownEditorProps {
 // → preview 탭이 선택될 때만 MarkdownContent가 마운트되므로 작성 중 renderMarkdown은 실행되지 않는다.
 export function MarkdownEditor({ value, onChange, id, error, placeholder, rows }: MarkdownEditorProps) {
   const [tab, setTab] = useState("write");
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   return (
     <Tabs value={tab} onValueChange={setTab}>
       <TabsList>
@@ -28,14 +30,18 @@ export function MarkdownEditor({ value, onChange, id, error, placeholder, rows }
         <TabsTrigger value="preview">미리보기</TabsTrigger>
       </TabsList>
       <TabsContent value="write">
-        <Textarea
-          id={id}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          error={error}
-          placeholder={placeholder}
-          rows={rows}
-        />
+        <div className="flex flex-col gap-xs">
+          <MarkdownToolbar textareaRef={textareaRef} value={value} onChange={onChange} />
+          <Textarea
+            ref={textareaRef}
+            id={id}
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            error={error}
+            placeholder={placeholder}
+            rows={rows}
+          />
+        </div>
       </TabsContent>
       <TabsContent value="preview">
         {value.trim() ? (
