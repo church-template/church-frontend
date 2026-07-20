@@ -37,7 +37,8 @@
 - `src/lib/date.ts`에 `todayKstDate(): string` 헬퍼 추가 —
   `Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Seoul" })`로 `YYYY-MM-DD` 생성.
   러너 로컬 TZ와 무관하게 KST 자정 기준으로 날짜가 바뀐다(요구: "00시 기준").
-  서버·클라이언트 모두 Asia/Seoul 기준이라 하이드레이션 불일치 없음.
+  하이드레이션 불일치 없음 — `Intl`이 timeZone을 Asia/Seoul로 고정하고, RHF `register`는
+  defaultValues를 HTML에 직렬화하지 않고 마운트 시 주입하기 때문(서버 TZ는 애초에 무관).
 - defaultValues: `preachedAt: initial?.preachedAt ?? todayKstDate()` — 등록 모드만 오늘.
 
 ## 3. 예배 카드 시간 강조 (신규 typo 위계)
