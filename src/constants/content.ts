@@ -322,6 +322,7 @@ export const LOCATION = {
 export const WORSHIP = {
   title: "예배 시간 안내",
   regularLead: "매주 드리는 정기 예배에 참여하여 하나님과 더 가까이 만나세요.",
+  sermonCta: "설교 말씀 보기", // 정기예배 섹션 하단 → 설교 목록 진입 CTA(#109)
   specialHeading: "특별 예배",
   specialLead: "연중 진행되는 의미 있는 특별 예배들입니다.",
   placeHeading: "예배 장소 안내",

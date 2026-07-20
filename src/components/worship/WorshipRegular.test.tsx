@@ -1,7 +1,14 @@
 import { describe, it, expect, vi } from "vitest";
+import type { ReactNode } from "react";
 import { render, screen } from "@testing-library/react";
 import { WORSHIP, WORSHIP_SERVICES } from "@/constants/content";
 import { WorshipRegular } from "./WorshipRegular";
+
+vi.mock("next/link", () => ({
+  default: ({ href, children, ...rest }: { href: string; children: ReactNode }) => (
+    <a href={href} {...rest}>{children}</a>
+  ),
+}));
 
 describe("WorshipRegular", () => {
   it("제목(h1)·리드·정기 예배 4카드(이름·시간·찬양·설명)를 렌더한다", () => {
@@ -18,5 +25,18 @@ describe("WorshipRegular", () => {
     expect(screen.getByText(sunday.time)).toBeDefined();
     expect(screen.getByText(sunday.praise!)).toBeDefined();
     expect(screen.getByText(sunday.notes[0])).toBeDefined();
+  });
+
+  it("대표시간을 강조 위계(datetime-lg·ink)로 렌더하고 설교 진입 CTA를 둔다", () => {
+    vi.stubGlobal("matchMedia", vi.fn(() => ({ matches: true })));
+    render(<WorshipRegular />);
+
+    const sunday = WORSHIP_SERVICES.find((s) => s.name === "주일예배")!;
+    const time = screen.getByText(sunday.time);
+    expect(time.className).toContain("text-datetime-lg");
+    expect(time.className).toContain("text-ink");
+
+    const cta = screen.getByRole("link", { name: WORSHIP.sermonCta });
+    expect(cta.getAttribute("href")).toBe("/sermons");
   });
 });
