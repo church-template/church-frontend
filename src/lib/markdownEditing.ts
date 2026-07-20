@@ -134,3 +134,11 @@ export function insertBlock(
     selEnd: caret,
   };
 }
+
+/** n×m 표 템플릿 — 자리표시 헤더(제목1…) + 구분행 + 빈 본문 행. 크기 검증은 입력 Dialog 책임. */
+export function buildTable(cols: number, rows: number): string {
+  const header = `| ${Array.from({ length: cols }, (_, i) => `제목${i + 1}`).join(" | ")} |`;
+  const separator = `|${" --- |".repeat(cols)}`;
+  const body = Array.from({ length: rows }, () => `|${"  |".repeat(cols)}`);
+  return [header, separator, ...body].join("\n");
+}

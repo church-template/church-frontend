@@ -50,12 +50,6 @@ describe("MarkdownToolbar — 기본 서식", () => {
     expect(textarea().value).toBe("- 가\n- 나");
   });
 
-  it("표 버튼이 표 템플릿을 넣는다", () => {
-    render(<Editor />);
-    fireEvent.click(screen.getByRole("button", { name: "표" }));
-    expect(textarea().value).toBe("| 항목 | 값 |\n| --- | --- |\n|  |  |");
-  });
-
   it("구분선 버튼이 본문 끝에 빈 줄과 함께 들어간다", () => {
     render(<Editor initial="본문" />);
     textarea().setSelectionRange(2, 2);
@@ -107,6 +101,32 @@ describe("MarkdownToolbar — 링크·유튜브", () => {
     });
     fireEvent.click(screen.getByRole("button", { name: "넣기" }));
     expect(textarea().value).toBe("안녕\n\nhttps://youtu.be/dQw4w9WgXcQ");
+  });
+});
+
+describe("MarkdownToolbar — 표", () => {
+  it("표 버튼은 크기 입력 다이얼로그를 열고 기본 2×2 표를 넣는다", () => {
+    render(<Editor />);
+    fireEvent.click(screen.getByRole("button", { name: "표" }));
+    fireEvent.click(screen.getByRole("button", { name: "넣기" }));
+    expect(textarea().value).toBe("| 제목1 | 제목2 |\n| --- | --- |\n|  |  |\n|  |  |");
+  });
+
+  it("표 크기를 바꿔 넣을 수 있다", () => {
+    render(<Editor />);
+    fireEvent.click(screen.getByRole("button", { name: "표" }));
+    fireEvent.change(screen.getByLabelText("열 수 (가로 칸)"), { target: { value: "3" } });
+    fireEvent.change(screen.getByLabelText("행 수 (세로 줄)"), { target: { value: "1" } });
+    fireEvent.click(screen.getByRole("button", { name: "넣기" }));
+    expect(textarea().value).toBe("| 제목1 | 제목2 | 제목3 |\n| --- | --- | --- |\n|  |  |  |");
+  });
+
+  it("범위를 벗어난 크기는 에러를 보인다", () => {
+    render(<Editor />);
+    fireEvent.click(screen.getByRole("button", { name: "표" }));
+    fireEvent.change(screen.getByLabelText("열 수 (가로 칸)"), { target: { value: "0" } });
+    fireEvent.click(screen.getByRole("button", { name: "넣기" }));
+    expect(screen.getByText("열은 1~8, 행은 1~20 사이로 입력해 주세요.")).toBeDefined();
   });
 });
 

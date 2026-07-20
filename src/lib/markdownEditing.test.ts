@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { applyInline, applyLine, insertInline, insertBlock } from "./markdownEditing";
+import { applyInline, applyLine, insertInline, insertBlock, buildTable } from "./markdownEditing";
 
 describe("applyInline", () => {
   it("선택 영역을 마커로 감싼다", () => {
@@ -107,5 +107,19 @@ describe("insertBlock", () => {
 
   it("이미 빈 줄이 있으면 더 추가하지 않는다", () => {
     expect(insertBlock("가\n\n", 3, 3, "---").text).toBe("가\n\n---");
+  });
+});
+
+describe("buildTable", () => {
+  it("자리표시 헤더·구분행·빈 본문 행을 만든다", () => {
+    expect(buildTable(2, 1)).toBe("| 제목1 | 제목2 |\n| --- | --- |\n|  |  |");
+  });
+
+  it("열·행 수만큼 칸을 만든다", () => {
+    const lines = buildTable(3, 2).split("\n");
+    expect(lines.length).toBe(4);
+    expect(lines[0]).toBe("| 제목1 | 제목2 | 제목3 |");
+    expect(lines[1]).toBe("| --- | --- | --- |");
+    expect(lines[3]).toBe("|  |  |  |");
   });
 });

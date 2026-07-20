@@ -29,7 +29,7 @@ import {
   type InlineAction,
   type LineAction,
 } from "@/lib/markdownEditing";
-import { LinkInsertDialog, YoutubeInsertDialog } from "./MarkdownInsertDialogs";
+import { LinkInsertDialog, TableInsertDialog, YoutubeInsertDialog } from "./MarkdownInsertDialogs";
 import { MediaPicker } from "./MediaPicker";
 import { MarkdownHelpDialog } from "./MarkdownHelpDialog";
 
@@ -40,7 +40,7 @@ export interface MarkdownToolbarProps {
   onChange: (value: string) => void;
 }
 
-type DialogKind = "link" | "youtube" | "image" | "help" | null;
+type DialogKind = "link" | "youtube" | "image" | "table" | "help" | null;
 
 // 버튼 정의는 순수 데이터(모듈 상수) — 렌더 중 ref를 읽는 클로저 배열을 만들면
 // react-hooks/refs가 렌더 중 ref 접근으로 판정한다(실행은 핸들러에서만 일어나도).
@@ -55,8 +55,6 @@ interface ToolButton {
   Icon: LucideIcon;
   act: ToolAction;
 }
-
-const TABLE_TEMPLATE = "| 항목 | 값 |\n| --- | --- |\n|  |  |";
 
 const GROUPS: ToolButton[][] = [
   [
@@ -74,7 +72,7 @@ const GROUPS: ToolButton[][] = [
     { label: "번호 목록", Icon: ListOrdered, act: { kind: "line", action: "ol" } },
     { label: "인용", Icon: Quote, act: { kind: "line", action: "quote" } },
     { label: "구분선", Icon: Minus, act: { kind: "block", block: "---" } },
-    { label: "표", Icon: Table, act: { kind: "block", block: TABLE_TEMPLATE } },
+    { label: "표", Icon: Table, act: { kind: "dialog", dialog: "table" } },
   ],
   [
     { label: "링크", Icon: Link, act: { kind: "dialog", dialog: "link" } },
@@ -215,6 +213,15 @@ export function MarkdownToolbar({ textareaRef, value, onChange }: MarkdownToolba
           accept="image"
           multiple
           onConfirm={(ids) => insertFromDialog(ids.map((id) => `media:${id}`).join("\n\n"), true)}
+        />
+      ) : null}
+      {dialog === "table" ? (
+        <TableInsertDialog
+          open
+          onOpenChange={(v) => {
+            if (!v) setDialog(null);
+          }}
+          onInsert={(md) => insertFromDialog(md, true)}
         />
       ) : null}
       {dialog === "help" ? (
