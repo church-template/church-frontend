@@ -79,7 +79,8 @@ export function applyLine(
   action: LineAction,
 ): EditResult {
   const rule = LINE_RULES[action];
-  const lineStart = text.lastIndexOf("\n", selStart - 1) + 1;
+  // lastIndexOf(fromIndex=-1)은 0으로 클램프되어 문서 첫 개행을 "커서 앞 개행"으로 오인한다 — slice로 회피
+  const lineStart = text.slice(0, selStart).lastIndexOf("\n") + 1;
   const nextBreak = text.indexOf("\n", selEnd);
   const lineEnd = nextBreak === -1 ? text.length : nextBreak;
   const lines = text.slice(lineStart, lineEnd).split("\n");

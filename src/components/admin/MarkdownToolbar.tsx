@@ -92,7 +92,8 @@ const toolButtonClass = cn(
 // 실행취소(Ctrl+Z) 보존을 위해 네이티브 삽입을 먼저 시도한다. execCommand는 deprecated지만
 // 실패·미지원(jsdom 포함)이면 상태 교체로 폴백하므로 안전하다. 성공하면 input 이벤트가 React onChange로 전파된다.
 function tryNativeInsert(ta: HTMLTextAreaElement, text: string): boolean {
-  if (typeof document.execCommand !== "function") return false;
+  // insertText("")는 엔진별 동작이 갈린다 — 빈 결과는 확실히 상태 교체 폴백으로
+  if (text === "" || typeof document.execCommand !== "function") return false;
   ta.focus();
   ta.setSelectionRange(0, ta.value.length);
   try {
@@ -114,6 +115,7 @@ export function MarkdownToolbar({ textareaRef, value, onChange }: MarkdownToolba
 
   function commit(result: EditResult) {
     const ta = textareaRef.current;
+    const scrollTop = ta?.scrollTop ?? 0; // 전체 교체 삽입은 캐럿을 끝으로 보내며 스크롤을 튕긴다 — 복원용 저장
     if (!ta || !tryNativeInsert(ta, result.text)) {
       // ponytail: 폴백은 Ctrl+Z 미보존 — 불편 제기 시 자체 히스토리 스택으로 승격
       onChange(result.text);
@@ -123,6 +125,7 @@ export function MarkdownToolbar({ textareaRef, value, onChange }: MarkdownToolba
       if (el) {
         el.focus();
         el.setSelectionRange(result.selStart, result.selEnd);
+        el.scrollTop = scrollTop;
       }
     });
   }

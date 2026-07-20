@@ -76,6 +76,10 @@ describe("applyLine", () => {
   it("인용 접두를 붙인다", () => {
     expect(applyLine("말씀", 0, 0, "quote").text).toBe("> 말씀");
   });
+
+  it("개행으로 시작하는 문서의 첫 위치에서는 본문을 바꾸지 않는다", () => {
+    expect(applyLine("\n가", 0, 0, "ul")).toEqual({ text: "\n가", selStart: 0, selEnd: 0 });
+  });
 });
 
 describe("insertInline", () => {
