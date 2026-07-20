@@ -19,7 +19,7 @@
 | 설교자 기본값 | church.ts 상수 (최근 설교 자동·localStorage 안 대신) |
 | 설교일 입력 | 네이티브 date 유지 + `max` 보정 + 오늘(KST) 기본값 (커스텀 3분할 입력 안 대신) |
 | 백스페이스 연속 삭제 | 이번 범위 제외 — 브라우저 세그먼트 동작 한계. 기본값+덮어쓰기 입력으로 "지울 일" 자체를 제거 |
-| 예배 카드 가시성 | 시간을 크게·진하게 (primary 색 강조 안 대신 — 단일 액센트 원칙 유지) |
+| 예배 카드 가시성 | 시간을 크게·진하게 + primary 색 (구현 후 실화면 확인에서 사용자가 primary 강조로 확정 — 시간이 이 페이지의 핵심 행동 정보라 단일 액센트 예외) |
 | 예배→설교 연결 | 진입 CTA만 (예배별 필터는 설교에 예배 구분 데이터가 없어 보류) |
 
 ## 1. 설교자 기본값
@@ -48,7 +48,8 @@
   2. `globals.css` `@theme`에 `--text-datetime-lg` 계열 추가
   3. `src/constants/typography.ts`에 `typo.datetimeLg` 추가
   4. `src/lib/utils.ts` extendTailwindMerge 목록에 등록 (누락 시 `cn()`이 크기를 색상으로 오인해 제거)
-- `WorshipRegular` 카드 대표시간: `typo.datetime` + `text-body` → `typo.datetimeLg` + `text-ink`.
+- `WorshipRegular` 카드 대표시간: `typo.datetime` + `text-body` → `typo.datetimeLg` + `text-primary`
+  (최초 확정은 `text-ink`였으나 실화면 확인 후 primary로 상향 — 위 결정 표 참조).
 - 찬양시간 서브라인(praise)은 현행 유지(muted) — 대표시간과의 위계 대비 확보.
 - 메인 페이지 `ScheduleCard`는 변경하지 않는다(범위 밖).
 

@@ -27,14 +27,14 @@ describe("WorshipRegular", () => {
     expect(screen.getByText(sunday.notes[0])).toBeDefined();
   });
 
-  it("대표시간을 강조 위계(datetime-lg·ink)로 렌더하고 설교 진입 CTA를 둔다", () => {
+  it("대표시간을 강조 위계(datetime-lg·primary)로 렌더하고 설교 진입 CTA를 둔다", () => {
     vi.stubGlobal("matchMedia", vi.fn(() => ({ matches: true })));
     render(<WorshipRegular />);
 
     const sunday = WORSHIP_SERVICES.find((s) => s.name === "주일예배")!;
     const time = screen.getByText(sunday.time);
     expect(time.className).toContain("text-datetime-lg");
-    expect(time.className).toContain("text-ink");
+    expect(time.className).toContain("text-primary");
 
     const cta = screen.getByRole("link", { name: WORSHIP.sermonCta });
     expect(cta.getAttribute("href")).toBe("/sermons");
