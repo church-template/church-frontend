@@ -331,6 +331,24 @@ body {
   height: auto;
   border-radius: var(--radius-lg);
 }
+.prose-church table {
+  /* 본문 표(마크다운 GFM) — 스타일 부재 시 테두리 없는 맨 텍스트로 보인다(#106 실사용 리포트) */
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-body-md);
+  line-height: var(--text-body-md--line-height);
+}
+.prose-church th,
+.prose-church td {
+  border: 1px solid var(--color-hairline);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  text-align: left;
+}
+.prose-church th {
+  background: var(--color-surface-soft);
+  color: var(--color-ink);
+  font-weight: 600;
+}
 .prose-church code {
   font-size: 0.9em;
   background: var(--color-surface-strong);
