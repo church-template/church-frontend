@@ -26,6 +26,7 @@ const twMerge = extendTailwindMerge({
             "body-strong",
             "body-sm",
             "datetime",
+            "datetime-lg",
             "caption",
             "caption-strong",
             "button",

@@ -11,6 +11,8 @@ describe("cn — 커스텀 타이포 토큰 병합", () => {
     expect(cn(typo.displaySm, "mt-base", "text-on-dark")).toContain("text-display-sm");
     // 복합 토큰(datetime = 크기 + tabular-nums)은 양쪽 모두 생존해야 한다
     expect(cn(typo.datetime, "text-muted")).toBe("text-datetime tabular-nums text-muted");
+    // datetime-lg(예배 카드 대표시간)도 크기 그룹 등록 + tabular-nums 생존
+    expect(cn(typo.datetimeLg, "text-ink")).toBe("text-datetime-lg tabular-nums text-ink");
     expect(cn(typo.titleMd, "text-on-dark")).toContain("text-title-md");
     // body-lg(소망·이야기 lead) 토큰도 크기 그룹으로 등록돼야 색과 공존한다
     expect(cn(typo.bodyLg, "text-ink")).toBe("text-body-lg text-ink");
