@@ -1,7 +1,17 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { useState } from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { MarkdownEditor } from "./MarkdownEditor";
+
+// MediaPicker는 TanStack Query 의존 — 여기선 선택 확정 콜백만 검증한다.
+vi.mock("./MediaPicker", () => ({
+  MediaPicker: ({ open, onConfirm }: { open: boolean; onConfirm: (ids: number[]) => void }) =>
+    open ? (
+      <button type="button" onClick={() => onConfirm([3, 7])}>
+        미디어 선택 확정
+      </button>
+    ) : null,
+}));
 
 // 툴바는 textarea 선택 범위와 한 몸이라 MarkdownEditor를 통째 렌더해 통합 검증한다.
 function Editor({ initial = "" }: { initial?: string }) {
@@ -97,5 +107,15 @@ describe("MarkdownToolbar — 링크·유튜브", () => {
     });
     fireEvent.click(screen.getByRole("button", { name: "넣기" }));
     expect(textarea().value).toBe("안녕\n\nhttps://youtu.be/dQw4w9WgXcQ");
+  });
+});
+
+describe("MarkdownToolbar — 이미지", () => {
+  it("선택한 미디어가 media 코드 단독 문단으로 들어간다", () => {
+    render(<Editor initial="본문" />);
+    textarea().setSelectionRange(2, 2);
+    fireEvent.click(screen.getByRole("button", { name: "이미지" }));
+    fireEvent.click(screen.getByRole("button", { name: "미디어 선택 확정" }));
+    expect(textarea().value).toBe("본문\n\nmedia:3\n\nmedia:7");
   });
 });

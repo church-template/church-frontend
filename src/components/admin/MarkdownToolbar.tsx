@@ -6,6 +6,7 @@ import {
   Heading1,
   Heading2,
   Heading3,
+  ImagePlus,
   Italic,
   Link,
   List,
@@ -28,6 +29,7 @@ import {
   type LineAction,
 } from "@/lib/markdownEditing";
 import { LinkInsertDialog, YoutubeInsertDialog } from "./MarkdownInsertDialogs";
+import { MediaPicker } from "./MediaPicker";
 
 export interface MarkdownToolbarProps {
   /** 삽입 대상 textarea — 선택 범위를 읽고, 적용 후 포커스·커서를 복원한다. */
@@ -74,6 +76,7 @@ const GROUPS: ToolButton[][] = [
   ],
   [
     { label: "링크", Icon: Link, act: { kind: "dialog", dialog: "link" } },
+    { label: "이미지", Icon: ImagePlus, act: { kind: "dialog", dialog: "image" } },
     { label: "유튜브", Icon: SquarePlay, act: { kind: "dialog", dialog: "youtube" } },
   ],
 ];
@@ -181,6 +184,17 @@ export function MarkdownToolbar({ textareaRef, value, onChange }: MarkdownToolba
             if (!v) setDialog(null);
           }}
           onInsert={(url) => insertFromDialog(url, true)}
+        />
+      ) : null}
+      {dialog === "image" ? (
+        <MediaPicker
+          open
+          onOpenChange={(v) => {
+            if (!v) setDialog(null);
+          }}
+          accept="image"
+          multiple
+          onConfirm={(ids) => insertFromDialog(ids.map((id) => `media:${id}`).join("\n\n"), true)}
         />
       ) : null}
     </>
