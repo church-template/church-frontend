@@ -20,6 +20,7 @@ export const typo = {
   bodyStrong: "text-body-strong",
   bodySm: "text-body-sm",
   datetime: "text-datetime tabular-nums", // 날짜·시간 자릿수 고정(tnum)
+  datetimeLg: "text-datetime-lg tabular-nums", // 강조 날짜·시간(예배 카드 대표시간) — 크기만 키운 datetime
   caption: "text-caption",
   captionStrong: "text-caption-strong",
   button: "text-button",

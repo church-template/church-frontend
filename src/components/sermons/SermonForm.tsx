@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { ACTION } from "@/constants/actionButton";
+import { SERMON_DEFAULT_PREACHER } from "@/constants/church";
+import { todayKstDate } from "@/lib/date";
 import { MarkdownEditor } from "@/components/admin/MarkdownEditor";
 import { TagMultiSelect } from "@/components/admin/TagMultiSelect";
 import { adminOnError } from "@/lib/admin/mutationHandlers";
@@ -59,8 +61,9 @@ export function SermonForm({ mode, initial }: SermonFormProps) {
     resolver: zodResolver(sermonSchema),
     defaultValues: {
       title: initial?.title ?? "",
-      preacher: initial?.preacher ?? "",
-      preachedAt: initial?.preachedAt ?? "",
+      // 등록 모드 프리필: 설교자는 교회 상수, 설교일은 오늘(KST) — 수정 모드는 기존 값 유지.
+      preacher: initial?.preacher ?? SERMON_DEFAULT_PREACHER,
+      preachedAt: initial?.preachedAt ?? todayKstDate(),
       series: initial?.series ?? "",
       scripture: initial?.scripture ?? "",
       content: initial?.content ?? "",
@@ -108,6 +111,8 @@ export function SermonForm({ mode, initial }: SermonFormProps) {
         <Input
           id="sermon-preachedAt"
           type="date"
+          // max로 연도 세그먼트를 4자리로 제한 — 4자리 입력 시 월로 자동 이동(연도 6자리 입력 방지).
+          max="9999-12-31"
           error={errors.preachedAt?.message}
           {...register("preachedAt")}
         />

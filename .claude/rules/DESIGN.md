@@ -375,6 +375,7 @@ components:
 | `{typography.body-lg-strong}` | 28px | 700 | 읽는 본문 내 의미 구절 인라인 강조 (소망 4색 구절, 행간 1.45로 body-lg 줄높이 유지) |
 | `{typography.body-sm}` | 18px | 400 | 보조 본문, 푸터 |
 | `{typography.datetime}` | 18px | 500 | 날짜·시간 (tnum) |
+| `{typography.datetime-lg}` | 22px | 600 | 강조 날짜·시간 — 예배 카드 대표시간 (tnum) |
 | `{typography.caption}` | 16px | 400 | 캡션 |
 | `{typography.button}` | 20px | 600 | CTA |
 | `{typography.nav-link}` | 21px | 500 | 네비 메뉴 |
