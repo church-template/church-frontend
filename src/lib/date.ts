@@ -77,3 +77,17 @@ export function toLocalInput(serverIso: string, allDay = false): string {
   if (!serverIso) return "";
   return allDay ? serverIso.slice(0, 10) : serverIso.slice(0, 16);
 }
+
+// date 입력 프리필용 오늘(KST). en-CA 로케일은 "YYYY-MM-DD"를 그대로 내 조립이 필요 없고,
+// Asia/Seoul 고정이라 러너 TZ와 무관하게 KST 자정 기준으로 날짜가 바뀐다.
+const kstDateInputFmt = new Intl.DateTimeFormat("en-CA", {
+  timeZone: KST,
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+});
+
+/** 오늘 날짜(KST) "YYYY-MM-DD" — date 입력 기본값용. */
+export function todayKstDate(): string {
+  return kstDateInputFmt.format(new Date());
+}

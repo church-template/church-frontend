@@ -1,5 +1,11 @@
-import { describe, it, expect } from "vitest";
-import { parseServerDate, formatDate, formatEventTime, formatClockTime } from "./date";
+import { describe, it, expect, vi, afterEach } from "vitest";
+import {
+  parseServerDate,
+  formatDate,
+  formatEventTime,
+  formatClockTime,
+  todayKstDate,
+} from "./date";
 
 describe("parseServerDate", () => {
   it("datetime을 KST(+09:00)로 해석한다 — 10:00 KST = 01:00 UTC", () => {
@@ -64,5 +70,21 @@ describe("formatClockTime", () => {
   it("KST 'HH:mm' 시각만 반환", () => {
     expect(formatClockTime("2026-06-14T10:00:00")).toBe("10:00");
     expect(formatClockTime("2026-06-14T09:05:00")).toBe("09:05");
+  });
+});
+
+describe("todayKstDate", () => {
+  afterEach(() => vi.useRealTimers());
+
+  it("KST 자정 직후에는 KST 기준 새 날짜를 반환한다(러너 TZ 무관)", () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-07-19T15:30:00Z")); // = 2026-07-20 00:30 KST
+    expect(todayKstDate()).toBe("2026-07-20");
+  });
+
+  it("KST 자정 직전에는 전날을 반환한다", () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-07-19T14:59:00Z")); // = 2026-07-19 23:59 KST
+    expect(todayKstDate()).toBe("2026-07-19");
   });
 });
