@@ -119,3 +119,11 @@ describe("MarkdownToolbar — 이미지", () => {
     expect(textarea().value).toBe("본문\n\nmedia:3\n\nmedia:7");
   });
 });
+
+describe("MarkdownToolbar — 도움말", () => {
+  it("도움말 버튼이 사용법 안내를 연다", () => {
+    render(<Editor />);
+    fireEvent.click(screen.getByRole("button", { name: "마크다운 사용법" }));
+    expect(screen.getByRole("heading", { name: "마크다운 사용법" })).toBeDefined();
+  });
+});

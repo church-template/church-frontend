@@ -3,6 +3,7 @@
 import { Fragment, useRef, useState, type RefObject } from "react";
 import {
   Bold,
+  CircleHelp,
   Heading1,
   Heading2,
   Heading3,
@@ -30,6 +31,7 @@ import {
 } from "@/lib/markdownEditing";
 import { LinkInsertDialog, YoutubeInsertDialog } from "./MarkdownInsertDialogs";
 import { MediaPicker } from "./MediaPicker";
+import { MarkdownHelpDialog } from "./MarkdownHelpDialog";
 
 export interface MarkdownToolbarProps {
   /** 삽입 대상 textarea — 선택 범위를 읽고, 적용 후 포커스·커서를 복원한다. */
@@ -167,6 +169,16 @@ export function MarkdownToolbar({ textareaRef, value, onChange }: MarkdownToolba
             ))}
           </Fragment>
         ))}
+        <span aria-hidden className="mx-xxs h-6 w-px bg-hairline" />
+        <button
+          type="button"
+          aria-label="마크다운 사용법"
+          title="마크다운 사용법"
+          onClick={() => setDialog("help")}
+          className={toolButtonClass}
+        >
+          <CircleHelp size={20} aria-hidden />
+        </button>
       </div>
       {dialog === "link" ? (
         <LinkInsertDialog
@@ -195,6 +207,14 @@ export function MarkdownToolbar({ textareaRef, value, onChange }: MarkdownToolba
           accept="image"
           multiple
           onConfirm={(ids) => insertFromDialog(ids.map((id) => `media:${id}`).join("\n\n"), true)}
+        />
+      ) : null}
+      {dialog === "help" ? (
+        <MarkdownHelpDialog
+          open
+          onOpenChange={(v) => {
+            if (!v) setDialog(null);
+          }}
         />
       ) : null}
     </>
