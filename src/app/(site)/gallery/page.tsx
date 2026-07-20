@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { Container } from "@/components/shell/Container";
 import { typo } from "@/constants/typography";
 import { cn } from "@/lib/utils";
-import { GalleryGate } from "@/components/gallery/GalleryGate";
+import { MemberGate } from "@/components/common/MemberGate";
 import { AlbumList } from "@/components/gallery/AlbumList";
 import { AlbumListAction } from "@/components/gallery/GalleryAdminActions";
 
@@ -20,9 +20,9 @@ export default function GalleryPage() {
         <AlbumListAction />
       </div>
       <Suspense fallback={null}>
-        <GalleryGate>
+        <MemberGate permission="GALLERY_VIEW" domainLabel="갤러리">
           <AlbumList />
-        </GalleryGate>
+        </MemberGate>
       </Suspense>
     </Container>
   );

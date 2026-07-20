@@ -2,7 +2,7 @@
 
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
@@ -19,7 +19,6 @@ import {
   type SermonCreateRequest,
   type SermonUpdateRequest,
 } from "@/lib/api/sermons.admin";
-import { revalidateSermons } from "@/lib/admin/revalidate";
 import type { SermonDetailResponse } from "@/lib/api/types";
 import { sermonSchema, type SermonFormValues } from "./schemas";
 
@@ -28,7 +27,7 @@ export interface SermonFormProps {
   initial?: SermonDetailResponse;
 }
 
-// 쓰기 직후 updateTag로 캐시를 즉시 무효화하므로 지연 안내 불필요.
+// 쓰기 직후 쿼리 무효화로 목록·상세가 즉시 갱신되므로 지연 안내 불필요.
 const SAVED_NOTICE = "저장했습니다.";
 
 // 선택 필드 빈 문자열은 전송에서 제외(PUT 전체 교체 시 의미 없는 빈값 방지).
@@ -49,6 +48,7 @@ function toBody(v: SermonFormValues): SermonCreateRequest {
 
 export function SermonForm({ mode, initial }: SermonFormProps) {
   const router = useRouter();
+  const qc = useQueryClient();
   const {
     register,
     handleSubmit,
@@ -84,11 +84,13 @@ export function SermonForm({ mode, initial }: SermonFormProps) {
         fes.forEach((fe) =>
           setError(fe.field as keyof SermonFormValues, { message: fe.reason }),
         ),
-      onReedit: () => router.refresh(),
+      // 409 재편집: 상세 쿼리 무효화 → SermonEditLoader가 최신 version으로 다시 시드한다(AlbumForm 관례).
+      onReedit: () => qc.invalidateQueries({ queryKey: initial ? ["sermon", initial.id] : ["sermons"] }),
     }),
-    onSuccess: async (res) => {
-      // 쓰기 성공 즉시 sermons 태그 캐시 무효화 → 다음 공개 요청이 fresh 데이터를 받음.
-      await revalidateSermons();
+    onSuccess: (res) => {
+      // 쓰기 성공 즉시 회원 쿼리 캐시 무효화 → 목록·상세가 fresh 데이터를 받음(회원전용 전환으로 ISR 태그 아님).
+      qc.invalidateQueries({ queryKey: ["sermons"] });
+      if (mode === "edit" && initial) qc.invalidateQueries({ queryKey: ["sermon", initial.id] });
       notify.success(SAVED_NOTICE);
       router.push(`/sermons/${res.id}`);
     },

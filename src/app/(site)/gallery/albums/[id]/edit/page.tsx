@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/shell/Container";
-import { GalleryGate } from "@/components/gallery/GalleryGate";
+import { MemberGate } from "@/components/common/MemberGate";
 import { RequirePermission } from "@/components/admin/RequirePermission";
 import { EditAccessDenied } from "@/components/admin/EditGate";
 import { AlbumEditLoader } from "@/components/gallery/AlbumEditLoader";
@@ -17,11 +17,11 @@ export default async function AlbumEditPage({ params }: { params: Promise<{ id: 
   return (
     <Container as="section" className="py-section">
       <h1 className="sr-only">앨범 수정</h1>
-      <GalleryGate>
+      <MemberGate permission="GALLERY_VIEW" domainLabel="갤러리">
         <RequirePermission permission="GALLERY_WRITE" fallback={<EditAccessDenied />}>
           <AlbumEditLoader id={numId} />
         </RequirePermission>
-      </GalleryGate>
+      </MemberGate>
     </Container>
   );
 }

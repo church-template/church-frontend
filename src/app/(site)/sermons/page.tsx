@@ -1,99 +1,30 @@
 // src/app/(site)/sermons/page.tsx
+import { Suspense } from "react";
+import type { Metadata } from "next";
 import { Container } from "@/components/shell/Container";
 import { typo } from "@/constants/typography";
 import { cn } from "@/lib/utils";
-import { formatDate } from "@/lib/date";
-import { getSermons, type SermonListParams } from "@/lib/api/sermons";
-import { getTags } from "@/lib/api/tags";
-import { SermonCard } from "@/components/cards/SermonCard";
-import { TagFilter } from "@/components/common/TagFilter";
-import { Pagination } from "@/components/common/Pagination";
-import { EmptyState } from "@/components/common/EmptyState";
-import { SermonSearch } from "@/components/sermons/SermonSearch";
-import { ActiveFilters } from "@/components/sermons/ActiveFilters";
+import { MemberGate } from "@/components/common/MemberGate";
+import { SermonList } from "@/components/sermons/SermonList";
 import { SermonListAction } from "@/components/sermons/SermonAdminActions";
 
-type SearchParams = Record<string, string | string[] | undefined>;
+export const metadata: Metadata = { title: "설교" };
 
-// 문자열 정규화: 배열이면 첫 값, trim 후 빈 값은 undefined.
-function toStr(v: string | string[] | undefined): string | undefined {
-  const s = Array.isArray(v) ? v[0] : v;
-  const t = s?.trim();
-  return t ? t : undefined;
-}
-function toNum(v: string | string[] | undefined): number | undefined {
-  const s = toStr(v);
-  if (s == null) return undefined;
-  const n = Number(s);
-  return Number.isFinite(n) ? n : undefined; // NaN 방어
-}
-
-const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
-// 날짜 필터는 yyyy-MM-dd 형식만 통과(비정상 값 백엔드 전달 차단).
-function toDate(v: string | string[] | undefined): string | undefined {
-  const s = toStr(v);
-  return s && DATE_RE.test(s) ? s : undefined;
-}
-
-function parseParams(sp: SearchParams): SermonListParams {
-  return {
-    page: toNum(sp.page),
-    tagId: toNum(sp.tagId),
-    q: toStr(sp.q),
-    preacher: toStr(sp.preacher),
-    series: toStr(sp.series),
-    from: toDate(sp.from),
-    to: toDate(sp.to),
-  };
-}
-
-// 공개 설교 목록. searchParams 접근 → 동적 렌더(CI 빌드 prerender 미시도). 목록·태그 병렬 fetch.
-export default async function SermonsPage({
-  searchParams,
-}: {
-  searchParams: Promise<SearchParams>;
-}) {
-  const sp = await searchParams;
-  const params = parseParams(sp);
-  const [data, tags] = await Promise.all([getSermons(params), getTags()]);
-
+// 회원전용 설교 목록(가이드 2.3). 게이트가 권한(SERMON_VIEW)을 선판단하고, SermonList가
+// useSearchParams로 필터를 읽어 TanStack Query로 조회한다. useSearchParams 때문에 Suspense 경계 필요.
+export default function SermonsPage() {
   return (
     <Container as="section" className="py-section">
+      {/* 등록 버튼은 공지·일정처럼 제목 행에 — 필터 행에 두면 알약이 폭을 나눠 써 일찍 줄바꿈된다. */}
       <div className="flex items-center justify-between gap-base">
         <h1 className={cn(typo.displayMd, "text-ink")}>설교</h1>
         <SermonListAction />
       </div>
-
-      <div className="mt-lg flex flex-col gap-base">
-        <SermonSearch />
-        <TagFilter tags={tags} />
-        <ActiveFilters />
-      </div>
-
-      {data.content.length === 0 ? (
-        <EmptyState message="조건에 맞는 설교가 없습니다." className="mt-xl" />
-      ) : (
-        <div className="mt-xl grid gap-base sm:grid-cols-2 lg:grid-cols-3">
-          {data.content.map((s) => (
-            <SermonCard
-              key={s.id}
-              href={`/sermons/${s.id}`}
-              title={s.title}
-              preacher={s.preacher}
-              date={formatDate(s.preachedAt)}
-              series={s.series}
-              scripture={s.scripture}
-              tags={s.tags.map((t) => t.name)}
-            />
-          ))}
-        </div>
-      )}
-
-      {data.page.totalPages > 1 ? (
-        <div className="mt-xl">
-          <Pagination page={data.page} />
-        </div>
-      ) : null}
+      <Suspense fallback={null}>
+        <MemberGate permission="SERMON_VIEW" domainLabel="설교">
+          <SermonList />
+        </MemberGate>
+      </Suspense>
     </Container>
   );
 }

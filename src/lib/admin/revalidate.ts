@@ -10,10 +10,6 @@ export async function revalidateEvents() {
   updateTag("events");
 }
 
-export async function revalidateSermons() {
-  updateTag("sermons");
-}
-
 export async function revalidateNotices() {
   updateTag("notices");
 }
