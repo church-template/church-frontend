@@ -15,49 +15,22 @@
 - 신규 의존성 추가 금지 (허용 스택 밖 라이브러리 금지)
 - 콘텐츠 하드코딩 금지 — `name`·`description`은 `src/constants/church.ts`의 `CHURCH_NAME`·`CHURCH_DESCRIPTION` 주입
 - `background_color`·`theme_color`는 `"#ffffff"` — DESIGN.md canvas 값. manifest는 CSS 변수를 못 읽어 하드코딩하되 주석으로 출처 명시
-- 커밋 메시지 형식: `<type> : <설명> #<이슈번호>` (Task 1에서 생성한 이슈 번호, Co-Authored-By 금지)
+- 커밋 메시지 형식: `<type> : <설명> #112` (이슈 [#112](https://github.com/church-template/church-frontend/issues/112), Co-Authored-By 금지)
 - 주석은 한국어, WHY 중심
 - 게이트: `pnpm test`·`pnpm lint`·`npx tsc --noEmit` 전부 통과 (lint는 타입체크를 안 하므로 tsc 별도 실행)
 - 워킹트리에 이 작업과 무관한 수정 파일들이 있다 — `git add`는 항상 명시 경로로만 (`git add -A` 금지)
 
 ---
 
-### Task 1: GitHub 이슈 생성 + 작업 브랜치
+### Task 1: GitHub 이슈 생성 + 작업 브랜치 — ✅ 완료 (2026-07-21, /issue-branch로 수행)
 
-**Files:** 없음 (git/gh 작업만)
+**결과 (실행자는 이 태스크를 건너뛴다):**
+- 이슈: [#112](https://github.com/church-template/church-frontend/issues/112) — 이슈 파일 `.issues/20260721_기능추가_PWA_홈화면_설치.md`
+- 브랜치: `20260721_#112_PWA_홈_화면_설치_지원` (생성·전환 완료)
+- 이후 모든 커밋 태그는 `#112`
 
-**Interfaces:**
-- Produces: 이슈 번호(이후 모든 커밋 태그에 사용), 브랜치 `feature/pwa-installable`
-
-- [ ] **Step 1: 이슈 생성하고 번호 확보**
-
-```bash
-gh issue create \
-  --title "PWA 홈 화면 설치 지원 (manifest + 아이콘)" \
-  --body "$(cat <<'EOF'
-## 목표
-홈페이지를 홈 화면에 설치 가능한 PWA로 만든다.
-
-## 범위
-- `src/app/manifest.ts` (Next 파일 컨벤션, church.ts 상수 주입)
-- 아이콘 4개: icon-192 / icon-512 / icon-maskable-512 (public), apple-icon (src/app)
-- 서비스워커·오프라인·푸시·설치 UI 제외
-
-## 스펙
-docs/superpowers/specs/2026-07-19-pwa-installable-design.md
-EOF
-)"
-```
-
-Expected: `https://github.com/.../issues/<번호>` 출력. 이 번호를 이후 커밋 태그 `#<번호>`로 사용.
-
-- [ ] **Step 2: 브랜치 생성**
-
-```bash
-git checkout -b feature/pwa-installable
-```
-
-Expected: `Switched to a new branch 'feature/pwa-installable'`
+- [x] **Step 1: 이슈 생성하고 번호 확보** — #112
+- [x] **Step 2: 브랜치 생성** — `20260721_#112_PWA_홈_화면_설치_지원`
 
 ---
 
@@ -128,7 +101,7 @@ Read 도구로 `public/icon-maskable-512.png`와 `src/app/apple-icon.png`를 열
 
 ```bash
 git add public/icon-192.png public/icon-512.png public/icon-maskable-512.png src/app/apple-icon.png
-git commit -m "feat : PWA 아이콘 에셋 4종 생성 (192/512/maskable/apple) #<이슈번호>"
+git commit -m "feat : PWA 아이콘 에셋 4종 생성 (192/512/maskable/apple) #112"
 ```
 
 ---
@@ -240,7 +213,7 @@ Expected: 전부 통과 (기존 테스트 포함, 에러 0)
 
 ```bash
 git add src/app/manifest.ts src/app/manifest.test.ts
-git commit -m "feat : PWA manifest 추가 (홈 화면 설치 지원) #<이슈번호>"
+git commit -m "feat : PWA manifest 추가 (홈 화면 설치 지원) #112"
 ```
 
 ---
