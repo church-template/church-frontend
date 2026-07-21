@@ -246,3 +246,40 @@ export interface MyParticipationResponse {
   completed: boolean; // rounds ≥ 1
   streakDays: number;
 }
+
+// ── 차량운행(스펙: docs/superpowers/specs/2026-07-21-vehicle-runs-design.md) ──
+
+export interface MyRequestResponse {
+  pickupLocation: string;
+  note?: string; // @JsonInclude(NON_NULL) 관례 — 미입력 시 누락 가능
+}
+
+export interface VehicleRunCardResponse {
+  id: number;
+  departsAt: string; // offset 없는 LocalDateTime — parseServerDate로 파싱
+  note?: string;
+  myRequest?: MyRequestResponse | null; // null/누락 = 미신청
+}
+
+export interface VehicleRequestResponse {
+  id: number;
+  runId: number;
+  pickupLocation: string;
+  note?: string;
+}
+
+// 어드민 목록 행 — 단건 GET이 없어 수정 시드·version도 이 행 값에서 얻는다.
+export interface VehicleRunDetailResponse {
+  id: number;
+  departsAt: string;
+  note?: string;
+  version: number; // 낙관락
+}
+
+export interface VehicleRosterEntryResponse {
+  name: string; // 탈퇴 회원은 "(탈퇴한 사용자)" — 백엔드 처리
+  phone?: string; // 탈퇴 시 누락 가능성 방어
+  pickupLocation: string;
+  note?: string;
+  requestedAt: string;
+}
