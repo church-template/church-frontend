@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import type { ReactNode } from "react";
-import { CHURCH_NAME, CHURCH_ADDRESS } from "@/constants/church";
+import { CHURCH_NAME, CHURCH_ADDRESS, CHURCH_PHONE } from "@/constants/church";
 import { FOOTER_COLUMNS } from "@/constants/navigation";
 
 vi.mock("next/link", () => ({
@@ -31,5 +31,11 @@ describe("SiteFooter", () => {
     const location = screen.getByRole("link", { name: "연락처 및 위치" }) as HTMLAnchorElement;
     expect(location.getAttribute("href")).toBe("/about/location");
     expect(screen.getByText(/©/)).toBeDefined();
+  });
+
+  it("전화번호는 명시적 tel: 링크다 (iOS 자동 감지 대신 — 하이드레이션 불일치 방지)", () => {
+    render(<SiteFooter />);
+    const tel = screen.getByRole("link", { name: CHURCH_PHONE }) as HTMLAnchorElement;
+    expect(tel.getAttribute("href")).toBe(`tel:${CHURCH_PHONE}`);
   });
 });
