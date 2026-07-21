@@ -61,7 +61,7 @@ export const CHURCH_EMAIL = "hsk71418@naver.com";
 
 // 설교 등록 폼의 설교자 기본값 — 설교자가 바뀌는 일이 드물어 미리 채운다(#109).
 // 교회 교체 시 이 값만 바꾸면 되고, 빈 문자열이면 기본값 없음과 동일하게 동작한다.
-export const SERMON_DEFAULT_PREACHER = "홍성균 목사";
+export const SERMON_DEFAULT_PREACHER = "홍성균 목사님";
 
 // 오시는 길 지도 임베드 URL(카카오/네이버 등). 비어 있으면 외부 지도 링크로 폴백(라이브러리 미사용).
 // 오시는 길 지도 임베드 URL(카카오/네이버 등). 비어 있으면 외부 지도 링크로 폴백(라이브러리 미사용).

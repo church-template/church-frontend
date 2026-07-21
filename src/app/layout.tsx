@@ -52,6 +52,9 @@ export const metadata: Metadata = {
     images: ["/og-image.jpg"],
   },
   robots: { index: true, follow: true },
+  // iOS Safari의 전화번호 자동 감지가 하이드레이션 전에 DOM을 <a href="tel:">로 변조해
+  // 불일치 에러를 낸다 — 감지를 끄고, 통화가 필요한 곳은 명시적 tel: 링크로 제공한다.
+  formatDetection: { telephone: false },
 };
 
 export default function RootLayout({

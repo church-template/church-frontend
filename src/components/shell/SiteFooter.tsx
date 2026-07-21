@@ -25,7 +25,11 @@ export function SiteFooter() {
           <address className={cn(typo.bodyMd, "not-italic text-muted whitespace-nowrap")}>
             {CHURCH_ADDRESS}
             <br />
-            {CHURCH_PHONE}
+            {/* 명시적 tel: 링크 — iOS Safari가 평문 번호를 자동으로 <a>로 감싸 하이드레이션 불일치를 내던 것을
+                layout의 formatDetection(telephone=no)으로 끄는 대신, 탭 통화는 여기서 직접 제공한다 */}
+            <a href={`tel:${CHURCH_PHONE}`} className="hover:text-primary">
+              {CHURCH_PHONE}
+            </a>
             <br />
             {CHURCH_EMAIL}
           </address>
