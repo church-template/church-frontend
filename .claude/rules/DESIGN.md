@@ -468,6 +468,10 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 - **`schedule-card`**: `{colors.surface-soft}` 배경. 예배명 `{typography.title-md}` +
   시간 `{typography.datetime}` + 장소 `{typography.body-sm}`.
 - **`event-card`**: 행사 카드. 날짜 배지(`badge-pill-primary`) + 제목 + 요약.
+- **`vehicle-run-card`**: 회원 차량 탑승 신청 카드(`/vehicle-runs`) — schedule-card 변형. `{colors.surface-soft}` 배경 +
+  출발시각 `{typography.datetime-lg}`(tnum) + 메모 `{typography.body-sm}` `{colors.muted}`. 미신청=우측 "탑승 신청"
+  `button-primary`(48px) → 신청 Dialog(픽업 장소 필수·메모 선택), 신청됨="신청됨" `badge` + 내 픽업 장소·메모 요약 +
+  "신청 취소" 텍스트 버튼(확인 Dialog). 목록은 다가오는 운행일만(출발 임박순), 게이트는 ChallengeGate 동형(`VEHICLE_APPLY`).
 
 ### 밴드
 - **`cta-band-dark`**: 프리푸터. "처음 오셨나요?" 헤드라인 `{typography.display-lg}` +
@@ -624,6 +628,10 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 <!-- admin:07 거버넌스 — role-permission-matrix · reset-password-reveal · agreement-reset-dialog -->
 - **`inquiry-manager`**: 문의 목록·처리 화면(`/mypage/manage/inquiries`). `Tabs`(전체·미처리·완료 → URL `?completed=`) + `DataTable`(이름·연락처·접수일·상태 `Badge`) + `Pagination`(URL 구동, 10건). 목록에 문의 내용이 없어 이름 셀 버튼으로 상세를 연다. 공개 소비자 없음 — ISR 무효화 불요, `["admin","inquiries",...]` 클라 쿼리만 무효화.
 - **`inquiry-detail-dialog`**: 문의 상세 Dialog. 상태 `Badge` + 연락처(`tel:`)·이메일(`mailto:`) + 본문(`whitespace-pre-wrap` — 방문자 평문이라 마크다운 변환 안 함) + 완료 처리/완료 취소 + `DeleteConfirmDialog` 삭제. `getInquiry` 시드(useQuery 파생), version 없음(낙관락 미적용 도메인).
+<!-- admin:08 차량운행 — vehicle-run management -->
+- **`vehicle-run-manager`**: 차량 운행일 목록·CRUD 화면(`/mypage/manage/vehicle-runs`). `DataTable`(출발시각·메모) + URL 구동 `Pagination`(10건) + 툴바 `새 운행일` + 행 `명단`(하위 페이지 Link)·`수정`·`삭제`(`DeleteConfirmDialog`, "탑승 신청 명단도 함께 사라집니다"). 공개 소비자 없음 — ISR 무효화 불요, `["admin","vehicle-runs",...]`·회원 `["vehicle-runs"]` 클라 쿼리만 무효화.
+- **`vehicle-run-form-dialog`**: 운행일 등록·수정 Dialog. `DateTimePicker`(출발시각) + `Textarea`(메모). 단건 GET 없음 — 수정은 행 값 시드(tag-form-modal 패턴) + 낙관락 version(목록 행 값), 충돌 시 목록 재조회 + 닫기.
+- **`vehicle-roster-view`**: 운행일별 탑승 명단 페이지(`/mypage/manage/vehicle-runs/[id]`). `DataTable`(이름·연락처 `tel:` 링크·픽업 장소·메모·신청 시각) + `Pagination`(20건). 제목 부제(출발시각)는 표시 전용 `?departsAt=` 쿼리로 전달(단건 GET 없음, 위·변조 무해).
 
 ## Do / Don't
 

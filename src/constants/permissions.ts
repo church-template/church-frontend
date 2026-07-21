@@ -15,6 +15,8 @@ export const PERMISSION_LABELS: Record<string, string> = {
   ROLE_MANAGE: "역할·권한 관리",
   CHALLENGE_MANAGE: "통독 챌린지 관리",
   CHALLENGE_PARTICIPATE: "통독 챌린지 참여",
+  VEHICLE_MANAGE: "차량운행 관리",
+  VEHICLE_APPLY: "차량 탑승 신청",
 };
 
 export function permissionLabel(perm: string): string {
