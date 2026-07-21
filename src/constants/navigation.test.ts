@@ -35,9 +35,14 @@ describe("navigation IA", () => {
     ]);
   });
 
-  it("예배·설교 하위에 예배시간·설교·성경통독이 있다", () => {
+  it("예배·설교 하위에 예배시간·설교·성경통독·차량 신청이 있다", () => {
     const worship = NAV_PRIMARY.find((i) => i.label === "예배·설교");
-    expect(worship?.children?.map((c) => c.href)).toEqual(["/worship", "/sermons", "/challenges"]);
+    expect(worship?.children?.map((c) => c.href)).toEqual([
+      "/worship",
+      "/sermons",
+      "/challenges",
+      "/vehicle-runs",
+    ]);
   });
 
   it("사역 하위 링크는 모두 DEPARTMENTS의 부서 slug로 연결된다(드리프트 감시)", () => {

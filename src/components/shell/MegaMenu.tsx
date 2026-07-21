@@ -3,6 +3,7 @@ import {
   Bell,
   BookOpen,
   BookOpenCheck,
+  Bus,
   Calendar,
   CalendarClock,
   Church,
@@ -39,6 +40,7 @@ const ICONS: Record<NavIconKey, LucideIcon> = {
   users: Users,
   music: Music,
   heart: Heart,
+  bus: Bus,
 };
 
 export interface MegaMenuProps {
