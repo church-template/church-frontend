@@ -469,7 +469,7 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
   시간 `{typography.datetime}` + 장소 `{typography.body-sm}`.
 - **`event-card`**: 행사 카드. 날짜 배지(`badge-pill-primary`) + 제목 + 요약.
 - **`vehicle-run-card`**: 회원 차량 탑승 신청 카드(`/vehicle-runs`) — schedule-card 변형. `{colors.surface-soft}` 배경.
-  헤더(출발시각 `{typography.datetime-lg}`(tnum) + 메모 `{typography.body-sm}` `{colors.muted}` 좌 / 신청됨=`badge`(primary, 확정 어피던스로 lucide `Check` 14px 선행) 우) +
+  헤더(출발시각 `{typography.datetime-lg}`(tnum) + 메모 `{typography.body-sm}` `{colors.muted}` 좌 / 신청됨=`AppliedStatus`(채움 칩이 아니라 lucide `Check` 18px + `{typography.body-md}`(600) `{colors.primary}` 인라인 — 단일 액센트·절제) 우) +
   신청됨이면 1px 헤어라인 아래 "내 신청" 라벨 행 블록(픽업 장소·메모·위치=`지도 보기` 링크, `w-20` 라벨/값 좌측정렬) +
   하단 우측 "신청 취소" 텍스트 버튼(확인 Dialog). 미신청은 헤더 아래 우측 "탑승 신청" `button-primary`(48px) →
   신청 Dialog(픽업 장소 필수·메모 선택). 목록은 다가오는 운행일만(출발 임박순), 게이트는 ChallengeGate 동형(`VEHICLE_APPLY`).
@@ -569,7 +569,7 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 
 ### 마이페이지
 - **`manage-hub`**: 마이페이지 관리 허브 섹션. `useMe().permissions` 기준 권한 보유 도메인만 카드로 노출(보유 0이면 섹션 비노출). 카드 = `{rounded.xl}`(24px) + 1px 헤어라인, hover 시 보더 `{colors.primary}` 전이. 공개 도메인 카드는 해당 공개 페이지로, 운영 도메인은 `/mypage/manage/*`로 링크. 어드민 화면이라 가독성 우선 단순 변형이되 토큰 공유(hex·px 인라인 금지). **카드는 테마 카테고리(콘텐츠·미디어/업로드·조직·회원/권한, `MANAGE_CATEGORIES` 순서)로 묶어 섹션 분리**: 카테고리 제목 `{typography.title-sm}`(600) ↔ 카드 라벨 `{typography.body-md}`(400)의 **굵기 대비** + 카테고리 경계 1px 헤어라인 divider(첫 그룹 제외 `border-t` + 상하 여백)로 '정보가 바뀌는 지점'을 드러낸다(그림자 단계 추가 없이 헤어라인+무게 위계만). 보유 카드 0개인 카테고리는 제목째 비노출. 관리 제목 아래에는 2px `{colors.ink}` 앵커 구분선(`border-t-2`, 카테고리 사이 1px 헤어라인보다 두껍게)을 두어 제목↔카테고리 위계를 강조한다.
-- **`my-vehicle-boardings`**: 마이페이지 "내 차량 탑승" 섹션(my-challenge-history 동형). 다가오는 운행일 목록(회원 `useVehicleRuns` 첫 페이지)에서 내 신청(`myRequest≠null`)만 필터 — 지난 이력은 백엔드 전용 API가 없어 미표시, 다가오는 운행이 여러 페이지면 첫 페이지 밖 신청은 이 섹션에 안 뜬다(전체는 `/vehicle-runs`에서). 행 = 출발 시각 `{typography.body-md}`(600) + `신청됨` Badge(lucide `Check` 선행) + "픽업: {장소 또는 '위치 첨부됨'}", 1px 헤어라인 구분, 행 전체가 `/vehicle-runs` 링크(취소·관리는 거기서). `VEHICLE_APPLY` 미보유·0건이면 섹션째 비노출(Reveal은 null 체크 뒤 내부 래핑).
+- **`my-vehicle-boardings`**: 마이페이지 "내 차량 탑승" 섹션(my-challenge-history 동형). 다가오는 운행일 목록(회원 `useVehicleRuns` 첫 페이지)에서 내 신청(`myRequest≠null`)만 필터 — 지난 이력은 백엔드 전용 API가 없어 미표시, 다가오는 운행이 여러 페이지면 첫 페이지 밖 신청은 이 섹션에 안 뜬다(전체는 `/vehicle-runs`에서). 행 = 출발 시각 `{typography.body-md}`(600) + `AppliedStatus`(체크+텍스트 인라인, 채움 없음) + "픽업: {장소 또는 '위치 첨부됨'}", 1px 헤어라인 구분, 행 전체가 `/vehicle-runs` 링크(취소·관리는 거기서). `VEHICLE_APPLY` 미보유·0건이면 섹션째 비노출(Reveal은 null 체크 뒤 내부 래핑).
 
 ### 성경통독 챌린지
 

@@ -1,11 +1,10 @@
 "use client";
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { typo } from "@/constants/typography";
 import { kakaoMapPinUrl } from "@/lib/mapLink";
-import { Badge } from "@/components/ui/Badge";
+import { AppliedStatus } from "./AppliedStatus";
 import { Button } from "@/components/ui/Button";
 import { Skeleton } from "@/components/common/Skeleton";
 import { EmptyState } from "@/components/common/EmptyState";
@@ -53,13 +52,7 @@ export function VehicleRunList() {
               <p className={cn(typo.datetimeLg, "text-ink")}>{departLabel(run)} 출발</p>
               {run.note ? <p className={cn(typo.bodySm, "text-muted")}>{run.note}</p> : null}
             </div>
-            {run.myRequest ? (
-              // 확정 상태 어피던스 — 일반 라벨 칩보다 의도적(lucide Check, 텍스트가 의미 전달이라 aria-hidden)
-              <Badge variant="primary" className="gap-xxs">
-                <Check size={14} aria-hidden />
-                신청됨
-              </Badge>
-            ) : null}
+            {run.myRequest ? <AppliedStatus /> : null}
           </div>
 
           {run.myRequest ? (
