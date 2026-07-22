@@ -13,9 +13,12 @@ export async function fetchVehicleRuns(params: { page?: number }): Promise<Page<
 }
 
 // 요청 타입은 도메인-로컬(types.ts 규약 — 쓰기 요청 타입은 공유 파일에 두지 않는다).
+// 주의: 백엔드 스키마의 pickupOrCoordinatesPresent 등 @AssertTrue 게터는 실제 필드가 아니므로 넣지 않는다.
 export interface VehicleRequestCreateRequest {
-  pickupLocation: string; // ≤200
+  pickupLocation?: string; // ≤200, 선택(좌표만 신청 가능)
   note?: string; // 동승 인원·특이사항
+  latitude?: number; // 현재 위치 첨부(좌표는 동반 필수 — 백엔드 검증)
+  longitude?: number;
 }
 
 export async function applyVehicleRequest(

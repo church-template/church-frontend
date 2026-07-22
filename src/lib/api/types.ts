@@ -250,8 +250,10 @@ export interface MyParticipationResponse {
 // ── 차량운행(스펙: docs/superpowers/specs/2026-07-21-vehicle-runs-design.md) ──
 
 export interface MyRequestResponse {
-  pickupLocation: string;
+  pickupLocation?: string; // 좌표만 신청 시 누락 가능(@JsonInclude(NON_NULL))
   note?: string; // @JsonInclude(NON_NULL) 관례 — 미입력 시 누락 가능
+  latitude?: number; // 현재 위치 첨부 시(좌표는 동반)
+  longitude?: number;
 }
 
 export interface VehicleRunCardResponse {
@@ -264,8 +266,10 @@ export interface VehicleRunCardResponse {
 export interface VehicleRequestResponse {
   id: number;
   runId: number;
-  pickupLocation: string;
+  pickupLocation?: string; // 좌표만 신청 시 누락 가능
   note?: string;
+  latitude?: number;
+  longitude?: number;
 }
 
 // 어드민 목록 행 — 단건 GET이 없어 수정 시드·version도 이 행 값에서 얻는다.
@@ -279,7 +283,9 @@ export interface VehicleRunDetailResponse {
 export interface VehicleRosterEntryResponse {
   name: string; // 탈퇴 회원은 "(탈퇴한 사용자)" — 백엔드 처리
   phone?: string; // 탈퇴 시 누락 가능성 방어
-  pickupLocation: string;
+  pickupLocation?: string; // 좌표만 신청 시 누락 가능
   note?: string;
   requestedAt: string;
+  latitude?: number; // 현재 위치 첨부 시
+  longitude?: number;
 }
