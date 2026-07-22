@@ -472,6 +472,9 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
   출발시각 `{typography.datetime-lg}`(tnum) + 메모 `{typography.body-sm}` `{colors.muted}`. 미신청=우측 "탑승 신청"
   `button-primary`(48px) → 신청 Dialog(픽업 장소 필수·메모 선택), 신청됨="신청됨" `badge` + 내 픽업 장소·메모 요약 +
   "신청 취소" 텍스트 버튼(확인 Dialog). 목록은 다가오는 운행일만(출발 임박순), 게이트는 ChallengeGate 동형(`VEHICLE_APPLY`).
+  현재 위치 첨부(브라우저 geolocation) 지원 — 신청 다이얼로그에 "현재 위치 첨부" 버튼(lucide `LocateFixed`) +
+  첨부 시 "위치 첨부됨"·"지도에서 확인"(카카오맵 좌표 URL)·지우기. 픽업 텍스트는 선택(텍스트·좌표 중 최소 하나).
+  카드는 좌표가 있으면 "위치 보기" 링크, 픽업 텍스트가 없으면 "위치 첨부됨" 표기.
 
 ### 밴드
 - **`cta-band-dark`**: 프리푸터. "처음 오셨나요?" 헤드라인 `{typography.display-lg}` +
@@ -632,6 +635,7 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 - **`vehicle-run-manager`**: 차량 운행일 목록·CRUD 화면(`/mypage/manage/vehicle-runs`). `DataTable`(출발시각·메모) + URL 구동 `Pagination`(10건) + 툴바 `새 운행일` + 행 `명단`(하위 페이지 Link)·`수정`·`삭제`(`DeleteConfirmDialog`, "탑승 신청 명단도 함께 사라집니다"). 공개 소비자 없음 — ISR 무효화 불요, `["admin","vehicle-runs",...]`·회원 `["vehicle-runs"]` 클라 쿼리만 무효화.
 - **`vehicle-run-form-dialog`**: 운행일 등록·수정 Dialog. `DateTimePicker`(출발시각) + `Textarea`(메모). 단건 GET 없음 — 수정은 행 값 시드(tag-form-modal 패턴) + 낙관락 version(목록 행 값), 충돌 시 목록 재조회 + 닫기.
 - **`vehicle-roster-view`**: 운행일별 탑승 명단 페이지(`/mypage/manage/vehicle-runs/[id]`). `DataTable`(이름·연락처 `tel:` 링크·픽업 장소·메모·신청 시각) + `Pagination`(20건). 제목 부제(출발시각)는 표시 전용 `?departsAt=` 쿼리로 전달(단건 GET 없음, 위·변조 무해).
+ 좌표가 있으면 픽업 장소 셀에 "지도 보기" 링크(카카오맵 좌표 URL, 키·SDK 불필요).
 
 ## Do / Don't
 
