@@ -55,6 +55,6 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ---
 
 <!-- AUTO-VERSION-SECTION: DO NOT EDIT MANUALLY -->
-## 최신 버전 : v0.1.73 (2026-07-20)
+## 최신 버전 : v0.1.75 (2026-07-22)
 
 [전체 버전 기록 보기](CHANGELOG.md)
