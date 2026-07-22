@@ -74,4 +74,30 @@ describe("VehicleRosterView", () => {
     );
     expect(await screen.findByText("아직 탑승 신청이 없습니다.")).toBeDefined();
   });
+
+  it("좌표 있는 명단 항목은 '지도 보기' 링크(카카오맵)", async () => {
+    rosterMock.mockResolvedValue(
+      page([{ name: "홍길동", phone: "010-1234-5678", pickupLocation: "정문", requestedAt: "2026-07-20T21:00:00", latitude: 37.5, longitude: 127.0 }]),
+    );
+    render(
+      <QueryClientProvider client={qc}>
+        <VehicleRosterView runId={3} />
+      </QueryClientProvider>,
+    );
+    const link = await screen.findByRole("link", { name: "지도 보기" });
+    expect(link.getAttribute("href")).toBe("https://map.kakao.com/link/map/%EC%A0%95%EB%AC%B8,37.5,127");
+  });
+
+  it("좌표 없는 항목은 지도 링크 없음", async () => {
+    rosterMock.mockResolvedValue(
+      page([{ name: "김철수", phone: "010-2222-3333", pickupLocation: "후문", requestedAt: "2026-07-20T21:05:00" }]),
+    );
+    render(
+      <QueryClientProvider client={qc}>
+        <VehicleRosterView runId={3} />
+      </QueryClientProvider>,
+    );
+    await waitFor(() => expect(screen.getByText("후문")).toBeDefined());
+    expect(screen.queryByRole("link", { name: "지도 보기" })).toBeNull();
+  });
 });

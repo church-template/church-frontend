@@ -14,6 +14,7 @@ import { adminOnError } from "@/lib/admin/mutationHandlers";
 import { formatDate, formatClockTime, parseServerDate } from "@/lib/date";
 import { fetchVehicleRoster } from "@/lib/api/vehicles.admin";
 import type { VehicleRosterEntryResponse } from "@/lib/api/types";
+import { kakaoMapPinUrl } from "@/lib/mapLink";
 
 export interface VehicleRosterViewProps {
   runId: number;
@@ -54,7 +55,25 @@ export function VehicleRosterView({ runId, departsAt }: VehicleRosterViewProps) 
           </a>
         ) : null,
     },
-    { key: "pickupLocation", header: "픽업 장소", cell: (e) => e.pickupLocation },
+    {
+      key: "pickupLocation",
+      header: "픽업 장소",
+      cell: (e) => (
+        <span className="flex flex-col gap-xxs">
+          {e.pickupLocation ? <span>{e.pickupLocation}</span> : null}
+          {e.latitude != null && e.longitude != null ? (
+            <a
+              href={kakaoMapPinUrl(e.latitude, e.longitude, e.pickupLocation)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={cn(typo.bodySm, "text-primary underline-offset-4 hover:underline")}
+            >
+              지도 보기
+            </a>
+          ) : null}
+        </span>
+      ),
+    },
     { key: "note", header: "메모", cell: (e) => e.note ?? "" },
     {
       key: "requestedAt",
