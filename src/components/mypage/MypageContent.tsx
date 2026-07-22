@@ -20,6 +20,7 @@ import { AgreementStatus } from "./AgreementStatus";
 import { WithdrawDialog } from "./WithdrawDialog";
 import { ManageHub } from "./ManageHub";
 import { MyChallengeHistory } from "./MyChallengeHistory";
+import { MyVehicleBoardings } from "./MyVehicleBoardings";
 
 export function MypageContent() {
   const router = useRouter();
@@ -89,6 +90,7 @@ export function MypageContent() {
               </section>
             </Reveal>
             <MyChallengeHistory delay={150} />
+            <MyVehicleBoardings delay={165} />
             <ManageHub delay={180} />
             <Reveal delay={240}>
               <div className="flex items-center justify-between gap-md pt-sm">

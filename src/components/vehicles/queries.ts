@@ -9,11 +9,13 @@ import {
 } from "@/lib/api/vehicles";
 
 // 게이트 통과 후에만 마운트. retry:false — 401 재시도는 authFetch 전담(챌린지 컨벤션).
-export function useVehicleRuns(page: number) {
+// enabled: 마이페이지는 VehicleGate 밖이라 권한 없으면 호출을 억제(기본 true라 /vehicle-runs 무영향).
+export function useVehicleRuns(page: number, enabled = true) {
   return useQuery({
     queryKey: ["vehicle-runs", { page }],
     queryFn: () => fetchVehicleRuns({ page }),
     placeholderData: keepPreviousData,
+    enabled,
     retry: false,
   });
 }
