@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { typo } from "@/constants/typography";
 import { Badge } from "@/components/ui/Badge";
@@ -30,7 +31,10 @@ export function MyVehicleBoardings({ delay }: { delay?: number }) {
               <Link href="/vehicle-runs" className="flex flex-col gap-xxs py-md hover:text-primary">
                 <span className="flex items-center gap-sm">
                   <span className={cn(typo.bodyMd, "font-semibold text-ink")}>{departLabel(r)} 출발</span>
-                  <Badge variant="primary">신청됨</Badge>
+                  <Badge variant="primary" className="gap-xxs">
+                    <Check size={14} aria-hidden />
+                    신청됨
+                  </Badge>
                 </span>
                 <span className={cn(typo.bodySm, "text-muted")}>
                   픽업: {r.myRequest?.pickupLocation ?? "위치 첨부됨"}
