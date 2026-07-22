@@ -56,11 +56,13 @@ describe("VehicleRunList", () => {
     expect(screen.getByText("apply-dialog:5")).toBeDefined();
   });
 
-  it("신청됨 카드엔 배지·내 픽업 장소·취소 버튼", async () => {
+  it("신청됨 카드엔 배지·라벨 픽업 장소·메모·취소 버튼", async () => {
     fetchMock.mockResolvedValue(page([applied]));
     renderList();
     expect(await screen.findByText("신청됨")).toBeDefined();
-    expect(screen.getByText("픽업: 정문")).toBeDefined();
+    expect(screen.getByText("픽업 장소")).toBeDefined();
+    expect(screen.getByText("정문")).toBeDefined();
+    expect(screen.getByText("2명")).toBeDefined();
     expect(screen.getByRole("button", { name: "신청 취소" })).toBeDefined();
   });
 
@@ -75,12 +77,12 @@ describe("VehicleRunList", () => {
     await waitFor(() => expect(cancelMock).toHaveBeenCalledWith(6));
   });
 
-  it("좌표 있는 신청은 '위치 보기' 링크(카카오맵)", async () => {
+  it("좌표 있는 신청은 '지도 보기' 링크(카카오맵)", async () => {
     fetchMock.mockResolvedValue(
       page([{ id: 7, departsAt: "2026-08-09T07:30:00", myRequest: { pickupLocation: "정문", latitude: 37.5, longitude: 127.0 } }]),
     );
     renderList();
-    const link = await screen.findByRole("link", { name: "위치 보기" });
+    const link = await screen.findByRole("link", { name: "지도 보기" });
     expect(link.getAttribute("href")).toBe("https://map.kakao.com/link/map/%EC%A0%95%EB%AC%B8,37.5,127");
   });
 
@@ -90,6 +92,6 @@ describe("VehicleRunList", () => {
     );
     renderList();
     expect(await screen.findByText("위치 첨부됨")).toBeDefined();
-    expect(screen.getByRole("link", { name: "위치 보기" })).toBeDefined();
+    expect(screen.getByRole("link", { name: "지도 보기" })).toBeDefined();
   });
 });

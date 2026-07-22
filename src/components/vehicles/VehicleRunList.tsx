@@ -46,36 +46,56 @@ export function VehicleRunList() {
       {runs.length === 0 ? <EmptyState message="예정된 운행일이 없습니다." /> : null}
       {runs.map((run) => (
         <section key={run.id} className="rounded-xl bg-surface-soft p-xl">
-          <div className="flex flex-wrap items-center justify-between gap-base">
+          {/* 헤더: 운행 정보(좌) + 상태 배지(우) */}
+          <div className="flex flex-wrap items-start justify-between gap-base">
             <div className="flex flex-col gap-xxs">
               <p className={cn(typo.datetimeLg, "text-ink")}>{departLabel(run)} 출발</p>
               {run.note ? <p className={cn(typo.bodySm, "text-muted")}>{run.note}</p> : null}
             </div>
-            {run.myRequest ? (
-              <div className="flex flex-col items-end gap-xs">
-                <Badge variant="primary">신청됨</Badge>
-                {run.myRequest.pickupLocation ? (
-                  <p className={cn(typo.bodySm, "text-body")}>픽업: {run.myRequest.pickupLocation}</p>
-                ) : (
-                  <p className={cn(typo.bodySm, "text-body")}>위치 첨부됨</p>
-                )}
-                {run.myRequest.latitude != null && run.myRequest.longitude != null ? (
-                  <a
-                    href={kakaoMapPinUrl(run.myRequest.latitude, run.myRequest.longitude, run.myRequest.pickupLocation)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={cn(typo.caption, "text-primary underline-offset-4 hover:underline")}
-                  >
-                    위치 보기
-                  </a>
+            {run.myRequest ? <Badge variant="primary">신청됨</Badge> : null}
+          </div>
+
+          {run.myRequest ? (
+            // 내 신청: 헤어라인으로 운행 정보와 구분 + 좌측 정렬 라벨/값(한글 가독성)
+            <div className="mt-md border-t border-hairline pt-md">
+              <dl className="flex flex-col gap-sm">
+                <div className="flex gap-md">
+                  <dt className={cn(typo.caption, "w-20 shrink-0 text-muted")}>픽업 장소</dt>
+                  <dd className={cn(typo.bodySm, "text-body")}>
+                    {run.myRequest.pickupLocation ? run.myRequest.pickupLocation : "위치 첨부됨"}
+                  </dd>
+                </div>
+                {run.myRequest.note ? (
+                  <div className="flex gap-md">
+                    <dt className={cn(typo.caption, "w-20 shrink-0 text-muted")}>메모</dt>
+                    <dd className={cn(typo.bodySm, "text-body")}>{run.myRequest.note}</dd>
+                  </div>
                 ) : null}
-                {run.myRequest.note ? <p className={cn(typo.caption, "text-muted")}>{run.myRequest.note}</p> : null}
+                {run.myRequest.latitude != null && run.myRequest.longitude != null ? (
+                  <div className="flex gap-md">
+                    <dt className={cn(typo.caption, "w-20 shrink-0 text-muted")}>위치</dt>
+                    <dd>
+                      <a
+                        href={kakaoMapPinUrl(run.myRequest.latitude, run.myRequest.longitude, run.myRequest.pickupLocation)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={cn(typo.bodySm, "text-primary underline-offset-4 hover:underline")}
+                      >
+                        지도 보기
+                      </a>
+                    </dd>
+                  </div>
+                ) : null}
+              </dl>
+              <div className="mt-md flex justify-end">
                 <Button type="button" variant="tertiary" onClick={() => setCancelTarget(run)}>신청 취소</Button>
               </div>
-            ) : (
+            </div>
+          ) : (
+            <div className="mt-md flex justify-end">
               <Button type="button" variant="primary" onClick={() => setApplyTarget(run)}>탑승 신청</Button>
-            )}
-          </div>
+            </div>
+          )}
         </section>
       ))}
 
