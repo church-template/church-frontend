@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { typo } from "@/constants/typography";
+import { kakaoMapPinUrl } from "@/lib/mapLink";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Skeleton } from "@/components/common/Skeleton";
@@ -53,7 +54,21 @@ export function VehicleRunList() {
             {run.myRequest ? (
               <div className="flex flex-col items-end gap-xs">
                 <Badge variant="primary">신청됨</Badge>
-                <p className={cn(typo.bodySm, "text-body")}>픽업: {run.myRequest.pickupLocation}</p>
+                {run.myRequest.pickupLocation ? (
+                  <p className={cn(typo.bodySm, "text-body")}>픽업: {run.myRequest.pickupLocation}</p>
+                ) : (
+                  <p className={cn(typo.bodySm, "text-body")}>위치 첨부됨</p>
+                )}
+                {run.myRequest.latitude != null && run.myRequest.longitude != null ? (
+                  <a
+                    href={kakaoMapPinUrl(run.myRequest.latitude, run.myRequest.longitude, run.myRequest.pickupLocation)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={cn(typo.caption, "text-primary underline-offset-4 hover:underline")}
+                  >
+                    위치 보기
+                  </a>
+                ) : null}
                 {run.myRequest.note ? <p className={cn(typo.caption, "text-muted")}>{run.myRequest.note}</p> : null}
                 <Button type="button" variant="tertiary" onClick={() => setCancelTarget(run)}>신청 취소</Button>
               </div>

@@ -74,4 +74,22 @@ describe("VehicleRunList", () => {
     fireEvent.click(confirmBtns[confirmBtns.length - 1]);
     await waitFor(() => expect(cancelMock).toHaveBeenCalledWith(6));
   });
+
+  it("좌표 있는 신청은 '위치 보기' 링크(카카오맵)", async () => {
+    fetchMock.mockResolvedValue(
+      page([{ id: 7, departsAt: "2026-08-09T07:30:00", myRequest: { pickupLocation: "정문", latitude: 37.5, longitude: 127.0 } }]),
+    );
+    renderList();
+    const link = await screen.findByRole("link", { name: "위치 보기" });
+    expect(link.getAttribute("href")).toBe("https://map.kakao.com/link/map/%EC%A0%95%EB%AC%B8,37.5,127");
+  });
+
+  it("좌표만 있고 픽업 텍스트 없으면 '위치 첨부됨' 표기", async () => {
+    fetchMock.mockResolvedValue(
+      page([{ id: 8, departsAt: "2026-08-16T07:30:00", myRequest: { latitude: 37.5, longitude: 127.0 } }]),
+    );
+    renderList();
+    expect(await screen.findByText("위치 첨부됨")).toBeDefined();
+    expect(screen.getByRole("link", { name: "위치 보기" })).toBeDefined();
+  });
 });
