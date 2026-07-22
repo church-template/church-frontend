@@ -17,4 +17,8 @@ describe("kakaoMapPinUrl", () => {
   it("undefined 라벨이면 기본값이 적용된다", () => {
     expect(kakaoMapPinUrl(37.5, 127.0, undefined)).toContain("/%ED%94%BD%EC%97%85%20%EC%9C%84%EC%B9%98,");
   });
+
+  it("빈 문자열 라벨이면 기본값으로 대체한다", () => {
+    expect(kakaoMapPinUrl(37.5, 127.0, "")).toContain("/%ED%94%BD%EC%97%85%20%EC%9C%84%EC%B9%98,");
+  });
 });

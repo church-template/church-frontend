@@ -121,9 +121,9 @@ export function VehicleApplyDialog({ run, onOpenChange }: VehicleApplyDialogProp
                   >
                     지도에서 확인
                   </a>
-                  <button type="button" onClick={clearLocation} aria-label="첨부한 위치 지우기" className="text-muted hover:text-ink">
+                  <Button type="button" iconOnly variant="tertiary" onClick={clearLocation} aria-label="첨부한 위치 지우기">
                     <X size={18} aria-hidden />
-                  </button>
+                  </Button>
                 </span>
               </div>
             ) : (
