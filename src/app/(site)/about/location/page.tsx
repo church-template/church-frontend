@@ -1,7 +1,16 @@
+import type { Metadata } from "next";
 import { Container } from "@/components/shell/Container";
 import { LocationContact } from "@/components/about/LocationContact";
 import { LocationDirections } from "@/components/about/LocationDirections";
 import { InquirySection } from "@/components/about/InquirySection";
+import { CHURCH_ADDRESS, CHURCH_NAME } from "@/constants/church";
+import { LOCATION } from "@/constants/content";
+
+export const metadata: Metadata = {
+  title: LOCATION.title,
+  description: `${CHURCH_NAME} 오시는 길 안내 — ${CHURCH_ADDRESS}. 주소·연락처와 문의 방법을 안내합니다.`,
+  alternates: { canonical: "/about/location" },
+};
 
 // 연락처·오시는 길 — 정적 생성(공개 콘텐츠는 상수 주입, API 호출 없음).
 // 문의 폼은 제출(POST)만 하는 client 섹션이라 페이지의 정적 생성을 깨지 않는다.

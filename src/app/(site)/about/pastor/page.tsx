@@ -4,7 +4,10 @@ import { PastorQuote } from "@/components/about/PastorQuote";
 import { PastorDossier } from "@/components/about/PastorDossier";
 import { PASTOR } from "@/constants/content";
 
-export const metadata: Metadata = { title: PASTOR.title };
+export const metadata: Metadata = {
+  title: PASTOR.title,
+  alternates: { canonical: "/about/pastor" },
+};
 
 // 공개 인사말 — 상수 구동 서버 컴포넌트. 흰→다크(인용)→회색→전역 다크 CTA 밴드 리듬.
 export default function PastorPage() {

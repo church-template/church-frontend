@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { connection } from "next/server";
 import { HeroHeaderSync } from "@/components/main/HeroHeaderSync";
 import { WorshipSection } from "@/components/main/WorshipSection";
@@ -16,6 +17,10 @@ import {
   HERO_POSTER_ASPECT,
   COLLAGE_TILES,
 } from "@/constants/church";
+
+// 홈 정본 URL — 루트 layout에 canonical을 두면 전 페이지가 홈을 정본으로 가리키는 버그라
+// 페이지별로 선언한다(layout.tsx 주석 참조). title·description은 루트 default 사용.
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 // 메인(가이드 13.4) — 공개 콘텐츠 서버 fetch. SiteShell 대신 투명 헤더를 직접 합성(T07 §5.2).
 export default async function Home() {

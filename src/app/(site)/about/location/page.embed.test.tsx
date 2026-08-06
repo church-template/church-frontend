@@ -3,6 +3,7 @@ import { render, screen } from "@testing-library/react";
 
 // MAP_EMBED_SRC가 설정된 배포 환경의 iframe 분기 검증 — 본 테스트 파일에서만 모듈 모킹.
 vi.mock("@/constants/church", () => ({
+  CHURCH_NAME: "은샘교회", // 페이지 metadata description이 소비(#117)
   CHURCH_ADDRESS: "충청남도 예산군 삽교읍 수암산로 260",
   CHURCH_PHONE: "041-337-2298",
   CHURCH_EMAIL: "hsk71418@naver.com",

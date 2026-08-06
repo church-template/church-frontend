@@ -1,4 +1,5 @@
 // src/app/(site)/notices/page.tsx
+import type { Metadata } from "next";
 import { Container } from "@/components/shell/Container";
 import { typo } from "@/constants/typography";
 import { cn } from "@/lib/utils";
@@ -11,6 +12,13 @@ import { Pagination } from "@/components/common/Pagination";
 import { EmptyState } from "@/components/common/EmptyState";
 import { SearchPill } from "@/components/common/SearchPill";
 import { NoticeListAction } from "@/components/notices/NoticeAdminActions";
+import { CHURCH_NAME } from "@/constants/church";
+
+export const metadata: Metadata = {
+  title: "공지",
+  description: `${CHURCH_NAME} 공지사항 — 교회 소식과 안내를 확인하세요.`,
+  alternates: { canonical: "/notices" },
+};
 
 type SearchParams = Record<string, string | string[] | undefined>;
 

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Container } from "@/components/shell/Container";
 import { typo } from "@/constants/typography";
 import { cn } from "@/lib/utils";
@@ -7,6 +8,13 @@ import { buildCalendarModel, resolveMonth, kstCivilFromDate } from "@/lib/calend
 import { TagFilter } from "@/components/common/TagFilter";
 import { EventCalendar } from "@/components/events/EventCalendar";
 import { EventListAction } from "@/components/events/EventAdminActions";
+import { CHURCH_NAME } from "@/constants/church";
+
+export const metadata: Metadata = {
+  title: "일정",
+  description: `${CHURCH_NAME} 행사와 일정을 안내합니다.`,
+  alternates: { canonical: "/events" },
+};
 
 type SearchParams = Record<string, string | string[] | undefined>;
 
