@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { CHURCH_URL } from "@/constants/church";
 import { DEPARTMENTS, allDepartmentSlugs } from "@/constants/departments";
 
-// 공개 정적 라우트. 상세([id])는 백엔드 fetch가 필요해 이번 범위 밖(후속).
+// 공개 정적 라우트. 설교·갤러리·챌린지는 회원 전용 전환으로 수집 제외(스펙 1장).
 const PUBLIC_PATHS = [
   "",
   "/about",
@@ -11,12 +11,9 @@ const PUBLIC_PATHS = [
   "/about/pastor",
   "/about/photos",
   "/worship",
-  "/sermons",
   "/notices",
   "/bulletins",
   "/events",
-  "/gallery",
-  "/challenges",
   "/departments",
 ];
 
