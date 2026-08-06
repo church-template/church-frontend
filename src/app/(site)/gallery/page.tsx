@@ -7,7 +7,11 @@ import { MemberGate } from "@/components/common/MemberGate";
 import { AlbumList } from "@/components/gallery/AlbumList";
 import { AlbumListAction } from "@/components/gallery/GalleryAdminActions";
 
-export const metadata: Metadata = { title: "갤러리" };
+export const metadata: Metadata = {
+  title: "갤러리",
+  // 회원 전용 — robots.txt 차단과 별개로 외부 링크 유입 색인도 막는다(이중 방어, 스펙 1장).
+  robots: { index: false, follow: false },
+};
 
 // 회원전용 갤러리(가이드 2.3). 게이트가 권한을 선판단하고, AlbumList가 useSearchParams로
 // page·tagId를 읽어 TanStack Query로 조회한다. useSearchParams 때문에 Suspense 경계 필요.

@@ -5,7 +5,11 @@ import { VehicleRunList } from "@/components/vehicles/VehicleRunList";
 import { typo } from "@/constants/typography";
 import { cn } from "@/lib/utils";
 
-export const metadata = { title: "차량 탑승 신청" };
+export const metadata = {
+  title: "차량 탑승 신청",
+  // 회원 전용 — robots.txt 차단과 별개로 외부 링크 유입 색인도 막는다(이중 방어, 스펙 1장).
+  robots: { index: false, follow: false },
+};
 
 // 회원 전용 — 서버 프리렌더 없음, 게이트 통과 후 클라이언트가 전부 조회(챌린지 패턴).
 export default function VehicleRunsPage() {

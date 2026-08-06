@@ -4,7 +4,11 @@ import { Container } from "@/components/shell/Container";
 import { MemberGate } from "@/components/common/MemberGate";
 import { AlbumDetail } from "@/components/gallery/AlbumDetail";
 
-export const metadata: Metadata = { title: "갤러리" };
+export const metadata: Metadata = {
+  title: "갤러리",
+  // 회원 전용 — robots.txt 차단과 별개로 외부 링크 유입 색인도 막는다(이중 방어, 스펙 1장).
+  robots: { index: false, follow: false },
+};
 
 export default async function AlbumDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

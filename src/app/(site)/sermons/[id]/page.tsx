@@ -10,7 +10,11 @@ import { MemberGate } from "@/components/common/MemberGate";
 import { DetailSkeleton } from "@/components/common/DetailSkeleton";
 import { SermonDetail } from "@/components/sermons/SermonDetail";
 
-export const metadata: Metadata = { title: "설교" };
+export const metadata: Metadata = {
+  title: "설교",
+  // 회원 전용 — robots.txt 차단과 별개로 외부 링크 유입 색인도 막는다(이중 방어, 스펙 1장).
+  robots: { index: false, follow: false },
+};
 
 // 회원전용 설교 상세(가이드 2.3). RSC는 id 검증만 — 데이터는 SermonDetail이 클라 조회(조회수 부수효과 포함).
 export default async function SermonDetailPage({
