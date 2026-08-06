@@ -17,7 +17,7 @@ vi.mock("next/link", () => ({
 // 클라이언트 island는 스텁(useMe·QueryClientProvider 의존 차단) — 단위 테스트가 커버.
 vi.mock("@/components/notices/NoticeAdminActions", () => ({ NoticeDetailActions: () => null }));
 
-import NoticeDetailPage from "./page";
+import NoticeDetailPage, { generateMetadata } from "./page";
 
 afterEach(() => vi.clearAllMocks());
 
@@ -83,5 +83,32 @@ describe("NoticeDetailPage (상세)", () => {
       NoticeDetailPage({ params: Promise.resolve({ id: "-3" }) }),
     ).rejects.toThrow("NEXT_NOT_FOUND");
     expect(getNotice).not.toHaveBeenCalled();
+  });
+});
+
+describe("공지 상세 generateMetadata (#117)", () => {
+  it("제목·요약·canonical을 산출한다", async () => {
+    getNotice.mockResolvedValueOnce({
+      ...base,
+      id: 7,
+      title: "가을 행사 안내",
+      content: "# 인사\n\n본문 **강조** 문장.",
+    });
+    const meta = await generateMetadata({
+      params: Promise.resolve({ id: "7" }),
+    });
+    expect(meta.title).toBe("가을 행사 안내");
+    expect(meta.description).toBe("인사 본문 강조 문장.");
+    expect(meta.alternates?.canonical).toBe("/notices/7");
+  });
+
+  it("잘못된 id·없는 글은 빈 metadata를 반환한다", async () => {
+    getNotice.mockResolvedValueOnce(null);
+    expect(
+      await generateMetadata({ params: Promise.resolve({ id: "abc" }) }),
+    ).toEqual({});
+    expect(
+      await generateMetadata({ params: Promise.resolve({ id: "99" }) }),
+    ).toEqual({});
   });
 });
