@@ -1,10 +1,18 @@
+import type { Metadata } from "next";
 import { SiteShell } from "@/components/shell/SiteShell";
 import { Container } from "@/components/shell/Container";
 import { EmptyState } from "@/components/common/EmptyState";
 import { DepartmentTree } from "@/components/departments/DepartmentTree";
 import { DEPARTMENTS, DEPT_PAGE } from "@/constants/departments";
+import { CHURCH_NAME } from "@/constants/church";
 import { typo } from "@/constants/typography";
 import { cn } from "@/lib/utils";
+
+export const metadata: Metadata = {
+  title: DEPT_PAGE.title,
+  description: `${CHURCH_NAME}의 사역과 부서를 소개합니다.`,
+  alternates: { canonical: "/departments" },
+};
 
 // 사역(부서) 목록 — 프론트 상수 구동(메인처럼 자립). 백엔드 불필요 → 정적 생성.
 export default function DepartmentsPage() {

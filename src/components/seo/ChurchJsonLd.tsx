@@ -1,6 +1,9 @@
 import {
-  CHURCH_ADDRESS,
+  CHURCH_ADDRESS_LOCALITY,
+  CHURCH_ADDRESS_REGION,
+  CHURCH_ADDRESS_STREET,
   CHURCH_EMAIL,
+  CHURCH_GEO,
   CHURCH_LOGO,
   CHURCH_NAME,
   CHURCH_NAME_FULL,
@@ -21,11 +24,24 @@ export function ChurchJsonLd() {
     image: `${CHURCH_URL}/og-image.jpg`,
     telephone: CHURCH_PHONE,
     email: CHURCH_EMAIL,
+    // 세분화 주소 — addressRegion·addressLocality가 지역 검색("예산 교회"류) 신호가 된다.
     address: {
       "@type": "PostalAddress",
-      streetAddress: CHURCH_ADDRESS,
+      streetAddress: CHURCH_ADDRESS_STREET,
+      addressLocality: CHURCH_ADDRESS_LOCALITY,
+      addressRegion: CHURCH_ADDRESS_REGION,
       addressCountry: "KR",
     },
+    // 좌표는 확보 시에만 출력(상수 null 가드) — 플레이스 등록 후 채운다.
+    ...(CHURCH_GEO
+      ? {
+          geo: {
+            "@type": "GeoCoordinates",
+            latitude: CHURCH_GEO.latitude,
+            longitude: CHURCH_GEO.longitude,
+          },
+        }
+      : {}),
   };
 
   return (

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { SiteHeader } from "@/components/shell/SiteHeader";
 import { Container } from "@/components/shell/Container";
@@ -22,6 +23,22 @@ import {
 // 빌드 시 모든 부서 slug(하위 포함)를 정적 생성 — 상수 단일 출처라 백엔드 불필요.
 export function generateStaticParams() {
   return allDepartmentSlugs().map((slug) => ({ slug }));
+}
+
+// 부서별 검색 메타 — 상수(DEPARTMENTS) 구동이라 fetch 없음. 없는 slug는 페이지가 notFound 처리.
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const dept = findDepartment(slug);
+  if (!dept) return {};
+  return {
+    title: dept.name,
+    description: dept.caption.join(" "),
+    alternates: { canonical: `/departments/${slug}` },
+  };
 }
 
 // 사역 부서 상세(공개) — 상수 구동. SiteShell 대신 투명+solid 고정 헤더 직접 합성.

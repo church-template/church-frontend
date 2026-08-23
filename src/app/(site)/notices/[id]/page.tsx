@@ -1,4 +1,6 @@
 // src/app/(site)/notices/[id]/page.tsx
+import { cache } from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
@@ -8,8 +10,39 @@ import { typo } from "@/constants/typography";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/date";
 import { getNotice } from "@/lib/api/notices";
+import { CHURCH_DESCRIPTION } from "@/constants/church";
+import { excerpt } from "@/lib/seo";
 import { MarkdownContent } from "@/components/common/MarkdownContent";
+import { ArticleJsonLd } from "@/components/seo/ArticleJsonLd";
 import { NoticeDetailActions } from "@/components/notices/NoticeAdminActions";
+
+// getNotice는 no-store(조회수 +1 부수효과) — generateMetadata와 페이지가 같은 요청에서
+// 두 번 부르지 않도록 요청 단위로 캐시한다(조회수 이중 증가 방지).
+const getNoticeCached = cache(getNotice);
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const numId = Number(id);
+  if (!Number.isInteger(numId) || numId <= 0) return {};
+  const notice = await getNoticeCached(numId);
+  if (!notice) return {};
+  const description = excerpt(notice.content) || CHURCH_DESCRIPTION;
+  return {
+    title: notice.title,
+    description,
+    alternates: { canonical: `/notices/${notice.id}` },
+    openGraph: {
+      type: "article",
+      title: notice.title,
+      description,
+      url: `/notices/${notice.id}`,
+    },
+  };
+}
 
 // 공개 공지 상세. no-store(getNotice) → 동적. 영상/오디오 없음. isPinned 배지·클릭 태그 필터.
 export default async function NoticeDetailPage({
@@ -21,11 +54,12 @@ export default async function NoticeDetailPage({
   const numId = Number(id);
   if (!Number.isInteger(numId) || numId <= 0) notFound();
 
-  const notice = await getNotice(numId);
+  const notice = await getNoticeCached(numId);
   if (!notice) notFound();
 
   return (
     <Container as="section" className="py-section">
+      <ArticleJsonLd notice={notice} />
       <Link
         href="/notices"
         className={cn(typo.bodySm, "inline-flex items-center gap-xxs text-primary")}

@@ -17,7 +17,7 @@ vi.mock("next/link", () => ({
 // EventDetailActions는 useMe(useQuery)→QueryClient 의존이라 RSC 테스트 맥락에서 null-스텁(02 선례).
 vi.mock("@/components/events/EventAdminActions", () => ({ EventDetailActions: () => null }));
 
-import EventDetailPage from "./page";
+import EventDetailPage, { generateMetadata } from "./page";
 
 afterEach(() => vi.clearAllMocks());
 
@@ -45,5 +45,23 @@ describe("EventDetailPage (딥링크)", () => {
     await expect(EventDetailPage({ params: Promise.resolve({ id: "abc" }) })).rejects.toThrow("NEXT_NOT_FOUND");
     await expect(EventDetailPage({ params: Promise.resolve({ id: "0" }) })).rejects.toThrow("NEXT_NOT_FOUND");
     expect(getEvent).not.toHaveBeenCalled();
+  });
+});
+
+describe("행사 상세 generateMetadata (#117)", () => {
+  it("제목·요약·canonical을 산출한다", async () => {
+    getEvent.mockResolvedValueOnce({
+      ...detail,
+      description: "**은혜로운** 시간.",
+    });
+    const meta = await generateMetadata({ params: Promise.resolve({ id: "3" }) });
+    expect(meta.title).toBe("성가대 연습");
+    expect(meta.description).toBe("은혜로운 시간.");
+    expect(meta.alternates?.canonical).toBe("/events/3");
+  });
+
+  it("없는 행사는 빈 metadata를 반환한다", async () => {
+    getEvent.mockResolvedValueOnce(null);
+    expect(await generateMetadata({ params: Promise.resolve({ id: "99" }) })).toEqual({});
   });
 });

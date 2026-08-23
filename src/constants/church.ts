@@ -54,7 +54,16 @@ export const COLLAGE_TILES: CollageTile[] = [
 ];
 
 // 교회 소재지·연락처 — 푸터·오시는 길에서 소비. 교회별 값이라 상수(env 아님, 스펙 D2).
-export const CHURCH_ADDRESS = "충청남도 예산군 삽교읍 수암산로 260";
+// 주소 세분화 — JSON-LD PostalAddress(addressRegion·addressLocality) 매핑용(지역 검색 신호).
+// CHURCH_ADDRESS는 세 조각의 조합이라 값의 단일 출처가 유지된다.
+export const CHURCH_ADDRESS_REGION = "충청남도";
+export const CHURCH_ADDRESS_LOCALITY = "예산군";
+export const CHURCH_ADDRESS_STREET = "삽교읍 수암산로 260";
+export const CHURCH_ADDRESS = `${CHURCH_ADDRESS_REGION} ${CHURCH_ADDRESS_LOCALITY} ${CHURCH_ADDRESS_STREET}`;
+
+// 교회 좌표 — 스마트플레이스·구글 비즈니스 등록 시 확인해 채운다(docs/seo-operations.md 4장).
+// null이면 JSON-LD geo를 출력하지 않는다.
+export const CHURCH_GEO: { latitude: number; longitude: number } | null = null;
 export const CHURCH_PHONE = "041-337-2298";
 // 교회 대표 이메일 — 도메인 메일이 아니라 실제 사용 중인 주소라 리터럴로 둔다.
 export const CHURCH_EMAIL = "hsk71418@naver.com";

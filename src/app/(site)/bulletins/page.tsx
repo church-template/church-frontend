@@ -1,4 +1,5 @@
 // src/app/(site)/bulletins/page.tsx
+import type { Metadata } from "next";
 import { Container } from "@/components/shell/Container";
 import { typo } from "@/constants/typography";
 import { cn } from "@/lib/utils";
@@ -9,6 +10,13 @@ import { BulletinRow } from "@/components/cards/BulletinRow";
 import { BulletinListAction, BulletinRowActions } from "@/components/bulletins/BulletinAdminActions";
 import { Pagination } from "@/components/common/Pagination";
 import { EmptyState } from "@/components/common/EmptyState";
+import { CHURCH_NAME } from "@/constants/church";
+
+export const metadata: Metadata = {
+  title: "주보",
+  description: `${CHURCH_NAME} 주보를 확인하고 내려받을 수 있습니다.`,
+  alternates: { canonical: "/bulletins" },
+};
 
 type SearchParams = Record<string, string | string[] | undefined>;
 
