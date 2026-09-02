@@ -584,6 +584,10 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 - **`reading-calendar`**: 벽걸이 달력식 월 그리드(히트맵 아님, EventCalendar의 monthMatrix 재사용). 읽은 날
   `{colors.primary-soft}` 채움 + ✓ + 장 수, 오늘 `{colors.primary}` 2px 테두리, 셀 `{rounded.sm}`. 셀 탭 =
   기록/취소 다이얼로그 입구(시작일~오늘 범위만 활성). 월 이동은 챌린지 시작월~현재월.
+- **`challenge-participants`**: 챌린지 상세 "함께 읽는 사람들" 명단 섹션(참여자 전용 — 미참여자에겐 안내 한 줄만). **순위 숫자를 매기지 않는다**(경쟁이 아니라 동행) — 서버 정렬(누적 장 수)만으로 진도순을 드러낸다.
+  행 = 이름 `{typography.body-md}` + `N회독` Badge(회독 완료자만) + 현재 위치 `{typography.datetime}` `{colors.muted}`(미시작은 "아직 시작 전") + 진도바(`TodayBand` 2-div 패턴 재사용, 트랙 `{colors.surface-strong}`·채움 `{colors.primary}`, `role="progressbar"`) + %,
+  1px 헤어라인 구분(notice-row 결), 내 행만 `{colors.primary-soft}` 강조(서버 `me` 판정 — 동명이인 방어). 목록은 `common/Pagination`(10건, `scroll={false}`) 재사용.
+  참여자가 나뿐이면 명단 대신 안내 문구. 이름 외 개인정보는 응답에 없다.
 - **`challenge-feature-card`**: 목록 상단 피처 카드. 참여 중 ONGOING = 다크 미니 밴드(오늘 읽을 곳·진행 요약 +
   "오늘 기록하러 가기") / 미참여 ONGOING = 참여 CTA. `{rounded.xl}`, 카드 그리드보다 큰 단일 카드.
 

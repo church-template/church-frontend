@@ -17,6 +17,7 @@ import { useChallenge, useMyProgress, useMyLogs, useJoinChallenge, useRecordRead
 import { TodayBand } from "./TodayBand";
 import { ReadingCalendar } from "./ReadingCalendar";
 import { ReadDialog, type ReadDialogTarget } from "./ReadDialog";
+import { ParticipantList } from "./ParticipantList";
 import type { ChallengeStatus } from "@/lib/api/types";
 
 export const STATUS_LABELS: Record<ChallengeStatus, string> = {
@@ -153,6 +154,15 @@ export function ChallengeDetail({ id }: { id: number }) {
           />
         </div>
       ) : null}
+
+      {/* 명단은 참여자만 열람 가능(미참여 403) — 미참여자에겐 요청 없이 안내만. */}
+      {joined ? (
+        <ParticipantList id={id} />
+      ) : (
+        <p className={cn(typo.bodyMd, "text-muted")}>
+          챌린지에 참여하면 함께 읽는 분들의 진도를 볼 수 있어요.
+        </p>
+      )}
 
       {c.description ? (
         <section className="rounded-xl border border-hairline p-xl">

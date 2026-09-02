@@ -5,7 +5,7 @@ vi.mock("@/lib/auth/authFetch", () => ({ authFetch: authFetchMock }));
 
 import {
   fetchChallenges, fetchChallenge, fetchMyProgress, fetchMyLogs, fetchMyParticipations,
-  joinChallenge, recordRead, cancelRead, CHALLENGE_PAGE_SIZE,
+  fetchParticipants, joinChallenge, recordRead, cancelRead, CHALLENGE_PAGE_SIZE, PARTICIPANT_PAGE_SIZE,
 } from "./challenges";
 
 function jsonRes(data: unknown) {
@@ -49,6 +49,13 @@ describe("목록·상세·이력 GET", () => {
     await fetchMyParticipations({ page: 0 });
     expect(authFetchMock).toHaveBeenLastCalledWith(
       `/api/bible-challenges/my-participations?page=0&size=${CHALLENGE_PAGE_SIZE}`,
+    );
+  });
+  it("fetchParticipants: page·size만 — 정렬은 서버 고정이라 sort를 보내지 않는다", async () => {
+    authFetchMock.mockImplementation(() => Promise.resolve(jsonRes({ content: [], page: { size: 10, number: 0, totalElements: 0, totalPages: 0 } })));
+    await fetchParticipants(7, 2);
+    expect(authFetchMock).toHaveBeenCalledWith(
+      `/api/bible-challenges/7/participants?page=2&size=${PARTICIPANT_PAGE_SIZE}`,
     );
   });
   it("fetchMyParticipations: size 지정 시 해당 값으로 쿼리(피처 스캔 50건 등)", async () => {
