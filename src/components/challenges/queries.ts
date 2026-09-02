@@ -2,7 +2,7 @@
 import { useMutation, useQuery, useQueryClient, keepPreviousData } from "@tanstack/react-query";
 import {
   fetchChallenges, fetchChallenge, fetchMyProgress, fetchMyLogs, fetchMyParticipations,
-  joinChallenge, recordRead, cancelRead, CHALLENGE_PAGE_SIZE,
+  fetchParticipants, joinChallenge, recordRead, cancelRead, CHALLENGE_PAGE_SIZE,
 } from "@/lib/api/challenges";
 import type { MyProgressResponse } from "@/lib/api/types";
 
@@ -52,6 +52,16 @@ export function useMyParticipations(page: number, enabled = true, size = CHALLEN
   });
 }
 
+// 참여자 명단 — 참여자만 열람 가능(미참여 403)이라 joined일 때만 마운트한다(스펙 §3 동형).
+export function useParticipants(id: number, page: number) {
+  return useQuery({
+    queryKey: ["challenge", id, "participants", page],
+    queryFn: () => fetchParticipants(id, page),
+    placeholderData: keepPreviousData,
+    retry: false,
+  });
+}
+
 // 쓰기 3종 공통 onSuccess: 응답이 완전한 대시보드라 progress는 setQueryData(재요청 0),
 // 달력·joined 플래그·마이페이지 숫자만 invalidate(스펙 §1·§3). 낙관적 업데이트 안 씀.
 function useProgressMutation<TVars>(id: number, fn: (vars: TVars) => Promise<MyProgressResponse>) {
@@ -63,6 +73,7 @@ function useProgressMutation<TVars>(id: number, fn: (vars: TVars) => Promise<MyP
       qc.invalidateQueries({ queryKey: ["challenge", id, "logs"] });
       qc.invalidateQueries({ queryKey: ["challenge", id], exact: true });
       qc.invalidateQueries({ queryKey: ["my-participations"] });
+      qc.invalidateQueries({ queryKey: ["challenge", id, "participants"] }); // 내 기록이 명단에 즉시 반영
     },
   });
 }

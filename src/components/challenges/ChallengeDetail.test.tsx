@@ -2,14 +2,21 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-const { fetchChallengeMock, fetchMyProgressMock, fetchMyLogsMock, joinMock, recordMock } = vi.hoisted(() => ({
-  fetchChallengeMock: vi.fn(), fetchMyProgressMock: vi.fn(), fetchMyLogsMock: vi.fn(),
-  joinMock: vi.fn(), recordMock: vi.fn(),
-}));
+const { fetchChallengeMock, fetchMyProgressMock, fetchMyLogsMock, joinMock, recordMock, fetchParticipantsMock } =
+  vi.hoisted(() => ({
+    fetchChallengeMock: vi.fn(), fetchMyProgressMock: vi.fn(), fetchMyLogsMock: vi.fn(),
+    joinMock: vi.fn(), recordMock: vi.fn(), fetchParticipantsMock: vi.fn(),
+  }));
 vi.mock("@/lib/api/challenges", async (importOriginal) => ({
   ...(await importOriginal<object>()),
   fetchChallenge: fetchChallengeMock, fetchMyProgress: fetchMyProgressMock,
   fetchMyLogs: fetchMyLogsMock, joinChallenge: joinMock, recordRead: recordMock,
+  fetchParticipants: fetchParticipantsMock,
+}));
+// 참여자 명단(ParticipantList)이 페이지 파라미터를 읽는다 — 라우터 컨텍스트 없는 단위 테스트라 mock.
+vi.mock("next/navigation", () => ({
+  useSearchParams: () => new URLSearchParams(""),
+  usePathname: () => "/challenges/1",
 }));
 // 마크다운 렌더는 별도 테스트 대상 — 소스 텍스트만 확인(테스트 관례: mock은 엘리먼트 반환).
 vi.mock("@/components/common/MarkdownContent", () => ({
@@ -34,6 +41,9 @@ let qc: QueryClient;
 beforeEach(() => {
   vi.clearAllMocks();
   fetchMyLogsMock.mockResolvedValue([]);
+  fetchParticipantsMock.mockResolvedValue({
+    content: [], page: { size: 10, number: 0, totalElements: 0, totalPages: 0 },
+  });
   qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
 });
 const renderDetail = () =>
@@ -47,6 +57,9 @@ describe("ChallengeDetail", () => {
     expect(screen.getByText(/260장을 65일 동안, 하루 4장씩/)).toBeDefined();
     expect(screen.getByText("함께 읽어요")).toBeDefined();
     expect(fetchMyProgressMock).not.toHaveBeenCalled();
+    // 명단은 참여자 전용(403) — 미참여자는 안내만 보고 요청하지 않는다.
+    expect(fetchParticipantsMock).not.toHaveBeenCalled();
+    expect(screen.getByText(/참여하면 함께 읽는 분들의 진도를 볼 수 있어요/)).toBeDefined();
   });
 
   it("참여하기 클릭 → joinChallenge 호출", async () => {

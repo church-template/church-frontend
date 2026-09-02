@@ -247,6 +247,15 @@ export interface MyParticipationResponse {
   streakDays: number;
 }
 
+export interface ChallengeParticipantResponse {
+  name: string; // 이름 외 식별자는 응답에 없다(참여자 한정 열람, 최소 노출)
+  chaptersRead: number; // 현재 회독 포인터
+  progressRate: number; // 현재 회독 기준 % — 정렬 키는 누적 장 수라 회독 완료자(0%)가 상위에 올 수 있다
+  roundsCompleted: number;
+  currentPosition: BiblePositionResponse | null; // null = 현재 회독 시작 전
+  me: boolean; // 본인 행(동명이인 방어 — 이름 비교 대신 서버 판정)
+}
+
 // ── 차량운행(스펙: docs/superpowers/specs/2026-07-21-vehicle-runs-design.md) ──
 
 export interface MyRequestResponse {

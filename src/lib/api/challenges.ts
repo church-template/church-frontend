@@ -4,10 +4,11 @@ import { parseJson } from "@/lib/auth/apiError";
 import { buildListQuery, type Page } from "@/lib/page";
 import type {
   ChallengeCardResponse, ChallengeDetailResponse, MyProgressResponse,
-  ReadingLogResponse, MyParticipationResponse,
+  ReadingLogResponse, MyParticipationResponse, ChallengeParticipantResponse,
 } from "./types";
 
 export const CHALLENGE_PAGE_SIZE = 12;
+export const PARTICIPANT_PAGE_SIZE = 10;
 
 export async function fetchChallenges(params: { page?: number }): Promise<Page<ChallengeCardResponse>> {
   const qs = buildListQuery({ page: params.page, size: CHALLENGE_PAGE_SIZE, sort: "startDate,desc" });
@@ -36,6 +37,14 @@ export async function fetchMyParticipations(
 ): Promise<Page<MyParticipationResponse>> {
   const qs = buildListQuery({ page: params.page, size: params.size ?? CHALLENGE_PAGE_SIZE });
   return parseJson(await authFetch(`/api/bible-challenges/my-participations${qs}`));
+}
+
+// 참여자 진도 명단 — 정렬은 서버 고정(누적 장 수)이라 sort를 보내지 않는다.
+export async function fetchParticipants(
+  id: number, page: number,
+): Promise<Page<ChallengeParticipantResponse>> {
+  const qs = buildListQuery({ page, size: PARTICIPANT_PAGE_SIZE });
+  return parseJson(await authFetch(`/api/bible-challenges/${id}/participants${qs}`));
 }
 
 // 쓰기 3종 — 모두 갱신된 MyProgressResponse 반환(setQueryData로 즉시 반영, 스펙 §1).
