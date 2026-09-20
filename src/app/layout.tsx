@@ -52,19 +52,16 @@ export const metadata: Metadata = {
     images: ["/og-image.jpg"],
   },
   robots: { index: true, follow: true },
-  // 검색엔진 소유확인 — 값은 서치콘솔·서치어드바이저 등록 시 발급(docs/seo-operations.md).
-  // env 미설정이면 태그 미출력이라 CI·로컬 빌드에 영향 없다.
+  // 검색엔진 소유확인 — 인증값은 최종 HTML에 공개되며 env로 교체할 수 있다.
   verification: {
     ...(process.env.GOOGLE_SITE_VERIFICATION
       ? { google: process.env.GOOGLE_SITE_VERIFICATION }
       : {}),
-    ...(process.env.NAVER_SITE_VERIFICATION
-      ? {
-          other: {
-            "naver-site-verification": process.env.NAVER_SITE_VERIFICATION,
-          },
-        }
-      : {}),
+    other: {
+      "naver-site-verification":
+        process.env.NAVER_SITE_VERIFICATION ??
+        "7118535826ce1a385c2b2fa2f17dc3c68fc2b19b",
+    },
   },
   // iOS Safari의 전화번호 자동 감지가 하이드레이션 전에 DOM을 <a href="tel:">로 변조해
   // 불일치 에러를 낸다 — 감지를 끄고, 통화가 필요한 곳은 명시적 tel: 링크로 제공한다.
