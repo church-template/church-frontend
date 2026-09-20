@@ -1,14 +1,39 @@
 {
   "metadata": {
-    "lastUpdated": "2026-09-20T05:46:25Z",
-    "currentVersion": "0.1.79",
+    "lastUpdated": "2026-09-20T11:39:32Z",
+    "currentVersion": "0.1.80",
     "projectType": "next",
     "projectTypes": [
       "next"
     ],
-    "totalReleases": 16
+    "totalReleases": 17
   },
   "releases": [
+    {
+      "version": "0.1.80",
+      "project_type": "next",
+      "project_types": [
+        "next"
+      ],
+      "date": "2026-09-20",
+      "pr_number": 126,
+      "raw_summary": "## Summary by CodeRabbit\n\n- **문서**\n  - README의 최신 버전 표기를 v0.1.80으로 업데이트했습니다.\n  - SEO 운영 가이드의 사이트, 검색 도구, 사이트맵 관련 URL을 `www.eunsaem.com` 기준으로 정리했습니다.\n\n- **개선**\n  - 서비스의 기본 도메인을 실제 배포 주소인 `www.eunsaem.com`으로 통일했습니다.\n  - 로봇 및 사이트맵에서 생성되는 URL도 `www` 하위 도메인을 사용하도록 반영했습니다.\n\n- **버전**\n  - 애플리케이션 버전을 0.1.80으로, 버전 코드를 81로 업데이트했습니다.",
+      "parsed_changes": {
+        "문서": {
+          "title": "문서",
+          "items": [
+            "README의 최신 버전 표기를 v0.1.80으로 업데이트했습니다.",
+            "SEO 운영 가이드의 사이트, 검색 도구, 사이트맵 관련 URL을 `www.eunsaem.com` 기준으로 정리했습니다.",
+            "**개선**",
+            "서비스의 기본 도메인을 실제 배포 주소인 `www.eunsaem.com`으로 통일했습니다.",
+            "로봇 및 사이트맵에서 생성되는 URL도 `www` 하위 도메인을 사용하도록 반영했습니다.",
+            "**버전**",
+            "애플리케이션 버전을 0.1.80으로, 버전 코드를 81로 업데이트했습니다."
+          ]
+        }
+      },
+      "parse_method": "markdown"
+    },
     {
       "version": "0.1.79",
       "project_type": "next",
