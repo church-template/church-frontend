@@ -17,8 +17,8 @@ describe("sitemap", () => {
     vi.mocked(getEvents).mockRejectedValue(new Error("backend down"));
     const entries = await sitemap();
     const urls = entries.map((e) => e.url);
-    expect(urls).toContain("https://eunsaem.com/notices");
-    expect(urls).toContain("https://eunsaem.com/bulletins");
+    expect(urls).toContain("https://www.eunsaem.com/notices");
+    expect(urls).toContain("https://www.eunsaem.com/bulletins");
     expect(urls.some((u) => u.includes("/sermons"))).toBe(false);
     expect(urls.some((u) => u.includes("/gallery"))).toBe(false);
     expect(urls.some((u) => u.includes("/challenges"))).toBe(false);
@@ -54,9 +54,9 @@ describe("sitemap", () => {
     });
     const entries = await sitemap();
     const urls = entries.map((e) => e.url);
-    expect(urls).toContain("https://eunsaem.com/notices/7");
+    expect(urls).toContain("https://www.eunsaem.com/notices/7");
     expect(
-      urls.filter((u) => u === "https://eunsaem.com/events/3"),
+      urls.filter((u) => u === "https://www.eunsaem.com/events/3"),
     ).toHaveLength(1);
   });
 });

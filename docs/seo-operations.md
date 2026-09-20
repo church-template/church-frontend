@@ -6,17 +6,17 @@
 
 ## 0. 사전 확인
 
-- 배포 도메인이 `https://eunsaem.com` 인지 확인
+- 배포 도메인이 `https://www.eunsaem.com` 인지 확인
 - 아래 세 URL이 정상 응답하는지 브라우저로 확인:
-  - `https://eunsaem.com/robots.txt`
-  - `https://eunsaem.com/sitemap.xml`
-  - `https://eunsaem.com/rss.xml`
+  - `https://www.eunsaem.com/robots.txt`
+  - `https://www.eunsaem.com/sitemap.xml`
+  - `https://www.eunsaem.com/rss.xml`
 
 ## 1. 소유확인 코드 발급·설정 (공통 선행)
 
-1. 구글 서치콘솔(https://search.google.com/search-console) 접속 → 속성 추가 → **URL 접두어** 방식으로 `https://eunsaem.com` 입력
+1. 구글 서치콘솔(https://search.google.com/search-console) 접속 → 속성 추가 → **URL 접두어** 방식으로 `https://www.eunsaem.com` 입력
 2. 확인 방법에서 **HTML 태그** 선택 → `content="..."` 안의 값만 복사
-3. 네이버 서치어드바이저(https://searchadvisor.naver.com) 접속 → 웹마스터 도구 → 사이트 등록 → `https://eunsaem.com` 입력
+3. 네이버 서치어드바이저(https://searchadvisor.naver.com) 접속 → 웹마스터 도구 → 사이트 등록 → `https://www.eunsaem.com` 입력
 4. 소유확인 방법에서 **HTML 태그** 선택 → `content="..."` 안의 값만 복사
 5. Vercel 대시보드 → 프로젝트 → Settings → Environment Variables에 등록:
    - `GOOGLE_SITE_VERIFICATION` = (2에서 복사한 값)
@@ -26,13 +26,13 @@
 
 ## 2. 구글 서치콘솔
 
-1. 좌측 **Sitemaps** 메뉴 → `https://eunsaem.com/sitemap.xml` 제출
+1. 좌측 **Sitemaps** 메뉴 → `https://www.eunsaem.com/sitemap.xml` 제출
 2. 색인 생성 → 페이지 보고서에서 수집 현황 확인 (반영까지 수일~수주)
 
 ## 3. 네이버 서치어드바이저
 
-1. 요청 → **사이트맵 제출**: `https://eunsaem.com/sitemap.xml`
-2. 요청 → **RSS 제출**: `https://eunsaem.com/rss.xml`
+1. 요청 → **사이트맵 제출**: `https://www.eunsaem.com/sitemap.xml`
+2. 요청 → **RSS 제출**: `https://www.eunsaem.com/rss.xml`
 3. 요청 → **웹 페이지 수집**: 홈·소개·예배안내·오시는길 등 주요 URL을 수동 수집 요청 (초기 1회)
 4. 검증 → **robots.txt 검증**으로 차단 오류가 없는지 확인
 
