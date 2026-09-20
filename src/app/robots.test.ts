@@ -15,6 +15,6 @@ describe("robots", () => {
     ]) {
       expect(disallow).toContain(path);
     }
-    expect(res.sitemap).toBe("https://eunsaem.com/sitemap.xml");
+    expect(res.sitemap).toBe("https://www.eunsaem.com/sitemap.xml");
   });
 });

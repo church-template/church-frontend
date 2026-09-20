@@ -6,9 +6,8 @@ import type { CollageTile, HeroMedia } from "@/hero/types";
 export const CHURCH_NAME = "은샘교회";
 // 정식 명칭 — 저작권·약관 등 공식 표기용. 헤더·푸터 로고는 약칭 CHURCH_NAME을 쓴다.
 export const CHURCH_NAME_FULL = "기독교 한국침례회 은샘교회";
-// 교회 공식 도메인. 현재 코드에서 URL 생성(canonical·og 등)에 쓰이지 않아 값만 정확히 둔다
-// (실제 DNS 연결은 별개 — 추후 SEO 메타 도입 시 그대로 사용).
-export const CHURCH_DOMAIN = "eunsaem.com";
+// 교회 공식 도메인. 실제 배포의 정본 호스트와 일치해야 한다.
+export const CHURCH_DOMAIN = "www.eunsaem.com";
 
 // 사이트 정본 URL — metadataBase·robots·sitemap·JSON-LD가 공유하는 절대 URL의 단일 출처.
 export const CHURCH_URL = `https://${CHURCH_DOMAIN}`;
